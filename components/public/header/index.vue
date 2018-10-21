@@ -1,28 +1,21 @@
 <template>
-  <el-row 
-    :gutter="15" 
-    class="m-header">
-    <el-col :span="4"><department/></el-col>
-    <el-col :span="3"><user/></el-col>
-    <el-col :span="17"><navbar/></el-col>
-  </el-row>
+  <div class="m-header">
+    <el-row>
+      <el-col><top-bar/></el-col>
+    </el-row>
+    <el-row>
+      <el-col><search-bar/></el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
-import Department from './department.vue'
-import User from './user.vue'
-import Navbar from './nav.vue'
+import topBar from './topbar.vue'
+import searchBar from './searchbar.vue'
 export default {
   components: {
-    Department,
-    User,
-    Navbar
+    topBar,
+    searchBar
   }
 }
 </script>
-
-<style lang="scss">
-a {
-  color: #999;
-}
-</style>
