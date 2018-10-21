@@ -1,6 +1,6 @@
 # ntut-shop
 
-> My flawless Nuxt.js project
+> The final project of NTUT database course.
 
 ## Build Setup
 
