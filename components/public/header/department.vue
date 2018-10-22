@@ -1,5 +1,5 @@
 <template>
-  <div class="m-geo">
+  <div class="m-deparment">
     <i class="el-icon-location">資工系</i>
     <nuxt-link 
       class="changeDepartment" 
@@ -13,9 +13,12 @@
 </template>
 
 <style lang="scss">
-.changeDepartment {
-  .el-button {
-    padding: 4px 6px;
+.m-deparment {
+  float: left;
+  .changeDepartment {
+    .el-button {
+      padding: 4px 6px;
+    }
   }
 }
 </style>

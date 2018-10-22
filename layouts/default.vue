@@ -45,11 +45,12 @@ html {
   height: auto !important;
   font-size: 12px;
   display: flex;
+  padding: 0;
   justify-content: center;
   align-items: center;
   text-align: center;
   .m-header {
-    width: 1000px;
+    width: 100%;
     display: flex;
     align-items: center;
     text-align: center;
