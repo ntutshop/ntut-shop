@@ -4,7 +4,16 @@
     class="m-topbar">
     <el-col :span="3"><department/></el-col>
     <el-col :span="3"><user/></el-col>
-    <el-col :span="18"><navbar/></el-col>
+    <el-col 
+      :span="18" >
+      <el-row
+        style="width: 100%;"
+        type="flex"
+        justify="end"
+        align="right">
+        <navbar/>
+      </el-row>
+    </el-col>
   </el-row>
 </template>
 
