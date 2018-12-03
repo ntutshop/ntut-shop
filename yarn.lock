@@ -9180,6 +9180,16 @@ void-elements@^2.0.1:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
+vue-avatar-component@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/vue-avatar-component/-/vue-avatar-component-1.2.4.tgz#7960c2cbd7d57972714d2f8ab247ddccf6879ed8"
+  integrity sha1-eWDCy9fVeXJxTS+KskfdzPaHntg=
+
+vue-avatar@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/vue-avatar/-/vue-avatar-2.1.7.tgz#00fca25f59ad9311159d55aacc4a98f70a23bd9d"
+  integrity sha512-1nYbgzCHPaQIN+LkOW0VH+2CrB0ljM5aiVaPtHqJ0/Uf8PnHRWLXzO3NFmXy5EPaYRjeLwnmm3ox2zac1AhBtA==
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"

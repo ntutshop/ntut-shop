@@ -35,6 +35,6 @@
     "pug-filters": "^3.1.0",
     "pug-loader": "^2.4.0",
     "sass-loader": "^7.1.0",
-    "vue-avatar-component": "^1.2.4"
+    "vue-avatar": "^2.1.7"
   }
 }

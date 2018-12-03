@@ -2,10 +2,10 @@
   <div class="m-user">
     <template v-if="user">
       <avatar 
-        :fullname="user"
+        :username="user" 
         size="40"
-        color="#409eff"/>
-
+        color="#FFF"
+        background-color="#409eff"/>
     </template>
     <template v-else>
       <el-button 
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Avatar from 'vue-avatar-component'
+import Avatar from 'vue-avatar'
 export default {
   components: {
     Avatar
