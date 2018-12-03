@@ -36,7 +36,10 @@
           <navbar/>
         </el-row>
       </el-col>
-      <el-col :span="2">
+      <el-col 
+        :span="2"
+        type="flex"
+        align="middle">
         <user/>
       </el-col>
     </el-row>
