@@ -1,25 +1,35 @@
 <template>
   <div class="m-user">
     <template v-if="user">
-      歡迎您，<span class="username">{{ user }}</span>
-      [<nuxt-link to="/exit">退出</nuxt-link>]
+      <avatar 
+        :fullname="user"
+        size="40"
+        color="#409eff"/>
+
     </template>
     <template v-else>
-      <nuxt-link
-        to="/login"
-        class="login">立即登錄</nuxt-link>
-      <nuxt-link
-        to="/login"
-        class="register">註冊</nuxt-link>
+      <el-button 
+        type="primary" 
+        round
+        @click="login">登入</el-button>
     </template>
   </div>
 </template>
 
 <script>
+import Avatar from 'vue-avatar-component'
 export default {
+  components: {
+    Avatar
+  },
   data() {
     return {
       user: ''
+    }
+  },
+  methods: {
+    login() {
+      this.user = '韋辰'
     }
   }
 }
