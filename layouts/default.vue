@@ -39,7 +39,6 @@ html {
 }
 
 .el-header {
-  background: #f8f8f8;
   color: #999;
   width: 100%;
   height: auto !important;

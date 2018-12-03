@@ -33,9 +33,6 @@
         <el-menu-item index="3-ˋ">關於北科大學店</el-menu-item>
 
       </el-submenu>
-      <el-menu-item index="4"><a 
-        href="" 
-        target="_blank">手機 App</a></el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -46,7 +43,6 @@
   justify-content: flex-end;
   .el-menu {
     font-size: 12px !important;
-    background: #f8f8f8;
     border-bottom: none;
     * {
       font-size: 12px !important;
