@@ -4,15 +4,17 @@
     <el-main>
       <nuxt />
     </el-main>
-    <el-footer>Footer</el-footer>
+    <el-footer><my-footer/></el-footer>
   </el-container>
 </template>
 
 <script>
-import MyHeader from '@/components/public/header/index.vue'
+import MyHeader from '../components/public/header/index.vue'
+import MyFooter from '../components/public/footer/index.vue'
 export default {
   components: {
-    MyHeader
+    MyHeader,
+    MyFooter
   }
 }
 </script>
@@ -55,11 +57,14 @@ html {
     text-align: center;
   }
 }
-.el-container {
+.el-header .el-main {
   margin: auto;
   @media screen and (max-width: 1200px) {
     width: 992px;
   }
   width: 1190px;
+}
+.el-footer {
+  padding: 0;
 }
 </style>
