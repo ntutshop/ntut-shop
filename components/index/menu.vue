@@ -5,8 +5,12 @@
       <dd 
         v-for="(item, index) in menu"
         :key="index"
-        @mouseenter="enter(item.child)">
-        <i :class="item.type"/>{{ item.name }}
+        @mouseenter="mouseenter(item.child)"
+        @mouseleave="mouseleave">
+        <i 
+          :class="item.type" 
+          class="menu-icon"/>
+        <div class="menu-title">{{ item.name }}</div>
         <span class="arrow"/>
       </dd>
     </dl>
@@ -15,10 +19,17 @@
       class="submenu">
       <template
         v-for="(item,idx) in submenu">
-        <h4 :key="idx">{{ item.title }}</h4>
-        <span
-          v-for="v in item.child"
-          :key="v">{{ v }}</span>
+        <div 
+          :key="idx" 
+          class="submenu-container">
+          <h4 
+            
+            class="submenu-title">{{ item.title }}</h4>
+          <p
+            v-for="v in item.child"
+            :key="v"
+            class="submenu-content">{{ v }}</p>
+        </div>
       </template>
     </div>
   </div>
@@ -31,152 +42,399 @@ export default {
     return {
       menu: [
         {
-          type: 'fas fa-utensils',
-          name: '美食',
+          type: 'fas fa-mobile',
+          name: '3C產品',
           child: [
             {
-              title: '美食',
-              child: ['代金券', '甜點飲品', '火鍋', '自助餐', '小吃快餐']
+              title: '筆電',
+              child: ['Apple', 'ASUS', 'Lenvono', 'Microsoft', 'Dell']
+            },
+            {
+              title: '平板',
+              child: ['Apple', 'ASUS', 'SAMSUNG', 'Acer', 'HUAWEI']
+            },
+            {
+              title: '手機',
+              child: ['Apple', 'ASUS', '小米', 'HTC', 'SAMSUNG']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '外賣',
+          type: 'fas fa-pencil-alt',
+          name: '文具',
           child: [
             {
-              title: '外賣',
-              child: ['美團外賣']
+              title: '通用',
+              child: ['工程計算機', '尺', '筆', '白紙', '資料夾', '釘書機']
+            },
+            {
+              title: '電子系',
+              child: ['繼電器', '蜂鳴器', '電阻', '電池', '壓線鉗', 'LED']
+            },
+            {
+              title: '工設系',
+              child: ['畫筆', '圖紙', '木料']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         },
         {
-          type: 'fas fa-utensils',
-          name: '酒店',
+          type: 'fas fa-book-open',
+          name: '課本',
           child: [
             {
-              title: '酒店星級',
-              child: ['經濟型', '舒適/三星', '高檔/四星', '豪華/五星']
+              title: '共同必修',
+              child: ['微積分', '物理', '國文']
+            },
+            {
+              title: '電子系',
+              child: ['電路學 ', '工程數學', '國文']
+            },
+            {
+              title: '資工系',
+              child: [
+                '數位邏輯',
+                '計算機組織',
+                '計算機概論',
+                '資料結構',
+                '演算法',
+                '離散數學'
+              ]
+            },
+            {
+              title: '機械系',
+              child: ['熱力學', '靜力學', '動力學']
             }
           ]
         }
       ],
-      submenu: []
+      submenu: ''
     }
   },
   methods: {
-    enter(submenu) {
+    mouseenter(submenu) {
       this.submenu = submenu
+    },
+    mouseleave() {
+      this.submenu = ''
     }
   }
 }
@@ -206,9 +464,15 @@ export default {
     &:hover {
       background: rgba(255, 255, 255, 0.2);
     }
-    i {
+    .menu-icon {
+      text-align: center;
+      height: 16px;
+      width: 16px;
       margin-right: 8px;
       color: rgba(255, 255, 255, 0.3);
+    }
+    .menu-title {
+      cursor: pointer;
     }
     .arrow {
       margin-left: auto;
@@ -230,5 +494,26 @@ export default {
   z-index: 199;
   color: #666;
   overflow: hidden;
+  padding: 0 30px;
+  .submenu-title {
+    width: 100%;
+    margin-top: 24px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 16px;
+    font-weight: 500;
+    color: #222;
+    cursor: pointer;
+    float: left;
+  }
+  .submenu-content {
+    color: #999;
+    font-size: 12px;
+    line-height: 15px;
+    display: inline-block;
+    margin-right: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
 }
 </style>
