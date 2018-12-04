@@ -55,4 +55,11 @@ html {
     text-align: center;
   }
 }
+.el-container {
+  margin: auto;
+  @media screen and (max-width: 1200px) {
+    width: 992px;
+  }
+  width: 1190px;
+}
 </style>
