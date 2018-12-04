@@ -21,7 +21,8 @@ export default {
 
 
 <style lang="scss">
-html {
+html,
+body {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
@@ -31,6 +32,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+  background-color: #f8f8f8;
 }
 
 *,
@@ -57,14 +59,13 @@ html {
     text-align: center;
   }
 }
-.el-header .el-main {
-  margin: auto;
-  @media screen and (max-width: 1200px) {
-    width: 992px;
-  }
-  width: 1190px;
-}
+
 .el-footer {
   padding: 0;
+}
+.el-main {
+  position: relative;
+  top: -49px;
+  padding: 0px;
 }
 </style>

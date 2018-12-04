@@ -1,4 +1,5 @@
 <template>
+
   <div 
     class="header-container">
     <el-row 
@@ -217,10 +218,14 @@ export default {
 
 <style lang="scss">
 .header-container {
-  height: 100px;
+  height: 150px;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: white;
+  box-shadow: 0 2px 27px 0 rgba(0, 0, 0, 0.1);
+  padding-bottom: 50px;
   .header-row {
     @media screen and (max-width: 1200px) {
       width: 992px;

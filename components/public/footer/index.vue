@@ -2,7 +2,6 @@
   <v-footer
     dark
     height="auto"
-    fixed
   >
     <v-card
       flat
@@ -21,14 +20,8 @@
         </v-btn>
       </v-card-text>
 
-      <v-card-text class="white--text pt-0">
-        臺北科技大學二手交易平台
-      </v-card-text>
-
-      <v-divider/>
-
       <v-card-text class="white--text">
-        &copy;2018 — <strong>Vuetify</strong>
+        &copy;2018 — <strong>NTUT Shop</strong>
       </v-card-text>
     </v-card>
   </v-footer>

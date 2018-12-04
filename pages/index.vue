@@ -41,4 +41,7 @@ export default {
 .links {
   padding-top: 15px;
 }
+.container {
+  padding: 0;
+}
 </style>
