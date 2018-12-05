@@ -9,28 +9,26 @@
         align-center
         justify-center>
         <v-flex 
-          xs2>
+          xs3>
           <v-img
-            width="126px"
-            height="46px"
+            width="126"
+            height="46"
             src="/logo.png" 
             alt="Logo"/>
         </v-flex>
-        <v-flex xs5>
-          <div class="search">
-            <v-flex>
-              <el-autocomplete
-                v-model="value"
-                :fetch-suggestions="querySearchAsync"
-                placeholder="請輸入內容"
-                @select="handleSelect"
-              >
-                <el-button
-                  slot="append"
-                  icon="el-icon-search"/>
-              </el-autocomplete>
-            </v-flex>
-          </div>
+        <v-flex 
+          xs4 
+          class="search">
+          <el-autocomplete
+            v-model="value"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="請輸入內容"
+            @select="handleSelect"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"/>
+          </el-autocomplete>
         </v-flex>
         <v-flex xs4>
           <v-layout>
@@ -232,7 +230,7 @@ export default {
     width: 1190px;
   }
   .el-autocomplete {
-    width: 350px;
+    width: 335px;
     .el-input-group__append {
       background-color: #409eff;
       border: 0;
