@@ -1,12 +1,13 @@
 <template>
   <div class="m-menu">
-    <dl class="menu-list">
+    <dl 
+      class="menu-list"
+      @mouseleave="mouseleave">
       <dt>全部分類</dt>
       <dd 
         v-for="(item, index) in menu"
         :key="index"
-        @mouseenter="mouseenter(item.child)"
-        @mouseleave="mouseleave">
+        @mouseenter="addSubmenu(item.child)">
         <i 
           :class="item.type" 
           class="menu-icon"/>
@@ -16,7 +17,9 @@
     </dl>
     <div
       v-if="submenu"
-      class="submenu">
+      class="submenu"
+      @mouseenter="sin"
+      @mouseleave="sout">
       <template
         v-for="(item,idx) in submenu">
         <div 
@@ -430,10 +433,19 @@ export default {
     }
   },
   methods: {
-    mouseenter(submenu) {
+    mouseleave() {
+      let self = this
+      self._timer = setTimeout(function() {
+        self.submenu = ''
+      }, 150)
+    },
+    addSubmenu(submenu) {
       this.submenu = submenu
     },
-    mouseleave() {
+    sin() {
+      clearTimeout(this._timer)
+    },
+    sout() {
       this.submenu = ''
     }
   }
