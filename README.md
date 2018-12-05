@@ -1,6 +1,7 @@
 # ntut-shop
 
 > The final project of NTUT database course.
+[![CircleCI](https://circleci.com/gh/ntutshop/ntut-shop.svg?style=svg)](https://circleci.com/gh/ntutshop/ntut-shop)
 
 ## Build Setup
 
