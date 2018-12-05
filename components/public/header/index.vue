@@ -1,49 +1,48 @@
 <template>
-
   <div 
     class="header-container">
-    <el-row 
-      class="header-row"
-      type="flex"
-      justify="center"
-      align="middle">
-      <el-col :span="3">
-        <img
-          width="126px"
-          height="46px"
-          src="/logo.png" 
-          alt="Logo"></el-col>
-      <el-col :span="11">
-        <div class="search">
-          <el-col>
-            <el-autocomplete
-              v-model="value"
-              :fetch-suggestions="querySearchAsync"
-              placeholder="請輸入內容"
-              @select="handleSelect"
-            >
-              <el-button
-                slot="append"
-                icon="el-icon-search"/>
-            </el-autocomplete>
-          </el-col>
-        </div>
-      </el-col>
-      <el-col :span="8">
-        <el-row
-          style="width: 100%;"
-          type="flex"
-          justify="start">
-          <navbar/>
-        </el-row>
-      </el-col>
-      <el-col 
-        :span="2"
-        type="flex"
-        align="middle">
-        <user/>
-      </el-col>
-    </el-row>
+    <v-container>
+      <v-layout 
+        row
+        wrap
+        class="header-row"
+        align-center
+        justify-center>
+        <v-flex 
+          xs2>
+          <v-img
+            width="126px"
+            height="46px"
+            src="/logo.png" 
+            alt="Logo"/>
+        </v-flex>
+        <v-flex xs5>
+          <div class="search">
+            <v-flex>
+              <el-autocomplete
+                v-model="value"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="請輸入內容"
+                @select="handleSelect"
+              >
+                <el-button
+                  slot="append"
+                  icon="el-icon-search"/>
+              </el-autocomplete>
+            </v-flex>
+          </div>
+        </v-flex>
+        <v-flex xs4>
+          <v-layout>
+            <navbar/>
+          </v-layout>
+        </v-flex>
+        <v-flex 
+          xs1>
+          <user />
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 

@@ -499,10 +499,10 @@ export default {
 }
 .submenu {
   position: absolute;
-  top: 60px;
+  top: 63px;
   left: 230px;
   width: 400px;
-  min-height: 463px;
+  min-height: 460px;
   background-color: #fff;
   z-index: 199;
   color: #666;

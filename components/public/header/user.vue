@@ -1,19 +1,27 @@
 <template>
-  <div class="m-user">
-    <template v-if="user">
-      <avatar 
-        :username="user" 
-        size="40"
-        color="#FFF"
-        background-color="#409eff"/>
-    </template>
-    <template v-else>
-      <el-button 
-        type="primary" 
-        round
-        @click="login">登入</el-button>
-    </template>
-  </div>
+  <v-layout 
+    class="m-user">
+    <v-flex v-if="user">
+      <v-layout
+        justify-center>
+        <avatar 
+          :username="user" 
+          size="40"
+          color="#FFF"
+          background-color="#409eff"/>
+      </v-layout>
+    </v-flex>
+    <v-flex v-else>
+      <v-layout
+        justify-end>
+        <el-button 
+          type="primary" 
+          round
+          @click="login">登入</el-button>
+      </v-layout>
+      
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
