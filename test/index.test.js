@@ -20,8 +20,6 @@ test.before('Init Nuxt.js', async t => {
   nuxt.listen(4000, 'localhost')
 })
 
-
-
 // 关掉服务器和Nuxt实例，停止文件监听。
 test.after('Closing server and nuxt.js', t => {
   nuxt.close()
