@@ -3,15 +3,16 @@
     <dl 
       class="menu-list"
       @mouseleave="mouseleave">
-      <dt>全部分類</dt>
+      <dt class="menu-title">全部分類</dt>
       <dd 
         v-for="(item, index) in menu"
         :key="index"
+        class="menu-item"
         @mouseenter="addSubmenu(item.child)">
         <i 
           :class="item.type" 
-          class="menu-icon"/>
-        <div class="menu-title">{{ item.name }}</div>
+          class="item-icon"/>
+        <div class="item-title">{{ item.name }}</div>
         <span class="arrow"/>
       </dd>
     </dl>
@@ -463,12 +464,12 @@ export default {
   padding: 12px 0;
   width: 230px;
 
-  dt {
+  .menu-title {
     font-size: 18px;
     margin: 0 0 24px 0;
     padding: 0 16px;
   }
-  dd {
+  .menu-item {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -476,14 +477,14 @@ export default {
     &:hover {
       background: rgba(255, 255, 255, 0.2);
     }
-    .menu-icon {
+    .item-icon {
       text-align: center;
       height: 16px;
       width: 16px;
       margin-right: 8px;
       color: rgba(255, 255, 255, 0.3);
     }
-    .menu-title {
+    .item-title {
       cursor: pointer;
     }
     .arrow {
@@ -501,7 +502,7 @@ export default {
   top: 60px;
   left: 230px;
   width: 400px;
-  height: 433px;
+  min-height: 463px;
   background-color: #fff;
   z-index: 199;
   color: #666;

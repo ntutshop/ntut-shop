@@ -1,6 +1,8 @@
 <template>
   <v-footer
+    app
     dark
+    absolute
     height="auto"
   >
     <v-card

@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <v-app>
     <nuxt/>
-  </el-container>
+  </v-app>
 </template>

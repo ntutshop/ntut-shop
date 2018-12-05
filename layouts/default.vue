@@ -1,11 +1,11 @@
 <template>
-  <el-container>
-    <el-header><my-header/></el-header>
-    <el-main>
+  <v-app>
+    <my-header/>
+    <v-content>
       <nuxt />
-    </el-main>
-    <el-footer><my-footer/></el-footer>
-  </el-container>
+    </v-content>
+    <my-footer/>
+  </v-app>
 </template>
 
 <script>
@@ -40,32 +40,5 @@ body {
 *:after {
   box-sizing: border-box;
   margin: 0;
-}
-
-.el-header {
-  color: #999;
-  width: 100%;
-  height: auto !important;
-  font-size: 12px;
-  display: flex;
-  padding: 0;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  .m-header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    text-align: center;
-  }
-}
-
-.el-footer {
-  padding: 0;
-}
-.el-main {
-  position: relative;
-  top: -49px;
-  padding: 0px;
 }
 </style>

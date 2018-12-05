@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-row>
-      <el-col :span="5"><emenu/></el-col>
+      <el-col :span="5"><emenu class="menu"/></el-col>
       <el-col :span="19"><banner/></el-col>
     </el-row>
   </div>
@@ -43,5 +43,9 @@ export default {
 }
 .container {
   padding: 0;
+}
+.menu {
+  position: relative;
+  top: -50px;
 }
 </style>
