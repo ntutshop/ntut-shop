@@ -25,9 +25,7 @@ jobs: # a collection of steps
           command: npm test
       - run:
           name: snyk
-          command: |
-            npm run security
-            npm install -g snyk
+          command: npm run security
 
       # - run: # run coverage report
       #     name: code-coverage
