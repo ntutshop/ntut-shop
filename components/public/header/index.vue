@@ -227,6 +227,9 @@ export default {
     @media screen and (max-width: 1200px) {
       width: 992px;
     }
+    @media screen and (max-width: 1200px) {
+      width: 992px;
+    }
     width: 1190px;
   }
   .el-autocomplete {

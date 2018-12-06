@@ -2,7 +2,7 @@
   <div class="container">
     <el-row>
       <el-col :span="5"><emenu class="menu"/></el-col>
-      <el-col :span="19"><banner/></el-col>
+      <el-col :span="19"><banner class="banner"/></el-col>
     </el-row>
   </div>
 </template>
@@ -47,5 +47,8 @@ export default {
 .menu {
   position: relative;
   top: -50px;
+}
+.banner {
+  margin: 16px 0px;
 }
 </style>
