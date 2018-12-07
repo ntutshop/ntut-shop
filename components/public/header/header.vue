@@ -1,46 +1,44 @@
 <template>
   <div 
     class="header-container">
-    <v-container>
-      <v-layout 
-        row
-        wrap
-        class="header-row"
-        align-center
-        justify-center>
-        <v-flex 
-          xs3>
-          <v-img
-            width="126"
-            height="46"
-            src="/logo.png" 
-            alt="Logo"/>
-        </v-flex>
-        <v-flex 
-          xs4 
-          class="search">
-          <el-autocomplete
-            v-model="value"
-            :fetch-suggestions="querySearchAsync"
-            placeholder="請輸入內容"
-            @select="handleSelect"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"/>
-          </el-autocomplete>
-        </v-flex>
-        <v-flex xs4>
-          <v-layout>
-            <navbar/>
-          </v-layout>
-        </v-flex>
-        <v-flex 
-          xs1>
-          <user />
-        </v-flex>
-      </v-layout>
-    </v-container>
+    <v-layout 
+      row
+      wrap
+      class="header-row"
+      align-center
+      justify-center
+      style="width: 1190px;">
+      <v-flex 
+        xs3>
+        <v-img
+          width="126"
+          height="46"
+          src="/logo.png" 
+          alt="Logo"/>
+      </v-flex>
+      <v-flex 
+        xs4 
+        class="search">
+        <el-autocomplete
+          v-model="value"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="請輸入內容"
+          @select="handleSelect">
+          <el-button
+            slot="append"
+            icon="el-icon-search"/>
+        </el-autocomplete>
+      </v-flex>
+      <v-flex xs4>
+        <v-layout>
+          <navbar/>
+        </v-layout>
+      </v-flex>
+      <v-flex 
+        xs1>
+        <user />
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
@@ -216,21 +214,13 @@ export default {
 <style lang="scss">
 .header-container {
   height: 150px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
   background-color: white;
   box-shadow: 0 2px 27px 0 rgba(0, 0, 0, 0.1);
   padding-bottom: 50px;
   .header-row {
-    @media screen and (max-width: 1200px) {
-      width: 992px;
-    }
-    @media screen and (max-width: 1200px) {
-      width: 992px;
-    }
     width: 1190px;
+    margin: 20px auto;
   }
   .el-autocomplete {
     width: 335px;

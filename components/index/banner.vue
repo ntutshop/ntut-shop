@@ -2,8 +2,7 @@
   <div>
     <v-carousel
       height="455"
-      hide-delimiters
-    >
+      hide-delimiters>
       <v-carousel-item
         v-for="(item,i) in items"
         :key="i"
