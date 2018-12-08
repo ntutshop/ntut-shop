@@ -7,9 +7,5 @@
     <nuxt-link to="/about">才藝交換</nuxt-link>
     <nuxt-link to="/about">才藝交換</nuxt-link>
     <nuxt-link to="/about">才藝交換</nuxt-link>
-
   </div>
 </template>
-
-<style lang="scss">
-</style>
