@@ -1,51 +1,61 @@
 <template>
-  <div class="container">
-    <el-row>
+  <div 
+    class="main-container">
+    <el-row style="width: 1190px;">
       <el-col :span="5"><emenu class="menu"/></el-col>
-      <el-col :span="19"><banner/></el-col>
+      <el-col :span="19">
+        <el-row>
+          <home-header class="home-header"/>
+        </el-row>
+        <el-row>
+          <banner class="banner"/>
+        </el-row>
+      </el-col>
     </el-row>
+    <product-suggest/>
   </div>
 </template>
 
 <script>
 import Emenu from '../components/index/menu.vue'
 import Banner from '../components/index/banner.vue'
+import ProductSuggest from '../components/index/product_suggest.vue'
+import HomeHeader from '../components/index/home_header.vue'
 
 export default {
   components: {
     Emenu,
-    Banner
+    Banner,
+    ProductSuggest,
+    HomeHeader
   }
 }
 </script>
 
 <style  lang="scss">
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-.container {
+.main-container {
   padding: 0;
+  margin: auto;
+  width: 1190px !important;
 }
 .menu {
   position: relative;
   top: -50px;
+}
+.home-header {
+  position: relative;
+  top: -38px;
+  a {
+    color: #222;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0 20px;
+    cursor: pointer;
+    position: relative;
+  }
+}
+.banner {
+  position: relative;
+  top: -7px;
 }
 </style>
