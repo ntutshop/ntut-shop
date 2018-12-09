@@ -1,11 +1,11 @@
 <template>
-  <v-layout 
+  <v-layout
     class="m-user">
     <v-flex v-if="user">
       <v-layout
         justify-center>
-        <avatar 
-          :username="user" 
+        <avatar
+          :username="user"
           size="40"
           color="#FFF"
           background-color="#409eff"/>
@@ -14,12 +14,12 @@
     <v-flex v-else>
       <v-layout
         justify-end>
-        <el-button 
-          type="primary" 
+        <el-button
+          type="primary"
           round
           @click="login">登入</el-button>
       </v-layout>
-      
+
     </v-flex>
   </v-layout>
 </template>
@@ -30,13 +30,13 @@ export default {
   components: {
     Avatar
   },
-  data() {
+  data () {
     return {
       user: ''
     }
   },
   methods: {
-    login() {
+    login () {
       this.user = '韋辰'
     }
   }

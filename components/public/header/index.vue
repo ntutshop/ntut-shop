@@ -1,24 +1,25 @@
 <template>
-  <div 
-    class="header-container">
+  <div class="header-container">
     <v-container>
-      <v-layout 
+      <v-layout
         row
         wrap
         class="header-row"
         align-center
-        justify-center>
-        <v-flex 
-          xs3>
+        justify-center
+      >
+        <v-flex xs3>
           <v-img
             width="126"
             height="46"
-            src="/logo.png" 
-            alt="Logo"/>
+            src="/logo.png"
+            alt="Logo"
+          />
         </v-flex>
-        <v-flex 
-          xs4 
-          class="search">
+        <v-flex
+          xs4
+          class="search"
+        >
           <el-autocomplete
             v-model="value"
             :fetch-suggestions="querySearchAsync"
@@ -27,16 +28,16 @@
           >
             <el-button
               slot="append"
-              icon="el-icon-search"/>
+              icon="el-icon-search"
+            />
           </el-autocomplete>
         </v-flex>
         <v-flex xs4>
           <v-layout>
-            <navbar/>
+            <navbar />
           </v-layout>
         </v-flex>
-        <v-flex 
-          xs1>
+        <v-flex xs1>
           <user />
         </v-flex>
       </v-layout>
@@ -52,18 +53,18 @@ export default {
     Navbar,
     User
   },
-  data() {
+  data () {
     return {
       restaurants: [],
       value: '',
       timeout: null
     }
   },
-  mounted() {
+  mounted () {
     this.restaurants = this.loadAll()
   },
   methods: {
-    loadAll() {
+    loadAll () {
       return [
         { value: 'Apple iPhone XS', address: '長寧區新漁路144號' },
         { value: 'Apple Macbook Pro 2018', address: '長寧區新漁路144號' },
@@ -188,7 +189,7 @@ export default {
         }
       ]
     },
-    querySearchAsync(queryString, cb) {
+    querySearchAsync (queryString, cb) {
       var restaurants = this.restaurants
       var results = queryString
         ? restaurants.filter(this.createStateFilter(queryString))
@@ -199,14 +200,14 @@ export default {
         cb(results)
       }, 3000 * Math.random())
     },
-    createStateFilter(queryString) {
+    createStateFilter (queryString) {
       return state => {
         return (
           state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
         )
       }
     },
-    handleSelect(item) {
+    handleSelect (item) {
       console.log(item)
     }
   }

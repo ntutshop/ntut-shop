@@ -1,16 +1,16 @@
 <template>
   <div class="m-menu">
-    <dl 
+    <dl
       class="menu-list"
       @mouseleave="mouseleave">
       <dt class="menu-title">全部分類</dt>
-      <dd 
+      <dd
         v-for="(item, index) in menu"
         :key="index"
         class="menu-item"
         @mouseenter="addSubmenu(item.child)">
-        <i 
-          :class="item.type" 
+        <i
+          :class="item.type"
           class="item-icon"/>
         <div class="item-title">{{ item.name }}</div>
         <span class="arrow"/>
@@ -23,11 +23,11 @@
       @mouseleave="sout">
       <template
         v-for="(item,idx) in submenu">
-        <div 
-          :key="idx" 
+        <div
+          :key="idx"
           class="submenu-container">
-          <h4 
-            
+          <h4
+
             class="submenu-title">{{ item.title }}</h4>
           <p
             v-for="v in item.child"
@@ -37,12 +37,12 @@
       </template>
     </div>
   </div>
-  
+
 </template>
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       menu: [
         {
@@ -434,19 +434,19 @@ export default {
     }
   },
   methods: {
-    mouseleave() {
+    mouseleave () {
       let self = this
-      self._timer = setTimeout(function() {
+      self._timer = setTimeout(function () {
         self.submenu = ''
       }, 150)
     },
-    addSubmenu(submenu) {
+    addSubmenu (submenu) {
       this.submenu = submenu
     },
-    sin() {
+    sin () {
       clearTimeout(this._timer)
     },
-    sout() {
+    sout () {
       this.submenu = ''
     }
   }
