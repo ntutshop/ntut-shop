@@ -1,5 +1,6 @@
 import Koa from 'koa'
 import consola from 'consola'
+import { Nuxt, Builder } from 'nuxt'
 
 import setup from './setup.js'
 
