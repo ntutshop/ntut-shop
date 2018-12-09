@@ -1,12 +1,12 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import Menu from '../components/index/menu.vue'
 
 describe('menu.vue', () => {
-  before(function() {
+  before(function () {
     this.jsdom = require('jsdom-global')()
   })
 
-  after(function() {
+  after(function () {
     this.jsdom()
   })
   it('计数器在点击按钮时自增', () => {

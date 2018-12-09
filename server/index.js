@@ -4,15 +4,15 @@ import { Nuxt, Builder } from 'nuxt'
 
 import setup from './setup.js'
 
+// Import and Set Nuxt.js options
+import config from '../nuxt.config.js'
+
 const app = new Koa()
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
-
-// Import and Set Nuxt.js options
-import config from '../nuxt.config.js'
 config.dev = !(app.env === 'production')
 
-async function start() {
+async function start () {
   // Instantiate nuxt.js
   const nuxt = new Nuxt(config)
 

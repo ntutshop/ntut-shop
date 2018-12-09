@@ -1,18 +1,20 @@
 <template>
-  <div 
-    class="main-container">
+  <div class="main-container">
     <el-row style="width: 1190px;">
-      <el-col :span="5"><emenu class="menu"/></el-col>
+      <el-col :span="5">
+        <emenu
+          class="menu" />
+      </el-col>
       <el-col :span="19">
         <el-row>
-          <home-header class="home-header"/>
+          <home-header class="home-header" />
         </el-row>
         <el-row>
-          <banner class="banner"/>
+          <banner class="banner" />
         </el-row>
       </el-col>
     </el-row>
-    <product-suggest/>
+    <product-suggest />
   </div>
 </template>
 

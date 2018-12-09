@@ -2,21 +2,25 @@
   <div>
     <h2>推薦商品</h2>
     <v-layout justify-center>
-      <v-flex 
+      <v-flex
         xs12
-        class="pt-3 pb-5">
+        class="pt-3 pb-5"
+      >
         <v-container
           fluid
           grid-list-md
-          class="pa-0">
-          <v-layout 
-            row 
-            wrap>
+          class="pa-0"
+        >
+          <v-layout
+            row
+            wrap
+          >
             <v-flex
               v-for="card in cards"
+              :key="card.title"
               v-bind="{ [`xs${card.flex}`]: true }"
-              :key="card.title">
-              <product/>
+            >
+              <product />
             </v-flex>
           </v-layout>
         </v-container>

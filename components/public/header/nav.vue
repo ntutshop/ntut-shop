@@ -1,7 +1,7 @@
 <template>
   <div class="m-nav">
-    <el-menu 
-      class="el-menu-demo" 
+    <el-menu
+      class="el-menu-demo"
       mode="horizontal">
       <el-submenu index="1">
         <template slot="title">我的訂單</template>
