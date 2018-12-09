@@ -5,8 +5,7 @@
         v-model="value"
         :fetch-suggestions="querySearchAsync"
         placeholder="請輸入內容"
-        @select="handleSelect"
-      >
+        @select="handleSelect">
         <el-button
           slot="append"
           icon="el-icon-search"/>
