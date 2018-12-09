@@ -2,6 +2,8 @@ import Koa from 'koa'
 import consola from 'consola'
 import { Nuxt, Builder } from 'nuxt'
 
+import setup from './setup.js'
+
 // Import and Set Nuxt.js options
 import config from '../nuxt.config.js'
 
@@ -19,6 +21,9 @@ async function start () {
     const builder = new Builder(nuxt)
     await builder.build()
   }
+
+  // Setup APIs
+  await setup(app)
 
   app.use(ctx => {
     ctx.status = 200 // koa defaults to 404 when it sees that status is unset
