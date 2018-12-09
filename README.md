@@ -1,7 +1,6 @@
 # ntut-shop
 
 [![CircleCI](https://circleci.com/gh/ntutshop/ntut-shop.svg?style=svg)](https://circleci.com/gh/ntutshop/ntut-shop)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7b96217c6e394935bc0285b3b6732b8d)](https://www.codacy.com/app/yaoandy107/ntut-shop?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ntutshop/ntut-shop&amp;utm_campaign=Badge_Grade)
 
 > The final project of NTUT database course.
 
