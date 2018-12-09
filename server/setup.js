@@ -1,13 +1,12 @@
 import consola from 'consola'
 import ntutdb from './config/db'
-import { DB_CONFIG } from './config/config.js'
 
 /**
  * Setup the Koa application.
  * @param {Koa} app Koa application.
  */
-export default function(app) {
-  return new Promise((res, rej) => {
+export default function (app) {
+  return new Promise((resolve, reject) => {
     // Check whether the connection is created or not.
     ntutdb
       .authenticate()
@@ -16,11 +15,11 @@ export default function(app) {
 
         // TODO: Setup API routers.
 
-        res()
+        resolve()
       })
       .catch(err => {
         consola.error(`Failed to connect to MariaDB:\n${err}`)
-        rej(err)
+        reject(err)
       })
   })
 }
