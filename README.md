@@ -10,6 +10,9 @@
 # install dependencies
 $ yarn install
 
+# init offline database
+$ mysql -uroot < ./server/action.sql
+
 # serve with hot reload at localhost:3000
 $ yarn run dev
 
