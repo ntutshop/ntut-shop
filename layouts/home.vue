@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <my-header/>
+    <my-header prominent="true" />
     <v-content>
       <nuxt />
     </v-content>
-    <my-footer/>
+    <my-footer />
   </v-app>
 </template>
 

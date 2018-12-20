@@ -1,5 +1,8 @@
 <template>
-  <div class="header-container">
+  <div
+    :style="style"
+    class="header-container"
+  >
     <v-layout
       row
       wrap
@@ -52,11 +55,27 @@ export default {
     Navbar,
     User
   },
+  props: {
+    prominent: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       restaurants: [],
       value: '',
       timeout: null
+    }
+  },
+  computed: {
+    style () {
+      let style = {}
+      if (this.prominent) {
+        style['height'] = '150px'
+        style['padding-bottom'] = '50px'
+      }
+      return style
     }
   },
   mounted () {
@@ -215,11 +234,10 @@ export default {
 
 <style lang="scss">
 .header-container {
-  height: 150px;
+  height: 100px;
   display: block;
   background-color: white;
   box-shadow: 0 2px 27px 0 rgba(0, 0, 0, 0.1);
-  padding-bottom: 50px;
   .header-row {
     width: 1190px;
     margin: 20px auto;

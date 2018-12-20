@@ -2,8 +2,7 @@
   <div class="main-container">
     <el-row style="width: 1190px;">
       <el-col :span="5">
-        <emenu
-          class="menu" />
+        <emenu class="menu" />
       </el-col>
       <el-col :span="19">
         <el-row>
@@ -30,16 +29,12 @@ export default {
     Banner,
     ProductSuggest,
     HomeHeader
-  }
+  },
+  layout: 'home'
 }
 </script>
 
 <style  lang="scss">
-.main-container {
-  padding: 0;
-  margin: auto;
-  width: 1190px !important;
-}
 .menu {
   position: relative;
   top: -50px;
