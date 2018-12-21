@@ -2,37 +2,42 @@
   <div class="m-menu">
     <dl
       class="menu-list"
-      @mouseleave="mouseleave">
+      @mouseleave="mouseleave"
+    >
       <dt class="menu-title">全部分類</dt>
       <dd
         v-for="(item, index) in menu"
         :key="index"
         class="menu-item"
-        @mouseenter="addSubmenu(item.child)">
+        @mouseenter="addSubmenu(item.child)"
+      >
         <i
           :class="item.type"
-          class="item-icon"/>
+          class="item-icon"
+        />
         <div class="item-title">{{ item.name }}</div>
-        <span class="arrow"/>
+        <span class="arrow" />
       </dd>
     </dl>
     <div
       v-if="submenu"
       class="submenu"
       @mouseenter="sin"
-      @mouseleave="sout">
-      <template
-        v-for="(item,idx) in submenu">
+      @mouseleave="sout"
+    >
+      <template v-for="(item,idx) in submenu">
         <div
           :key="idx"
-          class="submenu-container">
-          <h4
-
-            class="submenu-title">{{ item.title }}</h4>
-          <p
-            v-for="v in item.child"
-            :key="v"
-            class="submenu-content">{{ v }}</p>
+          class="submenu-container"
+        >
+          <h4 class="submenu-title">{{ item.title }}</h4>
+          <nuxt-link to="/products">
+            <p
+              v-for="v in item.child"
+              :key="v"
+              class="submenu-content"
+            >{{ v }}</p>
+          </nuxt-link>
         </div>
       </template>
     </div>

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>推薦商品</h2>
     <v-layout justify-center>
       <v-flex
         xs12
@@ -30,7 +29,7 @@
 </template>
 
 <script>
-import Product from '../product.vue'
+import Product from './product.vue'
 export default {
   components: {
     Product

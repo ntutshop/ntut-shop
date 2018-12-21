@@ -3,24 +3,22 @@
     :style="style"
     class="header-container"
   >
-    <v-layout
-      row
-      wrap
+    <el-row
       class="header-row"
-      align-center
-      justify-center
-      style="width: 1190px;"
+      type="flex"
+      align="middle"
+      justify="center"
     >
-      <v-flex xs3>
+      <el-col :span="5">
         <v-img
           width="126"
           height="46"
           src="/logo.png"
           alt="Logo"
         />
-      </v-flex>
-      <v-flex
-        xs4
+      </el-col>
+      <el-col
+        :span="8"
         class="search"
       >
         <el-autocomplete
@@ -34,26 +32,31 @@
             icon="el-icon-search"
           />
         </el-autocomplete>
-      </v-flex>
-      <v-flex xs4>
+      </el-col>
+      <el-col :span="8">
         <v-layout>
           <navbar />
         </v-layout>
-      </v-flex>
-      <v-flex xs1>
+      </el-col>
+      <el-col :span="2">
+        <cart />
+      </el-col>
+      <el-col :span="1">
         <user />
-      </v-flex>
-    </v-layout>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import Navbar from './nav.vue'
 import User from './user.vue'
+import Cart from './cart.vue'
 export default {
   components: {
     Navbar,
-    User
+    User,
+    Cart
   },
   props: {
     prominent: {
@@ -233,6 +236,9 @@ export default {
 </script>
 
 <style lang="scss">
+.v-btn {
+  box-shadow: none !important;
+}
 .header-container {
   height: 100px;
   display: block;
@@ -245,7 +251,7 @@ export default {
   .el-autocomplete {
     width: 335px;
     .el-input-group__append {
-      background-color: #409eff;
+      background-color: #2196f3;
       border: 0;
       color: white;
     }
