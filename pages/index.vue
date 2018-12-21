@@ -40,18 +40,6 @@ export default {
   position: relative;
   top: -50px;
 }
-.home-header {
-  position: relative;
-  top: -38px;
-  a {
-    color: #222;
-    font-weight: 700;
-    font-size: 16px;
-    margin: 0 20px;
-    cursor: pointer;
-    position: relative;
-  }
-}
 .banner {
   position: relative;
   top: -7px;

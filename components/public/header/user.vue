@@ -1,23 +1,22 @@
 <template>
-  <v-layout
-    class="m-user">
+  <v-layout class="m-user">
     <v-flex v-if="user">
-      <v-layout
-        justify-center>
+      <v-layout justify-center>
         <avatar
           :username="user"
           size="40"
           color="#FFF"
-          background-color="#409eff"/>
+          background-color="#409eff"
+        />
       </v-layout>
     </v-flex>
     <v-flex v-else>
-      <v-layout
-        justify-end>
+      <v-layout justify-end>
         <el-button
           type="primary"
+          class="blue"
           round
-          @click="login">登入</el-button>
+        >登入</el-button>
       </v-layout>
 
     </v-flex>
