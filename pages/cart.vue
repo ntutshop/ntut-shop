@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="m-cart">
     <v-layout v-if="1||cart.length">
       <list :cart-data="cart" />
     </v-layout>
@@ -17,7 +17,6 @@
         type="primary"
         class="blue"
       >提交訂單</el-button>
-
     </v-layout>
   </v-container>
 
@@ -55,14 +54,17 @@ export default {
 </script>
 
 <style lang="scss">
-.total-price {
-  margin-top: 8px;
-  .money {
-    font-size: 20px;
-    color: rgb(243, 98, 8);
+.m-cart {
+  padding: 24px 0;
+  .total-price {
+    margin-top: 8px;
+    .money {
+      font-size: 20px;
+      color: rgb(243, 98, 8);
+    }
   }
-}
-.submit {
-  margin-top: 8px;
+  .submit {
+    margin-top: 8px;
+  }
 }
 </style>
