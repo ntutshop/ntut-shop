@@ -8,7 +8,6 @@
       />
       <category
         :types="types"
-        :areas="areas"
         class="category"
       />
       <product-list
@@ -16,21 +15,13 @@
         class="product-list"
       />
     </el-col>
-    <el-col :span="5">
-      <!-- <amap
-        v-if="point.length"
-        :width="230"
-        :height="290"
-        :point="point"
-      /> -->
-    </el-col>
   </el-row>
 </template>
 
 <script>
 import Crumbs from '@/components/products/crumbs.vue'
 import Category from '../components/products/category.vue'
-import ProductList from '../components/products/product-list.vue'
+import ProductList from '../components/products/product_list.vue'
 export default {
   components: {
     Crumbs,
@@ -40,7 +31,8 @@ export default {
   data () {
     return {
       keyword: '',
-      category: '分類'
+      category: '分類',
+      list: []
     }
   }
 }
