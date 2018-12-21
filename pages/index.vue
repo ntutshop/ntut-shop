@@ -13,21 +13,22 @@
         </el-row>
       </el-col>
     </el-row>
-    <product-suggest />
+    <h2>推薦商品</h2>
+    <product-list />
   </div>
 </template>
 
 <script>
 import Emenu from '../components/index/menu.vue'
 import Banner from '../components/index/banner.vue'
-import ProductSuggest from '../components/index/product_suggest.vue'
+import ProductList from '../components/index/product_list.vue'
 import HomeHeader from '../components/index/home_header.vue'
 
 export default {
   components: {
     Emenu,
     Banner,
-    ProductSuggest,
+    ProductList,
     HomeHeader
   },
   layout: 'home'
