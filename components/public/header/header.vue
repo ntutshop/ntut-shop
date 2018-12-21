@@ -10,12 +10,14 @@
       justify="center"
     >
       <el-col :span="5">
-        <v-img
-          width="126"
-          height="46"
-          src="/logo.png"
-          alt="Logo"
-        />
+        <nuxt-link to="/">
+          <v-img
+            width="126"
+            height="46"
+            src="/logo.png"
+            alt="Logo"
+          />
+        </nuxt-link>
       </el-col>
       <el-col
         :span="8"
