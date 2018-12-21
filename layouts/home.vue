@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <my-header prominent="true" />
+    <my-header :prominent="true" />
     <v-content>
       <nuxt />
     </v-content>
