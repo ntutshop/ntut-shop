@@ -10,8 +10,8 @@
 export default {
   props: {
     error: {
-      type: Number,
-      default: 0
+      type: Object,
+      default: () => {}
     }
   }
 }
