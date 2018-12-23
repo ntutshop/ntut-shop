@@ -26,7 +26,7 @@ USE ntutdb;
 -- MEMBER
 CREATE TABLE IF NOT EXISTS MEMBER (
     id INT NOT NULL,
-    token VARCHAR(64) NOT NULL,
+    user_id VARCHAR(64) NOT NULL,
     authority VARCHAR(20) NOT NULL,
     username VARCHAR(25) NOT NULL,
     nickname VARCHAR(25) NOT NULL,

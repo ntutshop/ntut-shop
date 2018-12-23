@@ -11,7 +11,7 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    token: {
+    user_id: {
       type: DataTypes.STRING(64),
       allowNull: false
     },
