@@ -21,9 +21,12 @@
     "@nuxtjs/axios": "^5.0.0",
     "cross-env": "^5.2.0",
     "element-ui": "^2.4.6",
+    "jsonwebtoken": "^8.4.0",
     "koa": "^2.5.2",
+    "koa-router": "^7.4.0",
     "mysql2": "^1.6.4",
     "nuxt": "^2.0.0",
+    "request": "^2.88.0",
     "sequelize": "^4.41.2",
     "vuetify": "^1.3.11"
   },

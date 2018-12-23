@@ -1,5 +1,6 @@
 import consola from 'consola'
-import ntutdb from './config/db'
+import router from './routes/main.js'
+import ntutdb from './config/db.js'
 
 /**
  * Setup the Koa application.
@@ -13,7 +14,7 @@ export default function (app) {
       .then(() => {
         consola.ready(`Connected to MariaDB.`)
 
-        // TODO: Setup API routers.
+        app.use(router.routes()).use(router.allowedMethods())
 
         resolve()
       })
