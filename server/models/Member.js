@@ -109,7 +109,7 @@ async function CreateShellCustomer (userId) {
  */
 async function FillShellCustomer (userId, data) {
   // Validate the data.
-  let result = await PROFILE_VALIDATOR.validate(data)
+  let result = PROFILE_VALIDATOR.validate(data)
   if (result.error) {
     return {
       success: false,
