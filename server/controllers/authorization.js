@@ -111,7 +111,7 @@ async function FillShellCustomerMember (ctx) {
     ctx.body = {
       success: false,
       type: 'state',
-      message: (state === Member.STATE.Unauthorized) ? "unauthorized" : 'logged-in'
+      message: (state === Member.STATE.Unauthorized) ? 'unauthorized' : 'logged-in'
     }
     return
   }
