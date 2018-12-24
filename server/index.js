@@ -3,13 +3,14 @@ import consola from 'consola'
 import { Nuxt, Builder } from 'nuxt'
 
 import setup from './setup.js'
+import { SERVER_CONFIG as SV_CONFIG } from './config/config.js'
 
 // Import and Set Nuxt.js options
 import config from '../nuxt.config.js'
 
 const app = new Koa()
-const host = process.env.HOST || '127.0.0.1'
-const port = process.env.PORT || 3000
+const host = process.env.HOST || SV_CONFIG.HOST
+const port = process.env.PORT || SV_CONFIG.PORT
 config.dev = !(app.env === 'production')
 
 async function start () {
