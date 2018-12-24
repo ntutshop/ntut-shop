@@ -4,9 +4,6 @@ import request from 'request'
 import Member from '../models/Member.js'
 import { FACEBOOK_CONFIG as FB_CONFIG, SERVER_CONFIG as SV_CONFIG } from '../config/config.js'
 
-// const FB_LOGIN_URL = `https://www.facebook.com/v3.2/dialog/oauth?client_id=${FB_CONFIG.APP_ID}&redirect_uri=${FB_CONFIG.REDIRECT_URI}&state=vortex&scope=public_profile,email`
-const HMAC_SHA256 = crypto.createHmac('sha256', FB_CONFIG.APP_SECRET)
-
 /**
  * Check whether the user is new or not.
  * @param {string} userId An user_id from a Facebook account.
@@ -46,6 +43,7 @@ function RetriveAccessToken (code) {
  * @private
  */
 function RetriveUserId (accessToken) {
+  const HMAC_SHA256 = crypto.createHmac('sha256', FB_CONFIG.APP_SECRET)
   const APP_SECRET_PROOF = HMAC_SHA256.update(accessToken).digest('hex')
   const PROFILE_URL = 'https://graph.facebook.com/me?' +
     `access_token=${accessToken}&appsecret_proof=${APP_SECRET_PROOF}`
@@ -84,7 +82,54 @@ async function OAuthCallback (ctx) {
     ctx.cookies.set('jwt', JWT_TOKEN)
     ctx.body = { success: true }
   } else {
+    await Member.CreateShellCustomer(body.user_id)
     ctx.redirect('/signup')
+  }
+}
+
+/**
+ * Complete a member sign up.
+ * @param {IRouterContext} ctx Context.
+ * @async
+ */
+async function FillShellCustomerMember (ctx) {
+  // Check whether header jwt is emtpy or not.
+  let jwtToken = ctx.cookies.get('jwt')
+  if (!jwtToken) {
+    ctx.body = {
+      success: false,
+      type: 'authorization',
+      message: "You haven't passed OAuth2."
+    }
+    return
+  }
+
+  // Verify jwt token. Check whether the user is at unregistered state.
+  let userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
+  let state = await Member.CheckMemberStatus(userId)
+  if (state !== Member.STATE.Unregistered) {
+    ctx.body = {
+      success: false,
+      type: 'state',
+      message: (state === Member.STATE.Unauthorized) ? "You haven't passed OAuth2." : 'You have logged in ntut-shop.'
+    }
+    return
+  }
+
+  // Validate the data.
+  let body = ctx.request.body
+  let result = await Member.FillShellCustomer(userId, body)
+
+  if (result.success) {
+    ctx.body = { success: true }
+  } else {
+    let error = result.error
+    ctx.body = {
+      success: false,
+      type: 'body',
+      path: error.path,
+      message: error.message
+    }
   }
 }
 
@@ -107,16 +152,33 @@ async function Logout (ctx) {
 async function JWTVerification (ctx, next) {
   let jwtToken = ctx.cookies.get('jwt')
 
-  if (jwtToken && jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)) {
+  // Check whether the jwt token exists.
+  if (!jwtToken) {
+    ctx.body = {
+      success: false,
+      type: 'authorization',
+      message: 'unauthorized'
+    }
+    return
+  }
+
+  // Verify jwt token.
+  let userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
+  let state = await Member.CheckMemberStatus(userId)
+  if (state === Member.STATE.Normal) {
     return next()
   } else {
-    ctx.status = 401
-    ctx.body = { message: 'Unauthorized action.' }
+    ctx.body = {
+      success: false,
+      type: 'state',
+      message: (state === Member.STATE.Unauthorized) ? 'unauthorized' : 'unregistered'
+    }
   }
 }
 
 export default {
   OAuthCallback,
+  FillShellCustomerMember,
   Logout,
   JWTVerification
 }
