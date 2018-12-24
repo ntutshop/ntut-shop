@@ -7,7 +7,7 @@ let router = new KoaRouter()
 router.get('/oauth/facebook/callback', controller.OAuthCallback)
 
 // Sign-up a new member.
-router.post('/signup', controller.FillShellCustomerMember)
+router.post('/signup', controller.VerifyJWTToken, controller.FillShellCustomerMember)
 
 // Logout route.
 router.get('/logout', controller.Logout)
