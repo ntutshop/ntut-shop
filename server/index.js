@@ -39,7 +39,12 @@ async function start () {
     })
   })
 
-  app.listen(port, host)
+  if (!host || host === '*') {
+    app.listen(port)
+  } else {
+    app.listen(port, host)
+  }
+
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true
