@@ -13,8 +13,19 @@ const Member = db.import('MEMBER', MemberSchema)
  * @enum
  */
 const STATE = Object.freeze({
+  /**
+   * A user hasn't passed OAuth.
+   */
   Unauthorized: Symbol('Unauthorized'),
+
+  /**
+   * A user hasn't given one's profile like username, nickname, etc, but has passed OAuth.
+   */
   Unregistered: Symbol('Unregistered'),
+
+  /**
+   * A user both passed OAuth and registered.
+   */
   Normal: Symbol('Normal')
 })
 
