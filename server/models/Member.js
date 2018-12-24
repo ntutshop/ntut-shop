@@ -126,7 +126,8 @@ async function FillShellCustomer (userId, data) {
     nickname: value.nickname,
     register_time: sequelize.fn('NOW')
   }, {
-    where: { user_id: userId }
+    where: { user_id: userId },
+    fields: [ 'username', 'phone', 'email', 'nickname', 'register_time' ]
   })
   return { success: true }
 }
