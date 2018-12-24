@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import consola from 'consola'
 import jwt from 'jsonwebtoken'
 import request from 'request'
 import Member from '../models/Member.js'
@@ -66,8 +67,8 @@ function RetriveUserId (accessToken) {
  */
 async function OAuthCallback (ctx) {
   if (!ctx.query.code) {
-    console.error('Get no code in query.')
-    return ctx.redirect('/')
+    consola.error('Got no code in query.')
+    return ctx.redirect('/') // *It should change to an error page.
   }
 
   // == Get user's token.
@@ -98,8 +99,7 @@ async function FillShellCustomerMember (ctx) {
   if (!jwtToken) {
     ctx.body = {
       success: false,
-      type: 'authorization',
-      message: "You haven't passed OAuth2."
+      type: 'authorization'
     }
     return
   }
@@ -111,7 +111,7 @@ async function FillShellCustomerMember (ctx) {
     ctx.body = {
       success: false,
       type: 'state',
-      message: (state === Member.STATE.Unauthorized) ? "You haven't passed OAuth2." : 'You have logged in ntut-shop.'
+      message: (state === Member.STATE.Unauthorized) ? "unauthorized" : 'logged-in'
     }
     return
   }
@@ -156,8 +156,7 @@ async function JWTVerification (ctx, next) {
   if (!jwtToken) {
     ctx.body = {
       success: false,
-      type: 'authorization',
-      message: 'unauthorized'
+      type: 'authorization'
     }
     return
   }
