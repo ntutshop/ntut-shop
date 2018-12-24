@@ -1,4 +1,5 @@
 import consola from 'consola'
+import bodyparser from 'koa-bodyparser'
 import router from './routes/main.js'
 import ntutdb from './config/db.js'
 
@@ -7,6 +8,8 @@ import ntutdb from './config/db.js'
  * @param {Koa} app Koa application.
  */
 export default function (app) {
+  app.use(bodyparser())
+
   return new Promise((resolve, reject) => {
     // Check whether the connection is created or not.
     ntutdb
