@@ -89,23 +89,45 @@ async function OAuthCallback (ctx) {
 }
 
 /**
- * Complete a member sign up.
+ * Verify the JWT token.
  * @param {IRouterContext} ctx Context.
- * @async
+ * @param {Function} next Next middleware.
  */
-async function FillShellCustomerMember (ctx) {
+async function VerifyJWTToken (ctx, next) {
   // Check whether header jwt is emtpy or not.
   let jwtToken = ctx.cookies.get('jwt')
   if (!jwtToken) {
     ctx.body = {
       success: false,
-      type: 'authorization'
+      type: 'authorization',
+      message: 'empty'
     }
     return
   }
 
-  // Verify jwt token. Check whether the user is at unregistered state.
-  let userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
+  // Verify jwt token.
+  // The decoded user_id will be set on ctx.state.decodedUserId if verification succees.
+  try {
+    ctx.state.decodedUserId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
+    return next()
+  } catch (ex) {
+    ctx.body = {
+      success: false,
+      type: 'authorization',
+      message: 'invalid'
+    }
+  }
+}
+
+/**
+ * Complete a member sign up.
+ * This can be called only after VerifyJWTToken.
+ * @param {IRouterContext} ctx Context.
+ * @async
+ */
+async function FillShellCustomerMember (ctx) {
+  // Check whether the user is at unregistered state.
+  let userId = ctx.state.decodedUserId
   let state = await Member.CheckMemberStatus(userId)
   if (state !== Member.STATE.Unregistered) {
     ctx.body = {
@@ -145,25 +167,15 @@ async function Logout (ctx) {
 
 /**
  * Verify the jwt field in header.
+ * This can be called only after VerifyJWTToken.
  * @param {IRouterContext} ctx Context.
  * @param {Function} next Next middleware.
  * @async
  */
-async function JWTVerification (ctx, next) {
-  let jwtToken = ctx.cookies.get('jwt')
-
-  // Check whether the jwt token exists.
-  if (!jwtToken) {
-    ctx.body = {
-      success: false,
-      type: 'authorization'
-    }
-    return
-  }
-
-  // Verify jwt token.
-  let userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
+async function VerifyUserState (ctx, next) {
+  let userId = ctx.state.decodedUserId
   let state = await Member.CheckMemberStatus(userId)
+
   if (state === Member.STATE.Normal) {
     return next()
   } else {
@@ -177,7 +189,8 @@ async function JWTVerification (ctx, next) {
 
 export default {
   OAuthCallback,
+  VerifyJWTToken,
   FillShellCustomerMember,
   Logout,
-  JWTVerification
+  VerifyUserState
 }
