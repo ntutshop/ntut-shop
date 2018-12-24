@@ -1,8 +1,37 @@
 import db from '../config/db.js'
 import MemberSchema from '../schemas/Member.js'
+import Joi from 'joi'
 import sequelize from 'sequelize'
 
 const Member = db.import('MEMBER', MemberSchema)
+
+/**
+ * Members' state.
+ * @member {Symbol} Unauthorized A user hasn't passed OAuth.
+ * @member {Symbol} Unregistered A user hasn't given one's profile like username, nickname, etc, but has passed OAuth.
+ * @member {Symbol} Normal A user both passed OAuth and registered.
+ * @enum
+ */
+const STATE = Object.freeze({
+  Unauthorized: Symbol('Unauthorized'),
+  Unregistered: Symbol('Unregistered'),
+  Normal: Symbol('Normal')
+})
+
+/**
+ * A JSON validator for function FillShellCustomerMember.
+ */
+const PROFILE_VALIDATOR = Joi.object().keys({
+  username: Joi.string()
+    .required(),
+  nickname: Joi.string(),
+  phone: Joi.string()
+    .regex(/^\d{10,10}$/)
+    .required(),
+  email: Joi.string()
+    .regex(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+    .required()
+})
 
 /**
  * Try to find a member by user_id.
@@ -18,11 +47,19 @@ async function FindOneMemeberByUserId (userId) {
 }
 
 /**
- * Check whether the user_id exist in MEMBER table.
+ * Check a member's state by user_id.
  * @param {string} userId An user_id from Facebook.
+ * @async
  */
-async function CheckMemberExisting (userId) {
-  return await Member.count({ where: { user_id: userId } }) > 0
+async function CheckMemberStatus (userId) {
+  let member = await FindOneMemeberByUserId(userId)
+  if (!member) {
+    return STATE.Unauthorized
+  } else if (member.username === '') {
+    return STATE.Unregistered
+  } else {
+    return STATE.Normal
+  }
 }
 
 /**
@@ -45,28 +82,48 @@ async function CreateShellCustomer (userId) {
 }
 
 /**
- * Fill the shell customer with required information.
- * @param {string} userId The customer's Facebook user_id. It's used for query.
+ * @typedef ProfileData
+ * @type {Object}
+ * @description A JSON object contains a new user's basic data.
  * @param {string} username Username.
  * @param {string} phone Phone number.
  * @param {string} email Email.
  * @param {string?} nickname Nickname. Optional.
  */
-async function FillShellCustomer (userId, username, phone, email, nickname = '') {
-  return Member.update({
-    username,
-    phone,
-    email,
-    nickname,
+/**
+ * Fill the shell customer with required information.
+ * @param {string} userId The customer's Facebook user_id. It's used for query.
+ * @param {ProfileData} data ProfileData.
+ * @async
+ */
+async function FillShellCustomer (userId, data) {
+  // Validate the data.
+  let result = await PROFILE_VALIDATOR.validate(data)
+  if (result.error) {
+    return {
+      success: false,
+      error: result.error.details[0]
+    }
+  }
+
+  // Update the profile
+  let value = result.value
+  await Member.update({ // This statement can be replace by 'let queryResult = await ..' for checking the query result.
+    username: value.username,
+    phone: value.phone,
+    email: value.email,
+    nickname: value.nickname,
     register_time: sequelize.fn('NOW')
   }, {
     where: { user_id: userId }
   })
+  return { success: true }
 }
 
 export default {
   FindOneMemeberByUserId,
-  CheckMemberExisting,
+  CheckMemberStatus,
   CreateShellCustomer,
-  FillShellCustomer
+  FillShellCustomer,
+  STATE
 }
