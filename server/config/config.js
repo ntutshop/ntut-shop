@@ -5,7 +5,7 @@ export let SERVER_CONFIG = {
   PORT: 3000,
   JWT_SECRET: 'mysecret',
   MODE: process.env.NODE_ENV,
-  BASE_URL: `https://${DOMAIN}`
+  BASE_URL: (process.env.NODE_ENV === 'production') ? `https://${DOMAIN}` : 'http://127.0.0.1:3000'
 }
 
 export let DB_CONFIG = {
