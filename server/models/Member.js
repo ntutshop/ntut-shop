@@ -82,6 +82,7 @@ async function CreateShellCustomer (userId) {
   return Member.create({
     // id is auto-increment
     user_id: userId,
+    authority: 'Facebook',
     username: '',
     nickname: '',
     phone: '',
@@ -96,10 +97,10 @@ async function CreateShellCustomer (userId) {
  * @typedef ProfileData
  * @type {Object}
  * @description A JSON object contains a new user's basic data.
- * @param {string} username Username.
- * @param {string} phone Phone number.
- * @param {string} email Email.
- * @param {string?} nickname Nickname. Optional.
+ * @property {string} username Username.
+ * @property {string} phone Phone number.
+ * @property {string} email Email.
+ * @property {string?} nickname Nickname. Optional.
  */
 /**
  * Fill the shell customer with required information.
@@ -123,7 +124,7 @@ async function FillShellCustomer (userId, data) {
     username: value.username,
     phone: value.phone,
     email: value.email,
-    nickname: value.nickname,
+    nickname: value.nickname || '',
     register_time: sequelize.fn('NOW')
   }, {
     where: { user_id: userId },
