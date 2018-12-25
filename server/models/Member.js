@@ -35,7 +35,8 @@ const STATE = Object.freeze({
 const PROFILE_VALIDATOR = Joi.object().keys({
   username: Joi.string()
     .required(),
-  nickname: Joi.string(),
+  nickname: Joi.string()
+    .empty(''),
   phone: Joi.string()
     .regex(/^\d{10,10}$/)
     .required(),
