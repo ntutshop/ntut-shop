@@ -1,13 +1,14 @@
 const DOMAIN = 'virtualprism.io'
 
 export let SERVER_CONFIG = {
-  HOST: 'virtualprism.io',
+  HOST: '127.0.0.1',
   PORT: 3000,
-  JWT_SECRET: 'mysecret'
+  JWT_SECRET: 'mysecret',
+  MODE: 'development'
 }
 
 export let DB_CONFIG = {
-  HOST: 'localhost',
+  HOST: DOMAIN,
   USER: 'shopkeeper',
   PASSWORD: 'ycjls5dm',
   DATABASE: 'ntutdb',

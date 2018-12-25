@@ -11,7 +11,7 @@ import config from '../nuxt.config.js'
 const app = new Koa()
 const host = process.env.HOST || SV_CONFIG.HOST
 const port = process.env.PORT || SV_CONFIG.PORT
-config.dev = !(app.env === 'production')
+config.dev = !(SV_CONFIG.MODE === 'production') // Origin: config.dev = !(app.env === 'production')
 
 async function start () {
   // Instantiate nuxt.js
