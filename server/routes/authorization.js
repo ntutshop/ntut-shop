@@ -1,10 +1,13 @@
 import KoaRouter from 'koa-router'
 import controller from '../controllers/authorization.js'
+import { SERVER_CONFIG } from '../config/config.js'
 
 let router = new KoaRouter()
 
-// A callback from Facebook.
-router.get('/oauth/facebook/callback', controller.OAuthCallback)
+if (SERVER_CONFIG.MODE === 'production') {
+  // A callback from Facebook.
+  router.get('/oauth/facebook/callback', controller.OAuthCallback)
+}
 
 // Sign-up a new member.
 router.post('/signup', controller.VerifyJWTToken, controller.FillShellCustomerMember)
