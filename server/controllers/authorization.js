@@ -6,17 +6,6 @@ import Member from '../models/Member.js'
 import { FACEBOOK_CONFIG as FB_CONFIG, SERVER_CONFIG as SV_CONFIG } from '../config/config.js'
 
 /**
- * Check whether the user is new or not.
- * @param {string} userId An user_id from a Facebook account.
- * @private
- * @async
- */
-async function CheckMemberRegister (userId) {
-  let member = await Member.FindOneMemeberByUserId(userId)
-  return !!member
-}
-
-/**
  * Retrive the access_token from Facebook by user's code.
  * @param {string} code Accessing code.
  * @return {Promise} The result of the request.
@@ -77,13 +66,18 @@ async function OAuthCallback (ctx) {
   // == Get the user_id from user's profile by the token.
   body = await RetriveUserId(body.access_token)
 
+  // == Sign user_id with key
+  const JWT_TOKEN = jwt.sign(body.id, SV_CONFIG.JWT_SECRET)
+  ctx.cookies.set('jwt', JWT_TOKEN)
+
   // == Check the member
-  if (await CheckMemberRegister(body.user_id)) {
-    const JWT_TOKEN = jwt.sign(body.user_id, SV_CONFIG.JWT_SECRET)
-    ctx.cookies.set('jwt', JWT_TOKEN)
-    ctx.body = { success: true }
+  let state = await Member.CheckMemberStatus(body.id)
+  if (state === Member.STATE.Normal) {
+    ctx.redirect('/')
+  } else if (state === Member.STATE.Unregistered) {
+    ctx.redirect('/signup')
   } else {
-    await Member.CreateShellCustomer(body.user_id)
+    await Member.CreateShellCustomer(body.id)
     ctx.redirect('/signup')
   }
 }
