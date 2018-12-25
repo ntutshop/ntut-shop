@@ -1,7 +1,7 @@
 const DOMAIN = 'virtualprism.io'
 
 export let SERVER_CONFIG = {
-  HOST: '127.0.0.1',
+  HOST: 'virtualprism.io',
   PORT: 3000,
   JWT_SECRET: 'mysecret'
 }
