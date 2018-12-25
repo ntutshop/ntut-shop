@@ -20,6 +20,8 @@
             <v-flex xs12>
               <v-text-field
                 id="username"
+                ref="username"
+                v-model="input.username"
                 name="username"
                 label="使用者名稱"
                 color="blue"
@@ -28,6 +30,8 @@
             <v-flex xs12>
               <v-text-field
                 id="nickname"
+                ref="nickname"
+                v-model="input.nickname"
                 name="nickname"
                 label="暱稱"
                 color="blue"
@@ -36,6 +40,8 @@
             <v-flex xs12>
               <v-text-field
                 id="phone"
+                ref="phone"
+                v-model="input.phone"
                 name="phone"
                 label="手機號碼"
                 color="blue"
@@ -44,6 +50,8 @@
             <v-flex xs12>
               <v-text-field
                 id="email"
+                ref="email"
+                v-model="input.email"
                 name="email"
                 label="信箱"
                 color="blue"
@@ -63,5 +71,16 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      input: {
+        username: '',
+        nickname: '',
+        phone: '',
+        email: ''
+      }
+    }
+  }
+}
 </script>
