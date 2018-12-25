@@ -73,12 +73,12 @@ async function OAuthCallback (ctx) {
   // == Check the member
   let state = await Member.CheckMemberStatus(body.id)
   if (state === Member.STATE.Normal) {
-    ctx.redirect('/')
+    ctx.redirect(SV_CONFIG.BASE_URL)
   } else if (state === Member.STATE.Unregistered) {
-    ctx.redirect('/signup')
+    ctx.redirect(SV_CONFIG.BASE_URL + '/signup')
   } else {
     await Member.CreateShellCustomer(body.id)
-    ctx.redirect('/signup')
+    ctx.redirect(SV_CONFIG.BASE_URL + '/signup')
   }
 }
 
