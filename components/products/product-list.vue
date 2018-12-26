@@ -49,7 +49,8 @@ export default {
       productList: [
         {
           name: '雲南菜',
-          imgUrl: 'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
+          imgUrl:
+            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
           rate: 5,
           owner: 'Andy Meow',
           price: 238,
@@ -57,7 +58,8 @@ export default {
         },
         {
           name: '雲南菜',
-          imgUrl: 'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
+          imgUrl:
+            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
           rate: 5,
           owner: 'Andy Meow',
           price: 238,
