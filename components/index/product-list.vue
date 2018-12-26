@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home-product-list">
     <v-layout justify-center>
       <v-flex
         xs12
@@ -15,8 +15,8 @@
             wrap
           >
             <v-flex
-              v-for="card in cards"
-              :key="card.title"
+              v-for="(card, index) in cards"
+              :key="index"
               v-bind="{ [`xs${card.flex}`]: true }"
             >
               <product />
@@ -90,3 +90,9 @@ export default {
   })
 }
 </script>
+
+<style lang="scss">
+.home-product-list {
+  width: 1190px;
+}
+</style>
