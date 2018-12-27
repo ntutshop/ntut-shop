@@ -32,6 +32,9 @@ import Crumbs from '@/components/product/crumbs.vue'
 import Category from '@/components/product/category.vue'
 import ProductList from '@/components/product/product-list.vue'
 export default {
+  asyncData ({ query }) {
+    return { query }
+  },
   components: {
     Crumbs,
     Category,
