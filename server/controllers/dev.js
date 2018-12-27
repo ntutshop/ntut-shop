@@ -23,7 +23,7 @@ async function FakeFacebookLogin (ctx) {
 
   // == Sign user_id with key
   const JWT_TOKEN = jwt.sign(userId, SV_CONFIG.JWT_SECRET)
-  ctx.cookies.set('jwt', JWT_TOKEN, { httpOnly: false, secure: false })
+  ctx.cookies.set('jwt', JWT_TOKEN)
 
   // == Check the member
   let state = await Member.CheckMemberStatus(userId)
