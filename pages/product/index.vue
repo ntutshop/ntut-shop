@@ -28,9 +28,9 @@
 </template>
 
 <script>
-import Crumbs from '@/components/products/crumbs.vue'
-import Category from '../components/products/category.vue'
-import ProductList from '../components/products/product-list.vue'
+import Crumbs from '@/components/product/crumbs.vue'
+import Category from '@/components/product/category.vue'
+import ProductList from '@/components/product/product-list.vue'
 export default {
   components: {
     Crumbs,
