@@ -1,13 +1,13 @@
 <template>
-  <div class="m-products-list">
+  <div class="m-good-list">
     <el-tabs type="border-card">
       <el-tab-pane
         v-for="(item, index) in orderLabel"
         :key="index"
         :label="item.title"
       >
-        <product
-          v-for="(item, index) in productList"
+        <good
+          v-for="(item, index) in goodList"
           :key="index"
           :meta="item"
         />
@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import Product from './product.vue'
+import Good from './good.vue'
 export default {
   components: {
-    Product
+    Good
   },
   props: {
     list: {
@@ -46,7 +46,7 @@ export default {
           title: '評價最高'
         }
       ],
-      productList: [
+      goodList: [
         {
           name: '雲南菜',
           imgUrl:

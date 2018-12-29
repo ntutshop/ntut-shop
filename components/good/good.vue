@@ -1,5 +1,5 @@
 <template>
-  <dl class="product-item">
+  <dl class="good-item">
     <dt>
       <img
         :src="meta.imgUrl"
@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style lang="scss">
-.product-item {
+.good-item {
   display: flex;
   padding: 20px 0;
   min-height: 125px;

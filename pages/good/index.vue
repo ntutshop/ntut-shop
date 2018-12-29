@@ -1,5 +1,5 @@
 <template>
-  <el-row class="page-product">
+  <el-row class="page-good">
     <el-col :span="24">
       <crumbs
         :category="category"
@@ -10,18 +10,18 @@
         :types="types"
         class="category"
       />
-      <product-list
+      <good-list
         :list="list"
-        class="product-list"
+        class="good-list"
       />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import Crumbs from '@/components/product/crumbs.vue'
-import Category from '@/components/product/category.vue'
-import ProductList from '@/components/product/product-list.vue'
+import Crumbs from '@/components/good/crumbs.vue'
+import Category from '@/components/good/category.vue'
+import GoodList from '@/components/good/good-list.vue'
 export default {
   asyncData ({ query }) {
     return { query }
@@ -29,7 +29,7 @@ export default {
   components: {
     Crumbs,
     Category,
-    ProductList
+    GoodList
   },
   data () {
     return {
@@ -42,12 +42,12 @@ export default {
 </script>
 
 <style lang="scss">
-.page-product {
+.page-good {
   padding: 24px 0;
   .category {
     margin-top: 24px;
   }
-  .product-list {
+  .good-list {
     margin-top: 24px;
   }
 }

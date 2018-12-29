@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-card class="product-header-card">
+    <el-card class="good-header-card">
       <el-row gutter="24">
         <el-col :span="13">
           <v-carousel height="350">
             <v-carousel-item
-              v-for="(item,index) in productImage"
+              v-for="(item,index) in goodImage"
               :key="index"
               :src="item.src"
             />
           </v-carousel>
         </el-col>
         <el-col :span="11">
-          <h1 class="product-title">雲南菜</h1>
+          <h1 class="good-title">雲南菜</h1>
           <div class="seller-info">
             <span class="seller-name">DevilTea</span>
             <el-rate
@@ -24,7 +24,7 @@
             <span class="item-value">{{ rate }}分</span>
           </div>
           <v-divider />
-          <div class="product-payment">
+          <div class="good-payment">
             <span>付款方式：</span>
             <el-select
               v-model="currentPayment"
@@ -38,7 +38,7 @@
               />
             </el-select>
           </div>
-          <div class="product-shipping">
+          <div class="good-shipping">
             <span>運送方式：</span>
             <el-select
               v-model="currentShipping"
@@ -73,38 +73,38 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-card class="product-detail-card">
+    <el-card class="good-detail-card">
       <div slot="header">
         <span>商品詳情</span>
       </div>
-      <p class="product-detail-content">
+      <p class="good-detail-content">
         威任哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉
       </p>
     </el-card>
-    <el-card class="product-messaage-board-card">
+    <el-card class="good-messaage-board-card">
       <div slot="header">
         <span>留言區</span>
       </div>
       <div
         v-for="(message, index) in messaageList"
         :key="index"
-        class="product-messaage-board-item"
+        class="good-messaage-board-item"
       >
-        <div class="product-messaage-board-box">
+        <div class="good-messaage-board-box">
           <v-avatar size="56">
             <img
               :src="message.userImage"
               alt="John"
             >
           </v-avatar>
-          <div class="product-messaage-board-content">
-            <div class="product-messaage-board__username">
+          <div class="good-messaage-board-content">
+            <div class="good-messaage-board__username">
               <p>{{ message.userName }}</p>
             </div>
-            <div class="product-messaage-board__message">
+            <div class="good-messaage-board__message">
               <p>{{ message.content }}</p>
             </div>
-            <p class="text-xs-right product-messaage-board__time">{{ message.time }}</p>
+            <p class="text-xs-right good-messaage-board__time">{{ message.time }}</p>
           </div>
         </div>
         <v-divider />
@@ -122,7 +122,7 @@ export default {
       currentShipping: '',
       paymentList: ['面交', '口交'],
       shippingList: ['海運', '航運'],
-      productImage: [
+      goodImage: [
         {
           src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
         },
@@ -160,12 +160,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.product-header-card {
+.good-header-card {
   /deep/ .v-carousel__controls {
     background: none;
   }
   font-size: 14px;
-  .product-title {
+  .good-title {
     font-size: 26px;
   }
   .el-rate {
@@ -185,13 +185,13 @@ export default {
   .v-divider {
     margin: 24px 0;
   }
-  .product-payment {
+  .good-payment {
     margin-bottom: 16px;
     > span {
       color: #757575;
     }
   }
-  .product-shipping {
+  .good-shipping {
     > span {
       color: #757575;
     }
@@ -212,30 +212,30 @@ export default {
     }
   }
 }
-.product-detail-card {
+.good-detail-card {
   margin-top: 16px;
-  .product-detail__item {
+  .good-detail__item {
     font-size: 14px;
     margin-bottom: 18px;
-    .product-detail__label {
+    .good-detail__label {
       color: #757575;
       margin-right: 40px;
     }
   }
 }
-.product-messaage-board-card {
+.good-messaage-board-card {
   margin-top: 16px;
-  .product-messaage-board-item {
+  .good-messaage-board-item {
     margin-bottom: 18px;
     margin-left: 16px;
-    .product-messaage-board-box {
+    .good-messaage-board-box {
       display: flex;
-      .product-messaage-board-content {
+      .good-messaage-board-content {
         margin-left: 32px;
-        .product-messaage-board__username {
+        .good-messaage-board__username {
           font-size: 14px;
         }
-        .product-messaage-board__message {
+        .good-messaage-board__message {
           background: #f5f5f5;
           color: rgba(0, 0, 0, 0.87);
           padding: 16px;
@@ -243,7 +243,7 @@ export default {
           font-size: 14px;
           box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
         }
-        .product-messaage-board__time {
+        .good-messaage-board__time {
           align-self: flex-end;
           margin-left: 4px;
           color: #757575;
