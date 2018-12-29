@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import Emenu from '../components/index/menu.vue'
-import Banner from '../components/index/banner.vue'
-import ProductList from '../components/index/product-list.vue'
-import HomeHeader from '../components/index/home_header.vue'
+import Emenu from '@/components/index/menu.vue'
+import Banner from '@/components/index/banner.vue'
+import ProductList from '@/components/index/product-list.vue'
+import HomeHeader from '@/components/index/home-header.vue'
 
 export default {
   components: {

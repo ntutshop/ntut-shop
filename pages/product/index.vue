@@ -8,21 +8,12 @@
       />
       <category
         :types="types"
-        :areas="areas"
         class="category"
       />
       <product-list
         :list="list"
         class="product-list"
       />
-    </el-col>
-    <el-col :span="5">
-      <!-- <amap
-        v-if="point.length"
-        :width="230"
-        :height="290"
-        :point="point"
-      /> -->
     </el-col>
   </el-row>
 </template>
@@ -43,7 +34,8 @@ export default {
   data () {
     return {
       keyword: '',
-      category: '分類'
+      category: '分類',
+      list: []
     }
   }
 }

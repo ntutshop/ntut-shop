@@ -31,7 +31,7 @@
           class="submenu-container"
         >
           <h4 class="submenu-title">{{ item.title }}</h4>
-          <nuxt-link to="/products">
+          <nuxt-link to="/product">
             <p
               v-for="v in item.child"
               :key="v"
