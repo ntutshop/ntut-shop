@@ -1,5 +1,6 @@
 import db from '../config/db.js'
 import MemberSchema from '../schemas/Member.js'
+import errorGen from '../modules/errorgen.js'
 import Joi from 'joi'
 import sequelize from 'sequelize'
 
@@ -46,11 +47,11 @@ const PROFILE_VALIDATOR = Joi.object().keys({
 })
 
 /**
- * Try to find a member by user_id.
+ * Get a user's information by a user_id.
  * @param {string} userId An user_id from Facebook.
  * @async
  */
-async function FindOneMemeberByUserId (userId) {
+async function getUserInformationByUserId (userId) {
   return Member.findOne({
     where: {
       user_id: userId
@@ -59,12 +60,23 @@ async function FindOneMemeberByUserId (userId) {
 }
 
 /**
+ * Get a user's information by a username.
+ * @param {string} username Username.
+ * @async
+ */
+async function getUserInformationByUsername (username) {
+  return Member.findOne({
+    where: { username }
+  })
+}
+
+/**
  * Check a member's state by user_id.
  * @param {string} userId An user_id from Facebook.
  * @async
  */
-async function CheckMemberStatus (userId) {
-  let member = await FindOneMemeberByUserId(userId)
+async function checkMemberStatus (userId) {
+  let member = await getUserInformationByUserId(userId)
   if (!member) {
     return STATE.Unauthorized
   } else if (member.username === '') {
@@ -79,7 +91,7 @@ async function CheckMemberStatus (userId) {
  * @param {string} userId A user_id from Facebook.
  * @async
  */
-async function CreateShellCustomer (userId) {
+async function createShellCustomer (userId) {
   return Member.create({
     // id is auto-increment
     user_id: userId,
@@ -109,13 +121,13 @@ async function CreateShellCustomer (userId) {
  * @param {ProfileData} data ProfileData.
  * @async
  */
-async function FillShellCustomer (userId, data) {
+async function fillShellCustomer (userId, data) {
   // Validate the data.
   let result = PROFILE_VALIDATOR.validate(data)
   if (result.error) {
     return {
       success: false,
-      error: result.error.details[0]
+      error: errorGen(result.error.details)
     }
   }
 
@@ -135,9 +147,10 @@ async function FillShellCustomer (userId, data) {
 }
 
 export default {
-  FindOneMemeberByUserId,
-  CheckMemberStatus,
-  CreateShellCustomer,
-  FillShellCustomer,
+  getUserInformationByUserId,
+  getUserInformationByUsername,
+  checkMemberStatus,
+  createShellCustomer,
+  fillShellCustomer,
   STATE
 }

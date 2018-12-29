@@ -9,7 +9,8 @@ export default function (sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     source_id: {
       type: DataTypes.INTEGER(11),
@@ -30,6 +31,11 @@ export default function (sequelize, DataTypes) {
     content: {
       type: DataTypes.STRING(800),
       allowNull: false
+    },
+    time: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.fn('current_timestamp')
     }
   }, {
     tableName: 'MESSAGE_BOARD'

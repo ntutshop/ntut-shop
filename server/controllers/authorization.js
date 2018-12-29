@@ -1,84 +1,50 @@
-import crypto from 'crypto'
-import consola from 'consola'
 import jwt from 'jsonwebtoken'
-import request from 'request'
 import Member from '../models/Member.js'
-import { FACEBOOK_CONFIG as FB_CONFIG, SERVER_CONFIG as SV_CONFIG } from '../config/config.js'
-
-/**
- * Retrive the access_token from Facebook by user's code.
- * @param {string} code Accessing code.
- * @return {Promise} The result of the request.
- * @private
- */
-function RetriveAccessToken (code) {
-  const ACCESS_URL = 'https://graph.facebook.com/v3.2/oauth/access_token?' +
-    `client_id=${FB_CONFIG.APP_ID}&redirect_uri=${FB_CONFIG.REDIRECT_URI}&client_secret=${FB_CONFIG.APP_SECRET}&code=${code}`
-
-  return new Promise((resolve, reject) => {
-    request({
-      method: 'GET',
-      url: ACCESS_URL,
-      json: true
-    }, (error, response, body) => {
-      error ? reject(error) : resolve(body)
-    })
-  })
-}
-
-/**
- * Retrive the user_id from Facebook by the access_token.
- * @param {string} accessToken The access_token.
- * @return {Promise} The result of the request.
- * @private
- */
-function RetriveUserId (accessToken) {
-  const HMAC_SHA256 = crypto.createHmac('sha256', FB_CONFIG.APP_SECRET)
-  const APP_SECRET_PROOF = HMAC_SHA256.update(accessToken).digest('hex')
-  const PROFILE_URL = 'https://graph.facebook.com/me?' +
-    `access_token=${accessToken}&appsecret_proof=${APP_SECRET_PROOF}`
-
-  return new Promise((resolve, reject) => {
-    request({
-      url: PROFILE_URL,
-      method: 'GET',
-      json: true
-    }, (error, response, body) => {
-      error ? reject(error) : resolve(body)
-    })
-  })
-}
+import {
+  SERVER_CONFIG as SV_CONFIG
+} from '../config/config.js'
 
 /**
  * An OAuth callback from Facebook.
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function OAuthCallback (ctx) {
-  if (!ctx.query.code) {
-    consola.error('Got no code in query.')
-    return ctx.redirect('/') // *It should change to an error page.
+async function handleLogin (ctx) {
+  let authResponse = ctx.request.body.authResponse
+
+  // == Check fields
+  if (!authResponse || !authResponse.userId) {
+    ctx.body = {
+      success: false,
+      type: 'body',
+      message: !authResponse ? 'no-authResponse' : 'no-userId'
+    }
   }
 
-  // == Get user's token.
-  let body = await RetriveAccessToken(ctx.query.code)
-
-  // == Get the user_id from user's profile by the token.
-  body = await RetriveUserId(body.access_token)
-
-  // == Sign user_id with key
-  const JWT_TOKEN = jwt.sign(body.id, SV_CONFIG.JWT_SECRET)
+  // == Sign userID with key
+  let uid = authResponse.userID
+  const JWT_TOKEN = jwt.sign(uid, SV_CONFIG.JWT_SECRET)
   ctx.cookies.set('jwt', JWT_TOKEN)
 
   // == Check the member
-  let state = await Member.CheckMemberStatus(body.id)
+  let state = await Member.checkMemberStatus(uid)
   if (state === Member.STATE.Normal) {
-    ctx.redirect(SV_CONFIG.BASE_URL)
+    ctx.body = {
+      success: true,
+      redirect: '/'
+    }
   } else if (state === Member.STATE.Unregistered) {
-    ctx.redirect(SV_CONFIG.BASE_URL + '/signup')
+    ctx.body = {
+      success: true,
+      redirect: '/signup'
+    }
   } else {
-    await Member.CreateShellCustomer(body.id)
-    ctx.redirect(SV_CONFIG.BASE_URL + '/signup')
+    ctx.status = 201
+    await Member.createShellCustomer(uid)
+    ctx.body = {
+      success: true,
+      redirect: '/signup'
+    }
   }
 }
 
@@ -87,7 +53,7 @@ async function OAuthCallback (ctx) {
  * @param {IRouterContext} ctx Context.
  * @param {Function} next Next middleware.
  */
-async function VerifyJWTToken (ctx, next) {
+async function verifyJWTToken (ctx, next) {
   // Check whether header jwt is emtpy or not.
   let jwtToken = ctx.cookies.get('jwt')
   if (!jwtToken) {
@@ -102,7 +68,7 @@ async function VerifyJWTToken (ctx, next) {
   // Verify jwt token.
   // The decoded user_id will be set on ctx.state.decodedUserId if verification succees.
   try {
-    ctx.state.decodedUserId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
+    ctx.state.userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
     return next()
   } catch (ex) {
     ctx.body = {
@@ -119,32 +85,32 @@ async function VerifyJWTToken (ctx, next) {
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function FillShellCustomerMember (ctx) {
+async function handleSignup (ctx) {
   // Check whether the user is at unregistered state.
-  let userId = ctx.state.decodedUserId
-  let state = await Member.CheckMemberStatus(userId)
+  let userId = ctx.state.userId
+  let state = await Member.checkMemberStatus(userId)
   if (state !== Member.STATE.Unregistered) {
     ctx.body = {
       success: false,
       type: 'state',
-      message: (state === Member.STATE.Unauthorized) ? 'unauthorized' : 'logged-in'
+      message:
+        state === Member.STATE.Unauthorized ? 'unauthorized' : 'logged-in'
     }
     return
   }
 
   // Validate the data.
   let body = ctx.request.body
-  let result = await Member.FillShellCustomer(userId, body)
+  let result = await Member.fillShellCustomer(userId, body)
 
   if (result.success) {
+    ctx.status = 201
     ctx.body = { success: true }
   } else {
-    let error = result.error
     ctx.body = {
       success: false,
       type: 'body',
-      path: error.path,
-      message: error.message
+      error: result.error
     }
   }
 }
@@ -154,7 +120,7 @@ async function FillShellCustomerMember (ctx) {
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function Logout (ctx) {
+async function handleLogout (ctx) {
   ctx.cookies.set('jwt')
   ctx.body = { success: true }
 }
@@ -166,9 +132,9 @@ async function Logout (ctx) {
  * @param {Function} next Next middleware.
  * @async
  */
-async function VerifyUserState (ctx, next) {
-  let userId = ctx.state.decodedUserId
-  let state = await Member.CheckMemberStatus(userId)
+async function verifyUserState (ctx, next) {
+  let userId = ctx.state.userId
+  let state = await Member.checkMemberStatus(userId)
 
   if (state === Member.STATE.Normal) {
     return next()
@@ -176,15 +142,16 @@ async function VerifyUserState (ctx, next) {
     ctx.body = {
       success: false,
       type: 'state',
-      message: (state === Member.STATE.Unauthorized) ? 'unauthorized' : 'unregistered'
+      message:
+        state === Member.STATE.Unauthorized ? 'unauthorized' : 'unregistered'
     }
   }
 }
 
 export default {
-  OAuthCallback,
-  VerifyJWTToken,
-  FillShellCustomerMember,
-  Logout,
-  VerifyUserState
+  handleLogin,
+  verifyJWTToken,
+  handleSignup,
+  handleLogout,
+  verifyUserState
 }
