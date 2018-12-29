@@ -1,66 +1,8 @@
-import crypto from 'crypto'
-import consola from 'consola'
 import jwt from 'jsonwebtoken'
-import request from 'request'
 import Member from '../models/Member.js'
 import {
-  FACEBOOK_CONFIG as FB_CONFIG,
   SERVER_CONFIG as SV_CONFIG
 } from '../config/config.js'
-
-/**
- * Retrive the access_token from Facebook by user's code.
- * @param {string} code Accessing code.
- * @return {Promise} The result of the request.
- * @private
- */
-function RetriveAccessToken (code) {
-  const ACCESS_URL =
-    'https://graph.facebook.com/v3.2/oauth/access_token?' +
-    `client_id=${FB_CONFIG.APP_ID}&redirect_uri=${
-      FB_CONFIG.REDIRECT_URI
-    }&client_secret=${FB_CONFIG.APP_SECRET}&code=${code}`
-
-  return new Promise((resolve, reject) => {
-    request(
-      {
-        method: 'GET',
-        url: ACCESS_URL,
-        json: true
-      },
-      (error, response, body) => {
-        error ? reject(error) : resolve(body)
-      }
-    )
-  })
-}
-
-/**
- * Retrive the user_id from Facebook by the access_token.
- * @param {string} accessToken The access_token.
- * @return {Promise} The result of the request.
- * @private
- */
-function RetriveUserId (accessToken) {
-  const HMAC_SHA256 = crypto.createHmac('sha256', FB_CONFIG.APP_SECRET)
-  const APP_SECRET_PROOF = HMAC_SHA256.update(accessToken).digest('hex')
-  const PROFILE_URL =
-    'https://graph.facebook.com/me?' +
-    `access_token=${accessToken}&appsecret_proof=${APP_SECRET_PROOF}`
-
-  return new Promise((resolve, reject) => {
-    request(
-      {
-        url: PROFILE_URL,
-        method: 'GET',
-        json: true
-      },
-      (error, response, body) => {
-        error ? reject(error) : resolve(body)
-      }
-    )
-  })
-}
 
 /**
  * An OAuth callback from Facebook.
@@ -69,19 +11,17 @@ function RetriveUserId (accessToken) {
  */
 async function OAuthCallback (ctx) {
   let authResponse = ctx.request.body.authResponse
-  console.log(authResponse)
-  // if (!ctx.query.code) {
-  //   consola.error('Got no code in query.')
-  //   return ctx.redirect('/') // *It should change to an error page.
-  // }
 
-  // // == Get user's token.
-  // let body = await RetriveAccessToken(ctx.query.code)
+  // == Check fields
+  if (!authResponse || !authResponse.userId) {
+    ctx.body = {
+      success: false,
+      type: 'body',
+      message: !authResponse ? 'no-authResponse' : 'no-userId'
+    }
+  }
 
-  // // == Get the user_id from user's profile by the token.
-  // body = await RetriveUserId(body.access_token)
-
-  // == Sign user_id with key
+  // == Sign userID with key
   let uid = authResponse.userID
   const JWT_TOKEN = jwt.sign(uid, SV_CONFIG.JWT_SECRET)
   ctx.cookies.set('jwt', JWT_TOKEN)
@@ -89,12 +29,21 @@ async function OAuthCallback (ctx) {
   // == Check the member
   let state = await Member.CheckMemberStatus(uid)
   if (state === Member.STATE.Normal) {
-    ctx.redirect(SV_CONFIG.BASE_URL)
+    ctx.body = {
+      success: true,
+      redirect: '/'
+    }
   } else if (state === Member.STATE.Unregistered) {
-    ctx.redirect(SV_CONFIG.BASE_URL + '/signup')
+    ctx.body = {
+      success: true,
+      redirect: '/signup'
+    }
   } else {
     await Member.CreateShellCustomer(uid)
-    ctx.redirect(SV_CONFIG.BASE_URL + '/signup')
+    ctx.body = {
+      success: true,
+      redirect: '/signup'
+    }
   }
 }
 
@@ -156,12 +105,10 @@ async function FillShellCustomerMember (ctx) {
   if (result.success) {
     ctx.body = { success: true }
   } else {
-    let error = result.error
     ctx.body = {
       success: false,
       type: 'body',
-      path: error.path,
-      message: error.message
+      error: result.error
     }
   }
 }
