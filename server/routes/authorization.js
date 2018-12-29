@@ -3,15 +3,13 @@ import controller from '../controllers/authorization.js'
 
 let router = new KoaRouter()
 
-// A callback
-router.get('/oauth/facebook/callback', controller.handleOAuthCallback)
-
 // Sign-up a new member.
-router.post('/signup', controller.verifyJWTToken, controller.fillShellCustomerMember)
+router.post('/signup', controller.verifyJWTToken, controller.handleSignup)
 
 // Logout route.
-router.get('/logout', controller.logout)
+router.get('/logout', controller.handleLogout)
 
-router.post('/login', controller.handleOAuthCallback)
+// Login route.
+router.post('/login', controller.handleLogin)
 
 export default router

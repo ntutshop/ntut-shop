@@ -9,7 +9,7 @@ import {
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function handleOAuthCallback (ctx) {
+async function handleLogin (ctx) {
   let authResponse = ctx.request.body.authResponse
 
   // == Check fields
@@ -39,6 +39,7 @@ async function handleOAuthCallback (ctx) {
       redirect: '/signup'
     }
   } else {
+    ctx.status = 201
     await Member.createShellCustomer(uid)
     ctx.body = {
       success: true,
@@ -67,7 +68,7 @@ async function verifyJWTToken (ctx, next) {
   // Verify jwt token.
   // The decoded user_id will be set on ctx.state.decodedUserId if verification succees.
   try {
-    ctx.state.decodedUserId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
+    ctx.state.userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
     return next()
   } catch (ex) {
     ctx.body = {
@@ -84,10 +85,10 @@ async function verifyJWTToken (ctx, next) {
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function fillShellCustomerMember (ctx) {
+async function handleSignup (ctx) {
   // Check whether the user is at unregistered state.
-  let userId = ctx.state.decodedUserId
-  let state = await Member.CheckMemberStatus(userId)
+  let userId = ctx.state.userId
+  let state = await Member.checkMemberStatus(userId)
   if (state !== Member.STATE.Unregistered) {
     ctx.body = {
       success: false,
@@ -100,9 +101,10 @@ async function fillShellCustomerMember (ctx) {
 
   // Validate the data.
   let body = ctx.request.body
-  let result = await Member.FillShellCustomer(userId, body)
+  let result = await Member.fillShellCustomer(userId, body)
 
   if (result.success) {
+    ctx.status = 201
     ctx.body = { success: true }
   } else {
     ctx.body = {
@@ -118,7 +120,7 @@ async function fillShellCustomerMember (ctx) {
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function logout (ctx) {
+async function handleLogout (ctx) {
   ctx.cookies.set('jwt')
   ctx.body = { success: true }
 }
@@ -131,8 +133,8 @@ async function logout (ctx) {
  * @async
  */
 async function verifyUserState (ctx, next) {
-  let userId = ctx.state.decodedUserId
-  let state = await Member.CheckMemberStatus(userId)
+  let userId = ctx.state.userId
+  let state = await Member.checkMemberStatus(userId)
 
   if (state === Member.STATE.Normal) {
     return next()
@@ -147,9 +149,9 @@ async function verifyUserState (ctx, next) {
 }
 
 export default {
-  handleOAuthCallback,
+  handleLogin,
   verifyJWTToken,
-  fillShellCustomerMember,
-  logout,
+  handleSignup,
+  handleLogout,
   verifyUserState
 }
