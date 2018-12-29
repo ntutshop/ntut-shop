@@ -51,7 +51,7 @@ const PROFILE_VALIDATOR = Joi.object().keys({
  * @param {string} userId An user_id from Facebook.
  * @async
  */
-async function FindOneMemeberByUserId (userId) {
+async function findOneMemeberByUserId (userId) {
   return Member.findOne({
     where: {
       user_id: userId
@@ -64,8 +64,8 @@ async function FindOneMemeberByUserId (userId) {
  * @param {string} userId An user_id from Facebook.
  * @async
  */
-async function CheckMemberStatus (userId) {
-  let member = await FindOneMemeberByUserId(userId)
+async function checkMemberStatus (userId) {
+  let member = await findOneMemeberByUserId(userId)
   if (!member) {
     return STATE.Unauthorized
   } else if (member.username === '') {
@@ -80,7 +80,7 @@ async function CheckMemberStatus (userId) {
  * @param {string} userId A user_id from Facebook.
  * @async
  */
-async function CreateShellCustomer (userId) {
+async function createShellCustomer (userId) {
   return Member.create({
     // id is auto-increment
     user_id: userId,
@@ -110,7 +110,7 @@ async function CreateShellCustomer (userId) {
  * @param {ProfileData} data ProfileData.
  * @async
  */
-async function FillShellCustomer (userId, data) {
+async function fillShellCustomer (userId, data) {
   // Validate the data.
   let result = PROFILE_VALIDATOR.validate(data)
   if (result.error) {
@@ -136,9 +136,9 @@ async function FillShellCustomer (userId, data) {
 }
 
 export default {
-  FindOneMemeberByUserId,
-  CheckMemberStatus,
-  CreateShellCustomer,
-  FillShellCustomer,
+  findOneMemeberByUserId,
+  checkMemberStatus,
+  createShellCustomer,
+  fillShellCustomer,
   STATE
 }

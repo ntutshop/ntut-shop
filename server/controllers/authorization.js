@@ -9,7 +9,7 @@ import {
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function OAuthCallback (ctx) {
+async function handleOAuthCallback (ctx) {
   let authResponse = ctx.request.body.authResponse
 
   // == Check fields
@@ -27,7 +27,7 @@ async function OAuthCallback (ctx) {
   ctx.cookies.set('jwt', JWT_TOKEN)
 
   // == Check the member
-  let state = await Member.CheckMemberStatus(uid)
+  let state = await Member.checkMemberStatus(uid)
   if (state === Member.STATE.Normal) {
     ctx.body = {
       success: true,
@@ -39,7 +39,7 @@ async function OAuthCallback (ctx) {
       redirect: '/signup'
     }
   } else {
-    await Member.CreateShellCustomer(uid)
+    await Member.createShellCustomer(uid)
     ctx.body = {
       success: true,
       redirect: '/signup'
@@ -52,7 +52,7 @@ async function OAuthCallback (ctx) {
  * @param {IRouterContext} ctx Context.
  * @param {Function} next Next middleware.
  */
-async function VerifyJWTToken (ctx, next) {
+async function verifyJWTToken (ctx, next) {
   // Check whether header jwt is emtpy or not.
   let jwtToken = ctx.cookies.get('jwt')
   if (!jwtToken) {
@@ -84,7 +84,7 @@ async function VerifyJWTToken (ctx, next) {
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function FillShellCustomerMember (ctx) {
+async function fillShellCustomerMember (ctx) {
   // Check whether the user is at unregistered state.
   let userId = ctx.state.decodedUserId
   let state = await Member.CheckMemberStatus(userId)
@@ -118,7 +118,7 @@ async function FillShellCustomerMember (ctx) {
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function Logout (ctx) {
+async function logout (ctx) {
   ctx.cookies.set('jwt')
   ctx.body = { success: true }
 }
@@ -130,7 +130,7 @@ async function Logout (ctx) {
  * @param {Function} next Next middleware.
  * @async
  */
-async function VerifyUserState (ctx, next) {
+async function verifyUserState (ctx, next) {
   let userId = ctx.state.decodedUserId
   let state = await Member.CheckMemberStatus(userId)
 
@@ -147,9 +147,9 @@ async function VerifyUserState (ctx, next) {
 }
 
 export default {
-  OAuthCallback,
-  VerifyJWTToken,
-  FillShellCustomerMember,
-  Logout,
-  VerifyUserState
+  handleOAuthCallback,
+  verifyJWTToken,
+  fillShellCustomerMember,
+  logout,
+  verifyUserState
 }

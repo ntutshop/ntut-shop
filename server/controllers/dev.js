@@ -13,30 +13,39 @@ import { SERVER_CONFIG as SV_CONFIG } from '../config/config.js'
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function FakeFacebookLogin (ctx) {
-  let userId = ctx.query.user_id
+async function fakeFacebookLogin (ctx) {
+  let uid = ctx.query.user_id
 
-  if (!userId) {
+  if (!uid) {
     consola.error('Got no user_id in query.')
     return ctx.redirect('/') // *It should change to an error page.
   }
 
   // == Sign user_id with key
-  const JWT_TOKEN = jwt.sign(userId, SV_CONFIG.JWT_SECRET)
+  const JWT_TOKEN = jwt.sign(uid, SV_CONFIG.JWT_SECRET)
   ctx.cookies.set('jwt', JWT_TOKEN)
 
   // == Check the member
-  let state = await Member.CheckMemberStatus(userId)
+  let state = await Member.checkMemberStatus(uid)
   if (state === Member.STATE.Normal) {
-    ctx.redirect(SV_CONFIG.BASE_URL)
+    ctx.body = {
+      success: true,
+      redirect: '/'
+    }
   } else if (state === Member.STATE.Unregistered) {
-    ctx.redirect(SV_CONFIG.BASE_URL + '/signup')
+    ctx.body = {
+      success: true,
+      redirect: '/signup'
+    }
   } else {
-    await Member.CreateShellCustomer(userId)
-    ctx.redirect(SV_CONFIG.BASE_URL + '/signup')
+    await Member.createShellCustomer(uid)
+    ctx.body = {
+      success: true,
+      redirect: '/signup'
+    }
   }
 }
 
 export default {
-  FakeFacebookLogin
+  fakeFacebookLogin
 }
