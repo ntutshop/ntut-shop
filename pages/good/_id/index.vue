@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import Crumbs from '@/components/product/crumbs.vue'
-import Detail from '@/components/product-detail/detail.vue'
+import Crumbs from '@/components/good/crumbs.vue'
+import Detail from '@/components/good-detail/detail.vue'
 export default {
   components: {
     Crumbs,
