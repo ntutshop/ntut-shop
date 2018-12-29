@@ -5,7 +5,7 @@
       class="mx-auto"
       max-width="600"
     >
-      <nuxt-link to="/product/1">
+      <nuxt-link to="/good/1">
         <v-img
           height="180"
           src="https://cdn.vuetifyjs.com/images/cards/kitchen.png"
