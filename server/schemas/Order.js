@@ -5,11 +5,12 @@
  * @param {DataType} DataTypes Data types defined by sequelize.
  */
 export default function (sequelize, DataTypes) {
-  return sequelize.define('ORDERS', {
+  return sequelize.define('ORDER', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     member_id: {
       type: DataTypes.INTEGER(11),
@@ -35,6 +36,22 @@ export default function (sequelize, DataTypes) {
         key: 'id'
       }
     },
+    good_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'GOOD',
+        key: 'id'
+      }
+    },
+    quantity: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false
+    },
+    total: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false
+    },
     state: {
       type: DataTypes.INTEGER(4),
       allowNull: false
@@ -45,6 +62,6 @@ export default function (sequelize, DataTypes) {
       defaultValue: sequelize.fn('current_timestamp')
     }
   }, {
-    tableName: 'ORDERS'
+    tableName: 'ORDER'
   })
 }

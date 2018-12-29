@@ -9,7 +9,8 @@ export default function (sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     member_id: {
       type: DataTypes.INTEGER(11),
