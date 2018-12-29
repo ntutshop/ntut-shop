@@ -30,7 +30,8 @@
               block
               color="blue"
               dark
-              @click="fakeLogin">送出</v-btn>
+              @click="fakeLogin"
+            >送出</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -62,11 +63,16 @@ export default {
   },
   methods: {
     login () {
-      if (this.envMode === 'development') {
-        this.showDialog = true
-      } else {
-        window.location = 'https://www.facebook.com/v3.2/dialog/oauth?client_id=444077546126314&redirect_uri=https://virtualprism.io/api/oauth/facebook/callback&state=vortex&scope=public_profile,email'
-      }
+      /* global FB */
+      FB.login(
+        async (response) => {
+          console.log(response.authResponse)
+          await this.$axios.post('/api/login', {
+            authResponse: response.authResponse
+          })
+        },
+        { scope: 'public_profile,email' }
+      )
     },
     async fakeLogin () {
       window.location = `/api/dev/facebook_login?user_id=${this.userid}`

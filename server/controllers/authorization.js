@@ -3,7 +3,10 @@ import consola from 'consola'
 import jwt from 'jsonwebtoken'
 import request from 'request'
 import Member from '../models/Member.js'
-import { FACEBOOK_CONFIG as FB_CONFIG, SERVER_CONFIG as SV_CONFIG } from '../config/config.js'
+import {
+  FACEBOOK_CONFIG as FB_CONFIG,
+  SERVER_CONFIG as SV_CONFIG
+} from '../config/config.js'
 
 /**
  * Retrive the access_token from Facebook by user's code.
@@ -12,17 +15,23 @@ import { FACEBOOK_CONFIG as FB_CONFIG, SERVER_CONFIG as SV_CONFIG } from '../con
  * @private
  */
 function RetriveAccessToken (code) {
-  const ACCESS_URL = 'https://graph.facebook.com/v3.2/oauth/access_token?' +
-    `client_id=${FB_CONFIG.APP_ID}&redirect_uri=${FB_CONFIG.REDIRECT_URI}&client_secret=${FB_CONFIG.APP_SECRET}&code=${code}`
+  const ACCESS_URL =
+    'https://graph.facebook.com/v3.2/oauth/access_token?' +
+    `client_id=${FB_CONFIG.APP_ID}&redirect_uri=${
+      FB_CONFIG.REDIRECT_URI
+    }&client_secret=${FB_CONFIG.APP_SECRET}&code=${code}`
 
   return new Promise((resolve, reject) => {
-    request({
-      method: 'GET',
-      url: ACCESS_URL,
-      json: true
-    }, (error, response, body) => {
-      error ? reject(error) : resolve(body)
-    })
+    request(
+      {
+        method: 'GET',
+        url: ACCESS_URL,
+        json: true
+      },
+      (error, response, body) => {
+        error ? reject(error) : resolve(body)
+      }
+    )
   })
 }
 
@@ -35,17 +44,21 @@ function RetriveAccessToken (code) {
 function RetriveUserId (accessToken) {
   const HMAC_SHA256 = crypto.createHmac('sha256', FB_CONFIG.APP_SECRET)
   const APP_SECRET_PROOF = HMAC_SHA256.update(accessToken).digest('hex')
-  const PROFILE_URL = 'https://graph.facebook.com/me?' +
+  const PROFILE_URL =
+    'https://graph.facebook.com/me?' +
     `access_token=${accessToken}&appsecret_proof=${APP_SECRET_PROOF}`
 
   return new Promise((resolve, reject) => {
-    request({
-      url: PROFILE_URL,
-      method: 'GET',
-      json: true
-    }, (error, response, body) => {
-      error ? reject(error) : resolve(body)
-    })
+    request(
+      {
+        url: PROFILE_URL,
+        method: 'GET',
+        json: true
+      },
+      (error, response, body) => {
+        error ? reject(error) : resolve(body)
+      }
+    )
   })
 }
 
@@ -55,29 +68,32 @@ function RetriveUserId (accessToken) {
  * @async
  */
 async function OAuthCallback (ctx) {
-  if (!ctx.query.code) {
-    consola.error('Got no code in query.')
-    return ctx.redirect('/') // *It should change to an error page.
-  }
+  let authResponse = ctx.request.body.authResponse
+  console.log(authResponse)
+  // if (!ctx.query.code) {
+  //   consola.error('Got no code in query.')
+  //   return ctx.redirect('/') // *It should change to an error page.
+  // }
 
-  // == Get user's token.
-  let body = await RetriveAccessToken(ctx.query.code)
+  // // == Get user's token.
+  // let body = await RetriveAccessToken(ctx.query.code)
 
-  // == Get the user_id from user's profile by the token.
-  body = await RetriveUserId(body.access_token)
+  // // == Get the user_id from user's profile by the token.
+  // body = await RetriveUserId(body.access_token)
 
   // == Sign user_id with key
-  const JWT_TOKEN = jwt.sign(body.id, SV_CONFIG.JWT_SECRET)
+  let uid = authResponse.userID
+  const JWT_TOKEN = jwt.sign(uid, SV_CONFIG.JWT_SECRET)
   ctx.cookies.set('jwt', JWT_TOKEN)
 
   // == Check the member
-  let state = await Member.CheckMemberStatus(body.id)
+  let state = await Member.CheckMemberStatus(uid)
   if (state === Member.STATE.Normal) {
     ctx.redirect(SV_CONFIG.BASE_URL)
   } else if (state === Member.STATE.Unregistered) {
     ctx.redirect(SV_CONFIG.BASE_URL + '/signup')
   } else {
-    await Member.CreateShellCustomer(body.id)
+    await Member.CreateShellCustomer(uid)
     ctx.redirect(SV_CONFIG.BASE_URL + '/signup')
   }
 }
@@ -127,7 +143,8 @@ async function FillShellCustomerMember (ctx) {
     ctx.body = {
       success: false,
       type: 'state',
-      message: (state === Member.STATE.Unauthorized) ? 'unauthorized' : 'logged-in'
+      message:
+        state === Member.STATE.Unauthorized ? 'unauthorized' : 'logged-in'
     }
     return
   }
@@ -176,7 +193,8 @@ async function VerifyUserState (ctx, next) {
     ctx.body = {
       success: false,
       type: 'state',
-      message: (state === Member.STATE.Unauthorized) ? 'unauthorized' : 'unregistered'
+      message:
+        state === Member.STATE.Unauthorized ? 'unauthorized' : 'unregistered'
     }
   }
 }

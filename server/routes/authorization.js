@@ -15,4 +15,6 @@ router.post('/signup', controller.VerifyJWTToken, controller.FillShellCustomerMe
 // Logout route.
 router.get('/logout', controller.Logout)
 
+router.post('/login', controller.OAuthCallback)
+
 export default router
