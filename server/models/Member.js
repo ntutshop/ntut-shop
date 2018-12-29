@@ -47,15 +47,26 @@ const PROFILE_VALIDATOR = Joi.object().keys({
 })
 
 /**
- * Try to find a member by user_id.
+ * Get a user's information by a user_id.
  * @param {string} userId An user_id from Facebook.
  * @async
  */
-async function findOneMemeberByUserId (userId) {
+async function getUserInformationByUserId (userId) {
   return Member.findOne({
     where: {
       user_id: userId
     }
+  })
+}
+
+/**
+ * Get a user's information by a username.
+ * @param {string} username Username.
+ * @async
+ */
+async function getUserInformationByUsername (username) {
+  return Member.findOne({
+    where: { username }
   })
 }
 
@@ -65,7 +76,7 @@ async function findOneMemeberByUserId (userId) {
  * @async
  */
 async function checkMemberStatus (userId) {
-  let member = await findOneMemeberByUserId(userId)
+  let member = await getUserInformationByUserId(userId)
   if (!member) {
     return STATE.Unauthorized
   } else if (member.username === '') {
@@ -136,7 +147,8 @@ async function fillShellCustomer (userId, data) {
 }
 
 export default {
-  findOneMemeberByUserId,
+  getUserInformationByUserId,
+  getUserInformationByUsername,
   checkMemberStatus,
   createShellCustomer,
   fillShellCustomer,
