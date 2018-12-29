@@ -1,5 +1,6 @@
 import db from '../config/db.js'
 import MemberSchema from '../schemas/Member.js'
+import errorGen from '../modules/errorgen.js'
 import Joi from 'joi'
 import sequelize from 'sequelize'
 
@@ -115,7 +116,7 @@ async function FillShellCustomer (userId, data) {
   if (result.error) {
     return {
       success: false,
-      error: result.error.details[0]
+      error: errorGen(result.error.details)
     }
   }
 
