@@ -53,7 +53,7 @@ export default {
   components: {
     Avatar
   },
-  data () {
+  data() {
     return {
       user: '',
       envMode: process.env.NODE_ENV,
@@ -62,10 +62,10 @@ export default {
     }
   },
   methods: {
-    login () {
+    login() {
       /* global FB */
       FB.login(
-        async (response) => {
+        async response => {
           console.log(response.authResponse)
           await this.$axios.post('/api/login', {
             authResponse: response.authResponse
@@ -74,14 +74,14 @@ export default {
         { scope: 'public_profile,email' }
       )
     },
-    async fakeLogin () {
+    async fakeLogin() {
       window.location = `/api/dev/facebook_login?user_id=${this.userid}`
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login {
   color: #409eff;
 }
