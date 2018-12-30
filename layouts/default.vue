@@ -1,16 +1,16 @@
 <template>
   <v-app>
-    <my-header/>
+    <my-header />
     <v-content>
       <nuxt />
     </v-content>
-    <my-footer/>
+    <my-footer />
   </v-app>
 </template>
 
 <script>
-import MyHeader from '../components/public/header/header.vue'
-import MyFooter from '../components/public/footer/footer.vue'
+import MyHeader from '../components/public/header/index.vue'
+import MyFooter from '../components/public/footer/index.vue'
 export default {
   components: {
     MyHeader,
