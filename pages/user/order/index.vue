@@ -14,10 +14,36 @@
       </v-flex>
       <v-flex xs10>
         <el-tabs type="border-card">
-          <el-tab-pane label="待處理">待處理</el-tab-pane>
-          <el-tab-pane label="處理中">處理中</el-tab-pane>
-          <el-tab-pane label="完成">完成</el-tab-pane>
-          <el-tab-pane label="取消">取消</el-tab-pane>
+          <el-tab-pane label="待處理">
+            <order
+              v-for="(item, index) in penddingOrderList"
+              :key="index"
+              :meta="item"
+              :confirm="false"
+            />
+          </el-tab-pane>
+          <el-tab-pane label="處理中">
+            <order
+              v-for="(item, index) in handlingOrderList"
+              :key="index"
+              :meta="item"
+              pending="true"
+            />
+          </el-tab-pane>
+          <el-tab-pane label="完成">
+            <order
+              v-for="(item, index) in finishOrderList"
+              :key="index"
+              :meta="item"
+            />
+          </el-tab-pane>
+          <el-tab-pane label="取消">
+            <order
+              v-for="(item, index) in cancelOrderList"
+              :key="index"
+              :meta="item"
+            />
+          </el-tab-pane>
         </el-tabs>
       </v-flex>
     </v-layout>
@@ -26,17 +52,79 @@
 
 <script>
 import SideBar from '@/components/user/sidebar'
-
+import Order from '@/components/user/order/order'
 export default {
   components: {
-    SideBar
+    SideBar,
+    Order
   },
   data() {
     return {
       items: [
         { title: 'Home', icon: 'dashboard' },
         { title: 'About', icon: 'question_answer' }
-      ]
+      ],
+      penddingOrderList: [
+        {
+          name: '雲南菜',
+          imgUrl:
+            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
+          rate: 5,
+          owner: 'Andy Meow',
+          price: 238,
+          type: '食物'
+        },
+        {
+          name: '雲南菜',
+          imgUrl:
+            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
+          rate: 5,
+          owner: 'Andy Meow',
+          price: 238,
+          type: '食物'
+        }
+      ],
+      handlingOrderList: [
+        {
+          name: '雲南菜',
+          imgUrl:
+            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
+          rate: 5,
+          owner: 'Andy Meow',
+          price: 238,
+          type: '食物'
+        },
+        {
+          name: '雲南菜',
+          imgUrl:
+            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
+          rate: 5,
+          owner: 'Andy Meow',
+          price: 238,
+          type: '食物'
+        }
+      ],
+      finishOrderList: [
+        {
+          name: '雲南菜',
+          imgUrl:
+            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
+          rate: 5,
+          owner: 'Andy Meow',
+          price: 238,
+          type: '食物'
+        },
+        {
+          name: '雲南菜',
+          imgUrl:
+            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
+          rate: 5,
+          owner: 'Andy Meow',
+          price: 238,
+          type: '食物'
+        }
+      ],
+      cancelOrderList: []
     }
   }
 }
