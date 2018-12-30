@@ -70,7 +70,26 @@ async function getUserInformation (ctx) {
   }
 }
 
+/**
+ * Modify user's profile.
+ * @param {IRouterContext} ctx Koa's router context.
+ */
+async function modifyUserProfile (ctx) {
+  let result = await Member.modifyUserInformationByUserId(ctx.state.userId, ctx.request.body)
+
+  if (result.success) {
+    ctx.body = { success: true }
+  } else {
+    ctx.body = {
+      success: false,
+      type: 'body',
+      error: result.error
+    }
+  }
+}
+
 export default {
   getUserState,
-  getUserInformation
+  getUserInformation,
+  modifyUserProfile
 }

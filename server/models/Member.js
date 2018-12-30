@@ -31,9 +31,9 @@ const STATE = Object.freeze({
 })
 
 /**
- * A JSON validator for function FillShellCustomerMember.
+ * A JSON validator for users' profile.
  */
-const PROFILE_VALIDATOR = Joi.object().keys({
+const PROFILE_VALIDATOR = Joi.object().required().keys({
   username: Joi.string()
     .required(),
   nickname: Joi.string()
@@ -123,7 +123,7 @@ async function createShellCustomer (userId) {
  */
 async function fillShellCustomer (userId, data) {
   // Validate the data.
-  let result = PROFILE_VALIDATOR.validate(data)
+  let result = PROFILE_VALIDATOR.validate(data, { abortEarly: false })
   if (result.error) {
     return {
       success: false,
@@ -146,11 +146,43 @@ async function fillShellCustomer (userId, data) {
   return { success: true }
 }
 
+/**
+ * Modify user's profile.
+ * @param {string} userId The user's user_id.
+ * @param {ProfileData} data The new profile data.
+ * @async
+ */
+async function modifyUserInformationByUserId (userId, data) {
+  // Validate the data.
+  let result = PROFILE_VALIDATOR.validate(data, { abortEarly: false })
+
+  if (result.error) {
+    return {
+      success: false,
+      error: errorGen(result.error.details)
+    }
+  }
+
+  // Update the profile
+  let value = result.value
+  await Member.update({ // This statement can be replace by 'let queryResult = await ..' for checking the query result.
+    username: value.username,
+    phone: value.phone,
+    email: value.email,
+    nickname: value.nickname || value.username
+  }, {
+    where: { user_id: userId },
+    fields: [ 'username', 'phone', 'email', 'nickname' ]
+  })
+  return { success: true }
+}
+
 export default {
   getUserInformationByUserId,
   getUserInformationByUsername,
   checkMemberStatus,
   createShellCustomer,
   fillShellCustomer,
+  modifyUserInformationByUserId,
   STATE
 }

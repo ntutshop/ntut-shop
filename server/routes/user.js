@@ -13,4 +13,7 @@ router.get('/information', controller.getUserInformation)
 // Add JWT token and user state verifications as authorization filter.
 router.use(authController.verifyJWTToken, authController.verifyUserState)
 
+// Modify user's profile.
+router.put('/information', controller.modifyUserProfile)
+
 export default router
