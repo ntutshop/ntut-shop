@@ -59,7 +59,7 @@ async function verifyJWTToken (ctx, next) {
   if (!jwtToken) {
     ctx.body = {
       success: false,
-      type: 'authorization',
+      type: 'state',
       message: 'empty'
     }
     return
@@ -73,7 +73,7 @@ async function verifyJWTToken (ctx, next) {
   } catch (ex) {
     ctx.body = {
       success: false,
-      type: 'authorization',
+      type: 'state',
       message: 'invalid'
     }
   }
