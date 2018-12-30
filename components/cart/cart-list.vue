@@ -1,6 +1,8 @@
 <template>
   <el-table
+    ref="singleTable"
     :data="cartData"
+    highlight-current-row
     class="cart-table"
   >
     <el-table-column
@@ -49,7 +51,7 @@ export default {
     }
   },
   methods: {
-    handleDelete (index, row) {
+    handleDelete(index, row) {
       console.log(index, row)
     }
   }
