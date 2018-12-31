@@ -26,7 +26,7 @@ const createStore = () => {
             dispatch('setLoggedIn', false)
             dispatch('setUserInfo', undefined)
           } else if (code === 403) {
-            dispatch('setLoggedIn', false)
+            dispatch('setLoggedIn', true)
             dispatch('setUserInfo', undefined)
           } else if (code === 404) {
             dispatch('setLoggedIn', false)

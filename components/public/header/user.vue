@@ -1,13 +1,23 @@
 <template>
   <v-layout class="m-user">
-    <v-flex v-if="user">
+    <v-flex v-if="loggedIn">
       <v-layout justify-center>
-        <avatar
-          :username="user"
-          size="40"
-          color="#FFF"
-          background-color="#409eff"
-        />
+        <v-btn
+          fab
+          dark
+          outline
+          color="blue"
+          @click="$router.push('/user')"
+        >
+          <v-avatar
+          >
+            <img
+              v-if="avatar"
+              :src="avatar"
+            >
+            <span v-else>{{ userInfo ? userInfo.nickname[0] : '?' }}</span>
+          </v-avatar>
+        </v-btn>
       </v-layout>
     </v-flex>
     <v-flex v-else>
@@ -24,11 +34,8 @@
 </template>
 
 <script>
-import Avatar from 'vue-avatar'
+import { mapState } from 'vuex'
 export default {
-  components: {
-    Avatar
-  },
   data() {
     return {
       user: '',
@@ -37,7 +44,41 @@ export default {
       userid: ''
     }
   },
+  computed: {
+    avatar() {
+      if (this.userInfo) {
+        if (this.userInfo.authority === 'Facebook') {
+          return `https://graph.facebook.com/v3.2/${
+            this.userInfo.user_id
+          }/picture`
+        }
+      }
+      return undefined
+    },
+    ...mapState(['loggedIn', 'userInfo'])
+  },
   methods: {
+    async update() {
+      try {
+        let { data } = await this.$axios.get('/user/information')
+        this.$store.dispatch('setLoggedIn', true)
+        this.$store.dispatch('setUserInfo', data)
+      } catch (e) {
+        const code = parseInt(e.response && e.response.status)
+        if (code === 401) {
+          this.$store.dispatch('setLoggedIn', false)
+          this.$store.dispatch('setUserInfo', undefined)
+        } else if (code === 403) {
+          this.$store.dispatch('setLoggedIn', false)
+          this.$store.dispatch('setUserInfo', undefined)
+        } else if (code === 404) {
+          this.$store.dispatch('setLoggedIn', false)
+          this.$store.dispatch('setUserInfo', undefined)
+        } else {
+          throw e
+        }
+      }
+    },
     login() {
       /* global FB */
       FB.login(
@@ -46,17 +87,19 @@ export default {
             await this.$axios.post('/login', {
               authResponse: response.authResponse
             })
+            this.update()
             this.$router.replace('/')
           } catch (e) {
             const code = parseInt(e.response && e.response.status)
             if (code === 401) {
-              store.dispatch('setLoggedIn', false)
+              this.update()
               this.$nuxt.error({ statusCode: 401 })
             } else if (
               code === 403 &&
               e.response.data.reason === 'unregistered'
             ) {
-              this.$nuxt.error({ statusCode: 403, message: 'unregistered' })
+              this.update()
+              this.$router.push('/signup')
             } else {
               throw e
             }
@@ -68,12 +111,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.login {
-  color: #409eff;
-}
-.register {
-  margin-left: 10px;
-}
-</style>

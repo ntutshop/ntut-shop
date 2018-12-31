@@ -107,12 +107,34 @@ export default {
     }
   },
   methods: {
+    async update() {
+      try {
+        let { data } = await this.$axios.get('/user/information')
+        this.$store.dispatch('setLoggedIn', true)
+        this.$store.dispatch('setUserInfo', data)
+      } catch (e) {
+        const code = parseInt(e.response && e.response.status)
+        if (code === 401) {
+          this.$store.dispatch('setLoggedIn', false)
+          this.$store.dispatch('setUserInfo', undefined)
+        } else if (code === 403) {
+          this.$store.dispatch('setLoggedIn', false)
+          this.$store.dispatch('setUserInfo', undefined)
+        } else if (code === 404) {
+          this.$store.dispatch('setLoggedIn', false)
+          this.$store.dispatch('setUserInfo', undefined)
+        } else {
+          throw e
+        }
+      }
+    },
     async submit() {
       try {
         Object.keys(this.error).forEach(key => {
           this.error[key] = ''
         })
         await this.$axios.post('/signup', this.input)
+        this.update()
         this.$router.replace('/')
       } catch (e) {
         const code = parseInt(e.response && e.response.status)
@@ -121,6 +143,7 @@ export default {
             this.error[key] = e.response.data.error[key]
           })
         } else if (code === 403 && e.response.data.reason === 'registered') {
+          this.update()
           this.$nuxt.error({ statusCode: 403, message: 'registered' })
         } else {
           throw e
