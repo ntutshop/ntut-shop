@@ -7,7 +7,7 @@ import { SERVER_CONFIG as SV_CONFIG } from '../config/config.js'
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function getUserState (ctx) {
+async function getUserState(ctx) {
   let response = {
     success: true,
     type: 'state',
@@ -60,7 +60,7 @@ async function checkLogin() {
  * @param {IRouterContext} ctx Context.
  * @async
  */
-async function getUserInformation (ctx) {
+async function getUserInformation(ctx) {
   let query = ctx.query
   let information
 
@@ -82,7 +82,7 @@ async function getUserInformation (ctx) {
  * @param {IRouterContext} ctx Koa's router context.
  * @async
  */
-async function modifyUserProfile (ctx) {
+async function modifyUserProfile(ctx) {
   let result = await Member.modifyUserInformationByUserId(ctx.state.userId, ctx.request.body)
 
   if (result.success) {
@@ -101,7 +101,7 @@ async function modifyUserProfile (ctx) {
  * @param {IRouterContext} ctx Koa's router. context.
  * @async
  */
-async function getOrdersInformation (ctx) {
+async function getOrdersInformation(ctx) {
   try {
     let result = await Member.getAllUserOrders(ctx.state.userId, ctx.query.state)
     ctx.status = 200
