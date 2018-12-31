@@ -151,16 +151,29 @@ async function fillShellCustomer (memberId, data) {
 
   // Update the profile
   let value = result.value
-  await Member.update({ // This statement can be replace by 'let queryResult = await ..' for checking the query result.
-    username: value.username,
-    phone: value.phone,
-    email: value.email,
-    nickname: value.nickname || value.username,
-    register_time: sequelize.fn('NOW')
-  }, {
-    where: { id: memberId },
-    fields: [ 'username', 'phone', 'email', 'nickname', 'register_time' ]
-  })
+  try {
+    await Member.update({ // This statement can be replace by 'let queryResult = await ..' for checking the query result.
+      username: value.username,
+      phone: value.phone,
+      email: value.email,
+      nickname: value.nickname || value.username,
+      register_time: sequelize.fn('NOW')
+    }, {
+      where: { id: memberId },
+      fields: [ 'username', 'phone', 'email', 'nickname', 'register_time' ]
+    })
+  } catch (ex) {
+    let fisrtError = ex.errors[0]
+    // This should be processed by an error object converter.
+    if (fisrtError.type === 'unique violation') {
+      return {
+        success: false,
+        error: { username: "指定的使用者名稱已被其他使用者使用，請改成其他名稱。" }
+      }
+    } else {
+      throw ex
+    }
+  }
   return { success: true }
 }
 
@@ -183,15 +196,28 @@ async function modifyUserInformationByMemberId (memberId, data) {
 
   // Update the profile
   let value = result.value
-  await Member.update({ // This statement can be replace by 'let queryResult = await ..' for checking the query result.
-    username: value.username,
-    phone: value.phone,
-    email: value.email,
-    nickname: value.nickname || value.username
-  }, {
-    where: { id: memberId },
-    fields: [ 'username', 'phone', 'email', 'nickname' ]
-  })
+  try {
+    await Member.update({ // This statement can be replace by 'let queryResult = await ..' for checking the query result.
+      username: value.username,
+      phone: value.phone,
+      email: value.email,
+      nickname: value.nickname || value.username
+    }, {
+      where: { id: memberId },
+      fields: [ 'username', 'phone', 'email', 'nickname' ]
+    })
+  } catch (ex) {
+    let fisrtError = ex.errors[0]
+    // This should be processed by an error object converter.
+    if (fisrtError.type === 'unique violation') {
+      return {
+        success: false,
+        error: { username: "指定的使用者名稱已被其他使用者使用，請改成其他名稱。" }
+      }
+    } else {
+      throw ex
+    }
+  }
   return { success: true }
 }
 
