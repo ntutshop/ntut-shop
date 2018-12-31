@@ -17,6 +17,6 @@ router.use(authController.verifyJWTToken, authController.verifyUserState)
 router.put('/information', controller.modifyUserProfile)
 
 // Get user's orders
-router.get('/order', controller.getOrdersInformation)
+router.get('/orders', controller.getOrdersInformation)
 
 export default router
