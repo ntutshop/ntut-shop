@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-card class="good-header-card">
-      <el-row gutter="24">
+      <el-row :gutter="24">
         <el-col :span="13">
           <v-carousel height="350">
             <v-carousel-item
