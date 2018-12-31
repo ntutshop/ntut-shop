@@ -11,7 +11,7 @@
     >
       <el-card style="width: 700px;">
         <h2 class="title">新建商品</h2>
-        <p class="title-description">填入新商品的｀資訊</p>
+        <p class="title-description">填入新商品的資訊</p>
         <v-divider />
         <el-form
           ref="form"
