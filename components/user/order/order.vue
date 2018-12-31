@@ -61,13 +61,17 @@
       <el-col :span="4">
         <div class="order-status">
           <div
-            v-if="state==='waiting'"
+            v-if="meta.state==='waiting'"
             class="blue--text"
-          >狀態：等待賣家確認中</div>
+          >等待賣家確認中</div>
           <div
-            v-else-if="state==='reject'"
+            v-else-if="meta.state==='reject'"
             class="red--text"
-          >狀態：賣家拒絕交易</div>
+          >賣家拒絕交易</div>
+          <div
+            v-else-if="meta.state==='cancel'"
+            class="red--text"
+          >買家取消交易</div>
         </div>
       </el-col>
     </el-row>
@@ -91,11 +95,10 @@ export default {
     pending: {
       type: Boolean,
       default: false
-    }
-  },
-  data() {
-    return {
-      state: 'reject'
+    },
+    state: {
+      type: String,
+      default: ''
     }
   }
 }

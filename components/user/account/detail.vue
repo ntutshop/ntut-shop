@@ -12,7 +12,7 @@
         label="使用者名稱"
         style="width: 400px;"
       >
-        <div>{{ form.username }}</div>
+        <el-input v-model="form.username" />
       </el-form-item>
       <el-form-item
         label="暱稱"
