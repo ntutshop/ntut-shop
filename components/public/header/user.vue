@@ -49,7 +49,7 @@ export default {
         if (this.userInfo.authority === 'Facebook') {
           return `https://graph.facebook.com/v3.2/${
             this.userInfo.user_id
-          }/picture`
+          }/picture?type=normal`
         }
       }
       return undefined
