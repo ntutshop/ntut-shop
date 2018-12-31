@@ -7,10 +7,9 @@
           dark
           outline
           color="blue"
-          style="width:46px;height:46px;"
-          @click="$router.push('/user')"
+          @click="$router.push('/user/account')"
         >
-          <v-avatar size="40">
+          <v-avatar>
             <img
               v-if="avatar"
               :src="avatar"
@@ -58,27 +57,6 @@ export default {
     ...mapState(['loggedIn', 'userInfo'])
   },
   methods: {
-    async update() {
-      try {
-        let { data } = await this.$axios.get('/user/information')
-        this.$store.dispatch('setLoggedIn', true)
-        this.$store.dispatch('setUserInfo', data)
-      } catch (e) {
-        const code = parseInt(e.response && e.response.status)
-        if (code === 401) {
-          this.$store.dispatch('setLoggedIn', false)
-          this.$store.dispatch('setUserInfo', undefined)
-        } else if (code === 403) {
-          this.$store.dispatch('setLoggedIn', false)
-          this.$store.dispatch('setUserInfo', undefined)
-        } else if (code === 404) {
-          this.$store.dispatch('setLoggedIn', false)
-          this.$store.dispatch('setUserInfo', undefined)
-        } else {
-          throw e
-        }
-      }
-    },
     login() {
       /* global FB */
       FB.login(
@@ -87,18 +65,18 @@ export default {
             await this.$axios.post('/login', {
               authResponse: response.authResponse
             })
-            this.update()
+            this.$store.dispatch('updateUserState')
             this.$router.replace('/')
           } catch (e) {
             const code = parseInt(e.response && e.response.status)
             if (code === 401) {
-              this.update()
+              this.$store.dispatch('updateUserState')
               this.$nuxt.error({ statusCode: 401 })
             } else if (
               code === 403 &&
               e.response.data.reason === 'unregistered'
             ) {
-              this.update()
+              this.$store.dispatch('updateUserState')
               this.$router.push('/signup')
             } else {
               throw e

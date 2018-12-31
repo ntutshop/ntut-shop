@@ -7,7 +7,7 @@ let router = new KoaRouter()
 router.post('/signup', controller.verifyJWTToken, controller.handleSignup)
 
 // Logout route.
-router.get('/logout', controller.handleLogout)
+router.post('/logout', controller.handleLogout)
 
 // Login route.
 router.post('/login', controller.handleLogin)
