@@ -14,6 +14,7 @@
 
 <script>
 export default {
+  middleware: ['checkUserLogin', 'checkUserRegister'],
   data () {
     return {
 

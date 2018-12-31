@@ -26,6 +26,7 @@
 <script>
 import List from '../components/cart/cart-list.vue'
 export default {
+  middleware: ['checkUserLogin', 'checkUserRegister'],
   components: {
     List
   },

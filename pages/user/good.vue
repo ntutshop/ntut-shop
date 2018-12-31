@@ -54,6 +54,7 @@
 import SideBar from '@/components/user/sidebar'
 import Good from '@/components/user/good/good'
 export default {
+  middleware: ['checkUserLogin', 'checkUserRegister'],
   components: {
     SideBar,
     Good
