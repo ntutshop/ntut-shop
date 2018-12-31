@@ -1,5 +1,5 @@
 import consola from 'consola'
-import bodyparser from 'koa-bodyparser'
+import body from 'koa-body'
 import router from './routes/main.js'
 import ntutdb from './config/db.js'
 
@@ -8,7 +8,16 @@ import ntutdb from './config/db.js'
  * @param {Koa} app Koa application.
  */
 export default function (app) {
-  app.use(bodyparser())
+  app.use(body({
+    multipart: true,
+    encoding: 'gzip',
+    formidable: {
+      uploadDir: __dirname + '/public/uploads/',
+      keepExtensions: true,
+      maxFieldsSize: 5 * 1024 * 1024,
+      onFileBegin: (name, file) => { },
+    }
+  }))
 
   return new Promise((resolve, reject) => {
     // Check whether the connection is created or not.
