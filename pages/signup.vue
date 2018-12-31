@@ -113,6 +113,7 @@ export default {
           this.error[key] = ''
         })
         await this.$axios.post('/signup', this.input)
+        this.$router.replace('/')
       } catch (e) {
         const code = parseInt(e.response && e.response.status)
         if (code === 400) {
