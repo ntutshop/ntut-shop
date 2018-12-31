@@ -1,5 +1,5 @@
 import consola from 'consola'
-import body from 'koa-body'
+import koaBody from 'koa-body'
 import router from './routes/main.js'
 import ntutdb from './config/db.js'
 
@@ -8,7 +8,7 @@ import ntutdb from './config/db.js'
  * @param {Koa} app Koa application.
  */
 export default function (app) {
-  app.use(body({
+  app.use(koaBody({
     multipart: true,
     encoding: 'gzip',
     formidable: {
