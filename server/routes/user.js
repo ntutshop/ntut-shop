@@ -4,8 +4,11 @@ import authController from '../controllers/authorization.js'
 
 let router = new KoaRouter({ prefix: '/user' })
 
-// Get user's state.
-router.get('/state', controller.getUserState)
+// Check user's login.
+router.get('/state/login', authController.verifyJWTToken, controller.checkLogin)
+
+// Check user's register.
+router.get('/state/register', authController.verifyJWTToken, authController.verifyUserState, controller.checkLogin)
 
 // Get user's information
 router.get('/information', controller.getUserInformation)

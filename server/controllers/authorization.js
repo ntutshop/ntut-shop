@@ -13,12 +13,10 @@ async function handleLogin (ctx) {
   let authResponse = ctx.request.body.authResponse
 
   // == Check fields
-  if (!authResponse || !authResponse.userId) {
-    ctx.body = {
-      success: false,
-      type: 'body',
-      message: !authResponse ? 'no-authResponse' : 'no-userId'
-    }
+  if (!authResponse || !authResponse.userID) {
+    ctx.cookies.set('jwt')
+    ctx.status = 401
+    return
   }
 
   // == Sign userID with key
@@ -29,22 +27,12 @@ async function handleLogin (ctx) {
   // == Check the member
   let state = await Member.checkMemberStatus(uid)
   if (state === Member.STATE.Normal) {
-    ctx.body = {
-      success: true,
-      redirect: '/'
-    }
-  } else if (state === Member.STATE.Unregistered) {
-    ctx.body = {
-      success: true,
-      redirect: '/signup'
-    }
-  } else {
     ctx.status = 201
+  } else if (state === Member.STATE.Unregistered) {
+    ctx.status = 403
+  } else {
+    ctx.status = 403
     await Member.createShellCustomer(uid)
-    ctx.body = {
-      success: true,
-      redirect: '/signup'
-    }
   }
 }
 
@@ -57,25 +45,18 @@ async function verifyJWTToken (ctx, next) {
   // Check whether header jwt is emtpy or not.
   let jwtToken = ctx.cookies.get('jwt')
   if (!jwtToken) {
-    ctx.body = {
-      success: false,
-      type: 'state',
-      message: 'empty'
-    }
+    ctx.status = 401
     return
   }
 
   // Verify jwt token.
-  // The decoded user_id will be set on ctx.state.decodedUserId if verification succees.
+  // The decoded user_id will be set on ctx.state.userId if verification succees.
   try {
     ctx.state.userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
     return next()
   } catch (ex) {
-    ctx.body = {
-      success: false,
-      type: 'state',
-      message: 'invalid'
-    }
+    ctx.cookies.set('jwt')
+    ctx.status = 401
   }
 }
 
@@ -89,14 +70,12 @@ async function handleSignup (ctx) {
   // Check whether the user is at unregistered state.
   let userId = ctx.state.userId
   let state = await Member.checkMemberStatus(userId)
-  if (state !== Member.STATE.Unregistered) {
-    ctx.body = {
-      success: false,
-      type: 'state',
-      message:
-        state === Member.STATE.Unauthorized ? 'unauthorized' : 'logged-in'
-    }
-    return
+  if (state === Member.STATE.Normal) {
+    ctx.status = 403
+    ctx.body = { reason: 'registered' }
+  } else if (state == Member.STATE.Unauthorized ) {
+    ctx.cookies.set('jwt')
+    ctx.status = 401
   }
 
   // Validate the data.
@@ -105,10 +84,9 @@ async function handleSignup (ctx) {
 
   if (result.success) {
     ctx.status = 201
-    ctx.body = { success: true }
   } else {
+    ctx.status = 400
     ctx.body = {
-      success: false,
       type: 'body',
       error: result.error
     }
@@ -122,7 +100,7 @@ async function handleSignup (ctx) {
  */
 async function handleLogout (ctx) {
   ctx.cookies.set('jwt')
-  ctx.body = { success: true }
+  ctx.status = 204
 }
 
 /**
@@ -138,13 +116,12 @@ async function verifyUserState (ctx, next) {
 
   if (state === Member.STATE.Normal) {
     return next()
+  } else if (state == Member.STATE.Unauthorized ) {
+    ctx.cookies.set('jwt')
+    ctx.status = 401
   } else {
-    ctx.body = {
-      success: false,
-      type: 'state',
-      message:
-        state === Member.STATE.Unauthorized ? 'unauthorized' : 'unregistered'
-    }
+    ctx.status = 403
+    ctx.body = { reason: 'unregistered' }
   }
 }
 
