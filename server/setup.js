@@ -1,5 +1,6 @@
 import consola from 'consola'
 import koaBody from 'koa-body'
+import koaStatic from 'koa-static'
 import router from './routes/main.js'
 import ntutdb from './config/db.js'
 
@@ -8,6 +9,8 @@ import ntutdb from './config/db.js'
  * @param {Koa} app Koa application.
  */
 export default function (app) {
+  app.use(koaStatic(__dirname + '/public'))
+
   app.use(koaBody({
     multipart: true,
     encoding: 'gzip',
