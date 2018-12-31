@@ -7,10 +7,10 @@
           dark
           outline
           color="blue"
+          style="width:46px;height:46px;"
           @click="$router.push('/user')"
         >
-          <v-avatar
-          >
+          <v-avatar size="40">
             <img
               v-if="avatar"
               :src="avatar"
