@@ -14,28 +14,28 @@
       </el-col>
     </el-row>
     <h2>推薦商品</h2>
-    <product-list />
+    <good-list class="good-list" />
   </div>
 </template>
 
 <script>
 import Emenu from '@/components/index/menu.vue'
 import Banner from '@/components/index/banner.vue'
-import ProductList from '@/components/index/product-list.vue'
+import GoodList from '@/components/index/good-list.vue'
 import HomeHeader from '@/components/index/home-header.vue'
 
 export default {
   components: {
     Emenu,
     Banner,
-    ProductList,
+    GoodList,
     HomeHeader
   },
   layout: 'home'
 }
 </script>
 
-<style  lang="scss">
+<style  lang="scss" scoped>
 .menu {
   position: relative;
   top: -50px;
@@ -43,5 +43,9 @@ export default {
 .banner {
   position: relative;
   top: -7px;
+}
+/deep/ .good-list {
+  margin-top: 16px;
+  margin-bottom: 40px;
 }
 </style>

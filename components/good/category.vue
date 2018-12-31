@@ -1,5 +1,5 @@
 <template>
-  <div class="m-product-categroy">
+  <div class="m-good-categroy">
     <dl class="classic">
       <dt>分類</dt>
       <dt>全部</dt>
@@ -27,7 +27,7 @@ export default {
   props: {
     types: {
       type: Array,
-      default () {
+      default() {
         return [
           {
             type: '下拉選單',
@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang="scss">
-.m-product-categroy {
+.m-good-categroy {
   padding: 20px 30px 0;
   background: #fff;
   border: 1px solid #e5e5e5;

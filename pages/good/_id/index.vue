@@ -1,5 +1,5 @@
 <template>
-  <el-row class="m-product-detail">
+  <el-row class="m-good-detail">
     <el-col :span="24">
       <crumbs
         :category="category"
@@ -41,12 +41,9 @@ export default {
 </script>
 
 <style lang="scss">
-.m-product-detail {
+.m-good-detail {
   padding: 24px 0;
   .detail-card {
-    margin-top: 24px;
-  }
-  .product-list {
     margin-top: 24px;
   }
 }

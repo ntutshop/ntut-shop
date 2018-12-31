@@ -1,10 +1,7 @@
 <template>
-  <div class="home-product-list">
+  <div class="home-good-list">
     <v-layout justify-center>
-      <v-flex
-        xs12
-        class="pt-3 pb-5"
-      >
+      <v-flex xs12>
         <v-container
           fluid
           grid-list-md
@@ -19,7 +16,7 @@
               :key="index"
               v-bind="{ [`xs${card.flex}`]: true }"
             >
-              <product />
+              <good />
             </v-flex>
           </v-layout>
         </v-container>
@@ -29,10 +26,10 @@
 </template>
 
 <script>
-import Product from './product.vue'
+import Good from './good.vue'
 export default {
   components: {
-    Product
+    Good
   },
   data: () => ({
     cards: [
@@ -90,9 +87,3 @@ export default {
   })
 }
 </script>
-
-<style lang="scss">
-.home-product-list {
-  width: 1190px;
-}
-</style>
