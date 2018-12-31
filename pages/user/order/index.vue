@@ -27,7 +27,7 @@
               v-for="(item, index) in handlingOrderList"
               :key="index"
               :meta="item"
-              pending="true"
+              :pending="true"
             />
           </el-tab-pane>
           <el-tab-pane label="完成">
@@ -95,7 +95,7 @@ export default {
           rate: 5,
           owner: 'Andy Meow',
           price: 238,
-          type: '食物',
+          type: '食物'
         },
         {
           name: '雲南菜',

@@ -2,8 +2,6 @@
   <el-menu
     :default-active="index"
     class="menu"
-    @open="handleOpen"
-    @close="handleClose"
   >
     <el-menu-item index="1">
       <nuxt-link to="/user/account">
@@ -30,8 +28,8 @@
 export default {
   props: {
     index: {
-      type: Number,
-      default: 0
+      type: String,
+      default: "1"
     }
   }
 }
