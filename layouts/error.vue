@@ -21,13 +21,13 @@
         v-if="error.statusCode === 401"
         class="display-1">OOPS！您尚未登入</p>
       <p
-        v-if="error.statusCode === 403 && error.message === 'registered'"
-        class="display-1">OOPS！您已經完成基本資料填寫</p>
+        v-else-if="error.statusCode === 403 && error.message === 'registered'"
+        class="display-1">OOPS！您已經填寫過基本資料囉</p>
       <p
-        v-if="error.statusCode === 403 && error.message === 'permission-denied'"
+        v-else-if="error.statusCode === 403 && error.message === 'permission-denied'"
         class="display-1">OOPS！您沒有權限進行此操作</p>
       <p
-        v-if="error.statusCode === 404"
+        v-else-if="error.statusCode === 404"
         class="display-1">OOPS！找不到這個頁面</p>
       <p
         v-else
