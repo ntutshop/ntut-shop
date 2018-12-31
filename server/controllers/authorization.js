@@ -13,12 +13,9 @@ async function handleLogin (ctx) {
   let authResponse = ctx.request.body.authResponse
 
   // == Check fields
-  if (!authResponse || !authResponse.userId) {
-    ctx.body = {
-      success: false,
-      type: 'body',
-      message: !authResponse ? 'no-authResponse' : 'no-userId'
-    }
+  if (!authResponse || !authResponse.userID) {
+    ctx.status = 401
+    return
   }
 
   // == Sign userID with key
@@ -29,22 +26,12 @@ async function handleLogin (ctx) {
   // == Check the member
   let state = await Member.checkMemberStatus(uid)
   if (state === Member.STATE.Normal) {
-    ctx.body = {
-      success: true,
-      redirect: '/'
-    }
-  } else if (state === Member.STATE.Unregistered) {
-    ctx.body = {
-      success: true,
-      redirect: '/signup'
-    }
-  } else {
     ctx.status = 201
+  } else if (state === Member.STATE.Unregistered) {
+    ctx.status = 403
+  } else {
+    ctx.status = 403
     await Member.createShellCustomer(uid)
-    ctx.body = {
-      success: true,
-      redirect: '/signup'
-    }
   }
 }
 
