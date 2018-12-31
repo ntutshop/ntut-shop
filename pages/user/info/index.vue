@@ -20,28 +20,34 @@
           align-center
         >
           <v-avatar size="100">
-            <img
-              src="https://cdn.vuetifyjs.com/images/john.jpg"
-              alt="John"
-            >
+            <img :src="avatar">
           </v-avatar>
         </v-layout>
         <v-layout
           justify-center
           class="user-name"
         >
-          <h2>陳威威</h2>
+          <h2>{{ userInfo.nickname }}</h2>
         </v-layout>
         <v-layout
+          column
+          wrap
           justify-center
-          class="user-department"
+          align-center
+          class="user-rate"
         >
-          <p>國立臺北科技大學 資訊工程學系</p>
+          <span class="rate-value">{{ `${userInfo.rate_average} ${rateComment}` }}</span>
+          <el-rate
+            v-model="userInfo.rate_average"
+            :colors="['#ff9900', '#ff9900', '#FF9900']"
+            disabled
+          />
         </v-layout>
         <v-layout justify-center>
           <el-button
             round
             plain
+            @click="mailto"
           >聯絡他</el-button>
         </v-layout>
         <el-menu
@@ -68,14 +74,55 @@ export default {
   components: {
     GoodList
   },
-  asyncData({ params }) {
-    return params
+  async asyncData({ $axios, error, query }) {
+    try {
+      let { data } = await $axios.get('/user/information', {
+        params: query
+      })
+      return { userInfo: data }
+    } catch (e) {
+      const code = parseInt(e.response && e.response.status)
+      if (code === 401) {
+        error({ statusCode: 401 })
+      } else if (code === 403 && e.response.data.reason === 'unregistered') {
+        error({ statusCode: 403, message: 'unregistered' })
+      } else if (code === 404) {
+        error({ statusCode: 404, message: '找不到此用戶' })
+      } else {
+        throw e
+      }
+    }
   },
   data() {
     return {}
   },
+  computed: {
+    avatar() {
+      if (this.userInfo) {
+        if (this.userInfo.authority === 'Facebook') {
+          return `https://graph.facebook.com/v3.2/${
+            this.userInfo.user_id
+          }/picture?type=large`
+        }
+      }
+      return undefined
+    },
+    rateComment() {
+      let rate = this.userInfo.rate_average
+      if(rate > 4) {
+        return '令人滿意'
+      } else if(rate >= 3) {
+        return '普通'
+      } else {
+        return '令人不滿'
+      }
+    }
+  },
   methods: {
-    handleSelect(index, indexPath) {}
+    handleSelect(index, indexPath) {},
+    mailto() {
+      window.open(`mailto:${this.userInfo.email}`, '_blank')
+    }
   }
 }
 </script>
@@ -91,8 +138,8 @@ export default {
       font-weight: 700;
     }
   }
-  .user-department {
-    color: #999;
+  .user-rate {
+    color: #838383;
     margin-bottom: 8px;
   }
   .user-menu {
