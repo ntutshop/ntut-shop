@@ -19,23 +19,25 @@ async function handleLogin (ctx) {
     return
   }
 
-  // == Sign userID with key
+  // == Get user_id
   let uid = authResponse.userID
-  const JWT_TOKEN = jwt.sign(uid, SV_CONFIG.JWT_SECRET)
-  ctx.cookies.set('jwt', JWT_TOKEN)
 
   // == Check the member
-  let state = await Member.checkMemberStatus(uid)
+  let [state, memberId] = await Member.checkMemberStateAndIdByUserId(uid)
   if (state === Member.STATE.Normal) {
     ctx.status = 201
   } else if (state === Member.STATE.Unregistered) {
     ctx.status = 403
     ctx.body = { reason: 'unregistered' }
   } else {
+    let member = await Member.createShellCustomer(uid)
+    memberId = member.id
     ctx.status = 403
     ctx.body = { reason: 'unregistered' }
-    await Member.createShellCustomer(uid)
   }
+
+  const JWT_TOKEN = jwt.sign(memberId, SV_CONFIG.JWT_SECRET)
+  ctx.cookies.set('jwt', JWT_TOKEN)
 }
 
 /**
@@ -54,7 +56,7 @@ async function verifyJWTToken (ctx, next) {
   // Verify jwt token.
   // The decoded user_id will be set on ctx.state.userId if verification succees.
   try {
-    ctx.state.userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
+    ctx.state.memberId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
     return next()
   } catch (ex) {
     ctx.cookies.set('jwt')
@@ -70,8 +72,8 @@ async function verifyJWTToken (ctx, next) {
  */
 async function handleSignup (ctx) {
   // Check whether the user is at unregistered state.
-  let userId = ctx.state.userId
-  let state = await Member.checkMemberStatus(userId)
+  let memberId = ctx.state.memberId
+  let state = await Member.checkMemberStateByMemberId(memberId)
   if (state === Member.STATE.Normal) {
     ctx.status = 403
     ctx.body = { reason: 'registered' }
@@ -84,7 +86,7 @@ async function handleSignup (ctx) {
 
   // Validate the data.
   let body = ctx.request.body
-  let result = await Member.fillShellCustomer(userId, body)
+  let result = await Member.fillShellCustomer(memberId, body)
 
   if (result.success) {
     ctx.status = 201
@@ -115,12 +117,12 @@ async function handleLogout (ctx) {
  * @async
  */
 async function verifyUserState (ctx, next) {
-  let userId = ctx.state.userId
-  let state = await Member.checkMemberStatus(userId)
+  let memberId = ctx.state.memberId
+  let state = await Member.checkMemberStateByMemberId(memberId)
 
-  if (state === Member.STATE.Normal) {
+  if ( state === Member.STATE.Normal ) {
     return next()
-  } else if (state == Member.STATE.Unauthorized ) {
+  } else if ( state == Member.STATE.Unauthorized ) {
     ctx.cookies.set('jwt')
     ctx.status = 401
   } else {

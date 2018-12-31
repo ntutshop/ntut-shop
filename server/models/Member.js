@@ -72,18 +72,36 @@ async function getUserInformationByUsername (username) {
 }
 
 /**
- * Check a member's state by user_id.
- * @param {string} userId An user_id from Facebook.
+ * Get member's state by MEMBER id.
+ * @param {number} memberId MEMBER id.
+ * @return {Promise<STATE>} Symbol. The user's state.
  * @async
  */
-async function checkMemberStatus (userId) {
-  let member = await getUserInformationByUserId(userId)
+async function checkMemberStateByMemberId (memberId) {
+  let member = await Member.findOne({ where: { id: memberId } })
   if (!member) {
     return STATE.Unauthorized
   } else if (member.username === '') {
     return STATE.Unregistered
   } else {
     return STATE.Normal
+  }
+}
+
+/**
+ * Get a member's state and id by user_id.
+ * @param {string} userId An user_id from Facebook.
+ * @return {Promise<STATE, number?>} The user state and member id from MEMBER table.
+ * @async
+ */
+async function checkMemberStateAndIdByUserId (userId) {
+  let member = await getUserInformationByUserId(userId)
+  if (!member) {
+    return [STATE.Unauthorized, undefined]
+  } else if (member.username === '') {
+    return [STATE.Unregistered, member.id]
+  } else {
+    return [STATE.Normal, member.id]
   }
 }
 
@@ -118,11 +136,11 @@ async function createShellCustomer (userId) {
  */
 /**
  * Fill the shell customer with required information.
- * @param {string} userId The customer's Facebook user_id. It's used for query.
+ * @param {string} memberId The MEMBER id.
  * @param {ProfileData} data ProfileData.
  * @async
  */
-async function fillShellCustomer (userId, data) {
+async function fillShellCustomer (memberId, data) {
   // Validate the data.
   let result = PROFILE_VALIDATOR.validate(data, { abortEarly: false })
   if (result.error) {
@@ -141,7 +159,7 @@ async function fillShellCustomer (userId, data) {
     nickname: value.nickname || value.username,
     register_time: sequelize.fn('NOW')
   }, {
-    where: { user_id: userId },
+    where: { id: memberId },
     fields: [ 'username', 'phone', 'email', 'nickname', 'register_time' ]
   })
   return { success: true }
@@ -149,11 +167,11 @@ async function fillShellCustomer (userId, data) {
 
 /**
  * Modify user's profile.
- * @param {string} userId The user's user_id.
+ * @param {string} memberId The user's MEMBER id.
  * @param {ProfileData} data The new profile data.
  * @async
  */
-async function modifyUserInformationByUserId (userId, data) {
+async function modifyUserInformationByMemberId (memberId, data) {
   // Validate the data.
   let result = PROFILE_VALIDATOR.validate(data, { abortEarly: false })
 
@@ -172,7 +190,7 @@ async function modifyUserInformationByUserId (userId, data) {
     email: value.email,
     nickname: value.nickname || value.username
   }, {
-    where: { user_id: userId },
+    where: { id: memberId },
     fields: [ 'username', 'phone', 'email', 'nickname' ]
   })
   return { success: true }
@@ -180,11 +198,11 @@ async function modifyUserInformationByUserId (userId, data) {
 
 /**
  * Get all the user's orders.
- * @param {string} userId The user's user_id.
+ * @param {number} memberId The user's memberId.
  * @param {number} state Orders' state. It's used to find the orders with specified state.
  * @async
  */
-async function getAllUserOrders (userId, state) {
+async function getAllUserOrders (memberId, state) {
   let stateCondition = state ? 'AND A.state = :state' : ''
 
   let result = STATE_VALIDATOR.validate(state)
@@ -197,21 +215,18 @@ async function getAllUserOrders (userId, state) {
     SELECT A.id, total, name AS \`good.name\`, quantity AS \`good.quantity\`, A.state, transaction_time
     FROM \`ORDER\` AS A
     INNER JOIN GOOD ON A.good_id = GOOD.id
-    WHERE A.member_id = (
-      SELECT id
-      FROM MEMBER
-      WHERE user_id = :userId
-    ) ${stateCondition}`,
-  { replacements: { userId, state }, type: db.QueryTypes.SELECT, nest: true })
+    WHERE A.member_id = :memberId ${stateCondition}`,
+  { replacements: { memberId, state }, type: db.QueryTypes.SELECT, nest: true })
 }
 
 export default {
   getUserInformationByUserId,
   getUserInformationByUsername,
-  checkMemberStatus,
+  checkMemberStateByMemberId,
+  checkMemberStateAndIdByUserId,
   createShellCustomer,
   fillShellCustomer,
-  modifyUserInformationByUserId,
+  modifyUserInformationByMemberId,
   getAllUserOrders,
   STATE
 }
