@@ -30,8 +30,10 @@ async function handleLogin (ctx) {
     ctx.status = 201
   } else if (state === Member.STATE.Unregistered) {
     ctx.status = 403
+    ctx.body = { reason: 'unregistered' }
   } else {
     ctx.status = 403
+    ctx.body = { reason: 'unregistered' }
     await Member.createShellCustomer(uid)
   }
 }
