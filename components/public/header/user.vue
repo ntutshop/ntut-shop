@@ -11,30 +11,6 @@
       </v-layout>
     </v-flex>
     <v-flex v-else>
-      <v-dialog
-        v-if="envMode === 'development'"
-        v-model="showDialog"
-        persistent
-        max-width="200"
-      >
-        <v-card @keyup.enter="fakeLogin">
-          <v-card-text>
-            <v-text-field
-              ref="userid"
-              v-model="userid"
-              label="User ID"
-            />
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              block
-              color="blue"
-              dark
-              @click="fakeLogin"
-            >送出</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
       <v-layout justify-end>
         <el-button
           type="primary"
@@ -67,15 +43,19 @@ export default {
       FB.login(
         async response => {
           console.log(response.authResponse)
-          await this.$axios.post('/api/login', {
+          let { data } = await this.$axios.post('/api/login', {
             authResponse: response.authResponse
           })
+          if (data.redirect) {
+            if (data.redirect === '/signup') {
+              this.$router.replace('/signup')
+            } else {
+              this.$router.replace('')
+            }
+          }
         },
         { scope: 'public_profile,email' }
       )
-    },
-    async fakeLogin() {
-      window.location = `/api/dev/facebook_login?user_id=${this.userid}`
     }
   }
 }
