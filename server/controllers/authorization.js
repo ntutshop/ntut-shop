@@ -75,9 +75,11 @@ async function handleSignup (ctx) {
   if (state === Member.STATE.Normal) {
     ctx.status = 403
     ctx.body = { reason: 'registered' }
+    return
   } else if (state == Member.STATE.Unauthorized ) {
     ctx.cookies.set('jwt')
     ctx.status = 401
+    return
   }
 
   // Validate the data.
