@@ -49,6 +49,13 @@ async function getUserState (ctx) {
 }
 
 /**
+ * Passed login
+ */
+async function checkLogin() {
+  ctx.status = 200
+}
+
+/**
  * Get a user's information.
  * @param {IRouterContext} ctx Context.
  * @async
@@ -72,5 +79,6 @@ async function getUserInformation (ctx) {
 
 export default {
   getUserState,
+  checkLogin,
   getUserInformation
 }
