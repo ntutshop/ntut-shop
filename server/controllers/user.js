@@ -73,6 +73,7 @@ async function getUserInformation (ctx) {
 /**
  * Modify user's profile.
  * @param {IRouterContext} ctx Koa's router context.
+ * @async
  */
 async function modifyUserProfile (ctx) {
   let result = await Member.modifyUserInformationByUserId(ctx.state.userId, ctx.request.body)
@@ -88,8 +89,28 @@ async function modifyUserProfile (ctx) {
   }
 }
 
+/**
+ * Get the information of user's orders.
+ * @param {IRouterContext} ctx Koa's router. context.
+ * @async
+ */
+async function getOrdersInformation (ctx) {
+  try {
+    let result = await Member.getAllUserOrders(ctx.state.userId, ctx.query.state)
+    ctx.status = 200
+    ctx.body = { orders: result }
+  } catch (error) {
+    ctx.status = 400
+    ctx.body = {
+      type: 'query',
+      error: error
+    }
+  }
+}
+
 export default {
   getUserState,
   getUserInformation,
-  modifyUserProfile
+  modifyUserProfile,
+  getOrdersInformation
 }

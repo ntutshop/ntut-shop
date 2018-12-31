@@ -1,5 +1,6 @@
 import db from '../config/db.js'
 import MemberSchema from '../schemas/Member.js'
+import { STATE_VALIDATOR } from '../models/Order.js'
 import errorGen from '../modules/errorgen.js'
 import Joi from 'joi'
 import sequelize from 'sequelize'
@@ -177,6 +178,33 @@ async function modifyUserInformationByUserId (userId, data) {
   return { success: true }
 }
 
+/**
+ * Get all the user's orders.
+ * @param {string} userId The user's user_id.
+ * @param {number} state Orders' state. It's used to find the orders with specified state.
+ * @async
+ */
+async function getAllUserOrders (userId, state) {
+  let stateCondition = state ? 'AND A.state = :state' : ''
+
+  let result = STATE_VALIDATOR.validate(state)
+
+  if (result.error) {
+    throw errorGen(result.error.details)
+  }
+
+  return db.query(`
+    SELECT A.id, total, name AS \`good.name\`, quantity AS \`good.quantity\`, A.state, transaction_time
+    FROM \`ORDER\` AS A
+    INNER JOIN GOOD ON A.good_id = GOOD.id
+    WHERE A.member_id = (
+      SELECT id
+      FROM MEMBER
+      WHERE user_id = :userId
+    ) ${stateCondition}`,
+  { replacements: { userId, state }, type: db.QueryTypes.SELECT, nest: true })
+}
+
 export default {
   getUserInformationByUserId,
   getUserInformationByUsername,
@@ -184,5 +212,6 @@ export default {
   createShellCustomer,
   fillShellCustomer,
   modifyUserInformationByUserId,
+  getAllUserOrders,
   STATE
 }
