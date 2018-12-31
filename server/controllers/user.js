@@ -1,59 +1,4 @@
-import jwt from 'jsonwebtoken'
 import Member from '../models/Member.js'
-import { SERVER_CONFIG as SV_CONFIG } from '../config/config.js'
-
-/**
- * Get the user's state.
- * @param {IRouterContext} ctx Context.
- * @async
- */
-async function getUserState(ctx) {
-  let response = {
-    success: true,
-    type: 'state',
-    message: undefined
-  }
-
-  // Check whether header jwt is emtpy or not.
-  let jwtToken = ctx.cookies.get('jwt')
-  if (!jwtToken) {
-    response.message = 'unauthorized'
-    ctx.body = response
-    return
-  }
-
-  // Verify jwt token.
-  // The decoded user_id will be set on ctx.state.decodedUserId if verification succees.
-  try {
-    let userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
-    switch (await Member.checkMemberStatus(userId)) {
-      case Member.STATE.Normal:
-        response.message = 'logged-in'
-        ctx.body = response
-        break
-      case Member.STATE.Unregistered:
-        response.message = 'unregistered'
-        ctx.body = response
-        break
-      case Member.STATE.Unauthorized:
-        response.message = 'unauthorized'
-        ctx.body = response
-        break
-      default:
-        throw new Error('Undefined user state.')
-    }
-  } catch (ex) {
-    response.message = 'unauthorized'
-    ctx.body = response
-  }
-}
-
-/**
- * Passed login
- */
-async function checkLogin(ctx) {
-  ctx.status = 200
-}
 
 /**
  * Get a user's information.
@@ -83,7 +28,7 @@ async function getUserInformation(ctx) {
  * @async
  */
 async function modifyUserProfile(ctx) {
-  let result = await Member.modifyUserInformationByUserId(ctx.state.userId, ctx.request.body)
+  let result = await Member.modifyUserInformationByMemberId(ctx.state.memberId, ctx.request.body)
 
   if (result.success) {
     ctx.body = { success: true }
@@ -103,7 +48,7 @@ async function modifyUserProfile(ctx) {
  */
 async function getOrdersInformation(ctx) {
   try {
-    let result = await Member.getAllUserOrders(ctx.state.userId, ctx.query.state)
+    let result = await Member.getAllUserOrders(ctx.state.memberId, ctx.query.state)
     ctx.status = 200
     ctx.body = { orders: result }
   } catch (error) {
@@ -115,8 +60,14 @@ async function getOrdersInformation(ctx) {
   }
 }
 
+/**
+ * Passed login
+ */
+async function checkLogin(ctx) {
+  ctx.status = 200
+}
+
 export default {
-  getUserState,
   getUserInformation,
   modifyUserProfile,
   getOrdersInformation,
