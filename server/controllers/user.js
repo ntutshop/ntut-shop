@@ -76,10 +76,19 @@ async function getOrdersInformation(ctx) {
 }
 
 /**
- * Passed login
+ * Get the information of user's goods.
+ * @param {IRouterContext} ctx Koa's router. context.
+ * @async
  */
+async function getGoodsInformation(ctx) {
+  ctx.status = 204
+}
+
+/**
+* Passed login
+*/
 async function checkLogin(ctx) {
-  ctx.status = 200
+ ctx.status = 200
 }
 
 export default {
@@ -87,5 +96,6 @@ export default {
   getUserInformationById,
   modifyUserProfile,
   getOrdersInformation,
+  getGoodsInformation,
   checkLogin
 }
