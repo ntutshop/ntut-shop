@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web:
+      build: .
+      ports:
+          - "3000:3000"
+      expose:
+          - "3000"
+      volumes:
+          - .:/app
+      depends_on:
+          - mariadb
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./server/sql/action.sql:/docker-entrypoint-initdb.d/action.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_USER: shopkeeper
+      MYSQL_PASSWORD: ycjls5dm
+      MYSQL_DATABASE: ntutdb
+    restart: always

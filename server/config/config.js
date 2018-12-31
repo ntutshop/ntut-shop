@@ -1,7 +1,7 @@
 const DOMAIN = 'virtualprism.io'
 
 export let SERVER_CONFIG = {
-  HOST: 'localhost',
+  HOST: '*',
   PORT: 3000,
   JWT_SECRET: 'mysecret',
   MODE: process.env.NODE_ENV,
@@ -9,7 +9,7 @@ export let SERVER_CONFIG = {
 }
 
 export let DB_CONFIG = {
-  HOST: DOMAIN,
+  HOST: 'mariadb',
   USER: 'shopkeeper',
   PASSWORD: 'ycjls5dm',
   DATABASE: 'ntutdb',
