@@ -12,25 +12,37 @@
         label="使用者名稱"
         style="width: 400px;"
       >
-        <el-input v-model="form.username" />
+        <el-input
+          v-model="form.username"
+          placeholder="請輸入使用者名稱"
+        />
       </el-form-item>
       <el-form-item
         label="暱稱"
         style="width: 400px;"
       >
-        <el-input v-model="form.nickname" />
+        <el-input
+          v-model="form.nickname"
+          placeholder="請輸入暱稱"
+        />
       </el-form-item>
       <el-form-item
         label="聯絡電話"
         style="width: 400px;"
       >
-        <el-input v-model="form.phone" />
+        <el-input
+          v-model="form.phone"
+          placeholder="請輸入聯絡電話"
+        />
       </el-form-item>
       <el-form-item
         label="信箱"
         style="width: 400px;"
       >
-        <el-input v-model="form.email" />
+        <el-input
+          v-model="form.email"
+          placeholder="請輸入信箱"
+        />
       </el-form-item>
       <el-form-item label="註冊日期">
         <div>2018-10-11</div>

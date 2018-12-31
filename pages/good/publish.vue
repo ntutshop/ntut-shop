@@ -22,7 +22,10 @@
             label="商品名稱"
             style="width: 400px;"
           >
-            <el-input v-model="form.name" />
+            <el-input
+              v-model="form.name"
+              placeholder="請輸入商品名稱"
+            />
           </el-form-item>
           <el-form-item
             label="商品圖片"
@@ -51,13 +54,19 @@
             label="數量"
             style="width: 400px;"
           >
-            <el-input v-model="form.name" />
+            <el-input
+              v-model="form.name"
+              placeholder="請輸入商品數量"
+            />
           </el-form-item>
           <el-form-item
             label="價錢"
             style="width: 400px;"
           >
-            <el-input v-model="form.name" />
+            <el-input
+              v-model="form.name"
+              placeholder="請輸入商品價錢"
+            />
           </el-form-item>
           <el-form-item
             label="商品詳情"
@@ -67,6 +76,7 @@
               v-model="form.name"
               :rows="6"
               type="textarea"
+              placeholder="請輸入商品詳情"
             />
           </el-form-item>
           <el-form-item
