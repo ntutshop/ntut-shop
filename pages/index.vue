@@ -14,21 +14,21 @@
       </el-col>
     </el-row>
     <h2>推薦商品</h2>
-    <product-list class="good-list" />
+    <good-list class="good-list" />
   </div>
 </template>
 
 <script>
 import Emenu from '@/components/index/menu.vue'
 import Banner from '@/components/index/banner.vue'
-import ProductList from '@/components/index/product-list.vue'
+import GoodList from '@/components/index/good-list.vue'
 import HomeHeader from '@/components/index/home-header.vue'
 
 export default {
   components: {
     Emenu,
     Banner,
-    ProductList,
+    GoodList,
     HomeHeader
   },
   layout: 'home'

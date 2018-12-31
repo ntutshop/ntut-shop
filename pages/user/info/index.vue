@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import GoodList from '@/components/index/product-list'
+import GoodList from '@/components/index/good-list'
 export default {
   components: {
     GoodList
