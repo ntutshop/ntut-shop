@@ -37,7 +37,6 @@ const createStore = () => {
         }
       },
       setLoggedIn({ commit }, loggedIn) {
-        console.log(this)
         commit('setLoggedIn', loggedIn)
       },
       setUserInfo({ commit }, userInfo) {
