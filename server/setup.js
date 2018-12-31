@@ -12,10 +12,7 @@ export default function (app) {
     multipart: true,
     encoding: 'gzip',
     formidable: {
-      uploadDir: __dirname + '/public/uploads/',
-      keepExtensions: true,
       maxFieldsSize: 5 * 1024 * 1024,
-      onFileBegin: (name, file) => { },
     }
   }))
 
