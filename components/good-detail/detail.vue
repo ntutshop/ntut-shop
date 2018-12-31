@@ -1,6 +1,16 @@
 <template>
   <div>
     <el-card class="good-header-card">
+      <v-btn
+        icon
+        fab
+        small
+        dark
+        color="blue"
+        style="position: absolute;right: 24px;z-index: 20;"
+      >
+        <v-icon>edit</v-icon>
+      </v-btn>
       <el-row :gutter="24">
         <el-col :span="13">
           <v-carousel height="350">
@@ -115,7 +125,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       rate: 4,
       currentPayment: '',
