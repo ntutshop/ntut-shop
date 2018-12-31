@@ -11,30 +11,6 @@
       </v-layout>
     </v-flex>
     <v-flex v-else>
-      <v-dialog
-        v-if="envMode === 'development'"
-        v-model="showDialog"
-        persistent
-        max-width="200"
-      >
-        <v-card @keyup.enter="fakeLogin">
-          <v-card-text>
-            <v-text-field
-              ref="userid"
-              v-model="userid"
-              label="User ID"
-            />
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              block
-              color="blue"
-              dark
-              @click="fakeLogin"
-            >送出</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
       <v-layout justify-end>
         <el-button
           type="primary"
@@ -66,16 +42,28 @@ export default {
       /* global FB */
       FB.login(
         async response => {
-          console.log(response.authResponse)
-          await this.$axios.post('/api/login', {
-            authResponse: response.authResponse
-          })
+          try {
+            await this.$axios.post('/login', {
+              authResponse: response.authResponse
+            })
+            this.$router.replace('/')
+          } catch (e) {
+            const code = parseInt(e.response && e.response.status)
+            if (code === 401) {
+              store.dispatch('setLoggedIn', false)
+              this.$nuxt.error({ statusCode: 401 })
+            } else if (
+              code === 403 &&
+              e.response.data.reason === 'unregistered'
+            ) {
+              this.$nuxt.error({ statusCode: 403, message: 'unregistered' })
+            } else {
+              throw e
+            }
+          }
         },
         { scope: 'public_profile,email' }
       )
-    },
-    async fakeLogin() {
-      window.location = `/api/dev/facebook_login?user_id=${this.userid}`
     }
   }
 }

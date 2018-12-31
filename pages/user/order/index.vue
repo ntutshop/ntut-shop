@@ -54,6 +54,7 @@
 import SideBar from '@/components/user/sidebar'
 import Order from '@/components/user/order/order'
 export default {
+  middleware: ['checkUserLogin', 'checkUserRegister'],
   components: {
     SideBar,
     Order

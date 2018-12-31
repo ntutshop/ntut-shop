@@ -20,6 +20,9 @@ const createStore = () => {
           loggedIn = !!parsed.jwt
         }
         commit('setLoggedIn', loggedIn)
+      },
+      setLoggedIn ({ commit }, loggedIn) {
+        commit('setLoggedIn', loggedIn)
       }
     }
   })

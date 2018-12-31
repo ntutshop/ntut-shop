@@ -96,7 +96,8 @@
 
 <script>
 export default {
-  data() {
+  middleware: ['checkUserLogin', 'checkUserRegister'],
+  data () {
     return {
       form: {
         username: 'deviltea',

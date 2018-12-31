@@ -23,6 +23,7 @@
 import Account from '@/components/user/account/detail'
 import SideBar from '@/components/user/sidebar'
 export default {
+  middleware: ['checkUserLogin', 'checkUserRegister'],
   components: {
     Account,
     SideBar
