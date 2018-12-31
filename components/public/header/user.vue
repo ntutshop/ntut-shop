@@ -43,7 +43,7 @@ export default {
       FB.login(
         async response => {
           console.log(response.authResponse)
-          let { data } = await this.$axios.post('/api/login', {
+          let { data } = await this.$axios.post('/login', {
             authResponse: response.authResponse
           })
           if (data.redirect) {
