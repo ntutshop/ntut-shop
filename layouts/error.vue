@@ -23,6 +23,9 @@
         v-if="error.statusCode === 401"
         class="display-1">OOPS！您尚未登入</p>
       <p
+        v-if="error.statusCode === 403 && error.reason === 'registered'"
+        class="display-1">OOPS！您已經完成基本資料填寫</p>
+      <p
         v-if="error.statusCode === 403 && error.reason === 'permission-denied'"
         class="display-1">OOPS！您沒有權限進行此操作</p>
       <p

@@ -8,6 +8,8 @@ export default function ({ $axios, error, store }) {
       error({ statusCode: 403, reason: 'unregistered' })
     } else if (code === 403 && e.response.data.reason === 'permission-denied') {
       error({ statusCode: 403, reason: 'permission-denied' })
+    } else if (code === 403 && e.response.data.reason === 'registered') {
+      error({ statusCode: 403, reason: 'registered' })
     } else {
       throw e
     }
