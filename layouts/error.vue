@@ -27,11 +27,11 @@
         v-else-if="error.statusCode === 403 && error.message === 'permission-denied'"
         class="display-1">OOPS！您沒有權限進行此操作</p>
       <p
-        v-else-if="error.statusCode === 404"
+        v-else-if="error.statusCode === 404 && error.message === 'This page could not be found'"
         class="display-1">OOPS！找不到這個頁面</p>
       <p
         v-else
-        class="display-1">{{ `${error.statusCode} 未知的錯誤` }}</p>
+        class="display-1">{{ `${error.statusCode}: ${error.message}` }}</p>
       <v-btn
         class="mt-5"
         nuxt

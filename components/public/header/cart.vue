@@ -2,7 +2,6 @@
   <v-btn
     fab
     dark
-    small
     outline
     color="blue"
     to="/cart"
