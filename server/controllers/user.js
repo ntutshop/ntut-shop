@@ -46,10 +46,10 @@ async function modifyUserProfile(ctx) {
   let result = await Member.modifyUserInformationByMemberId(ctx.state.memberId, ctx.request.body)
 
   if (result.success) {
-    ctx.body = { success: true }
+    ctx.status = 204
   } else {
+    ctx.status = 400
     ctx.body = {
-      success: false,
       type: 'body',
       error: result.error
     }
