@@ -41,13 +41,25 @@ export default {
     login() {
       /* global FB */
       FB.login(
-        async (response) => {
+        async response => {
           try {
             await this.$axios.post('/login', {
               authResponse: response.authResponse
             })
+            this.$router.replace('/')
           } catch (e) {
-            console.log(e)
+            const code = parseInt(e.response && e.response.status)
+            if (code === 401) {
+              store.dispatch('setLoggedIn', false)
+              this.$nuxt.error({ statusCode: 401 })
+            } else if (
+              code === 403 &&
+              e.response.data.reason === 'unregistered'
+            ) {
+              this.$nuxt.error({ statusCode: 403, message: 'unregistered' })
+            } else {
+              throw e
+            }
           }
         },
         { scope: 'public_profile,email' }
