@@ -19,7 +19,6 @@
   ],
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
-    "cookieparser": "^0.1.0",
     "cross-env": "^5.2.0",
     "element-ui": "^2.4.6",
     "joi": "^14.3.0",
