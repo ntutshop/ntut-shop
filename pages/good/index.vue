@@ -6,10 +6,7 @@
         :keyword="keyword"
         class="breadcrumbs"
       />
-      <category
-        :types="types"
-        class="category"
-      />
+      <category class="category" />
       <good-list
         :list="list"
         class="good-list"
@@ -23,7 +20,7 @@ import Crumbs from '@/components/good/crumbs.vue'
 import Category from '@/components/good/category.vue'
 import GoodList from '@/components/good/good-list.vue'
 export default {
-  asyncData ({ query }) {
+  asyncData({ query }) {
     return { query }
   },
   components: {
@@ -31,7 +28,7 @@ export default {
     Category,
     GoodList
   },
-  data () {
+  data() {
     return {
       keyword: '',
       category: '分類',

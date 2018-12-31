@@ -27,11 +27,11 @@
               v-for="(item, index) in handlingGoodList"
               :key="index"
               :meta="item"
-              pending="true"
+              :pending="true"
             />
           </el-tab-pane>
           <el-tab-pane label="完成">
-            <ood
+            <good
               v-for="(item, index) in finishGoodList"
               :key="index"
               :meta="item"
