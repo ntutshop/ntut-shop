@@ -6,7 +6,6 @@
     justify-center
     align-center
   >
-    <p>{{ error.statusCode }}; {{ error.message }}</p>
     <template v-if="error.statusCode === 403 && error.message === 'unregistered'">
       <p class="display-1">OOPS！您尚未完成基本資料填寫</p>
       <v-btn
@@ -32,7 +31,7 @@
         class="display-1">OOPS！找不到這個頁面</p>
       <p
         v-else
-        class="display-1">{{ '未知的錯誤' }}</p>
+        class="display-1">{{ `${error.statusCode} 未知的錯誤` }}</p>
       <v-btn
         class="mt-5"
         nuxt
