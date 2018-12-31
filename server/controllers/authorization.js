@@ -44,25 +44,17 @@ async function verifyJWTToken (ctx, next) {
   // Check whether header jwt is emtpy or not.
   let jwtToken = ctx.cookies.get('jwt')
   if (!jwtToken) {
-    ctx.body = {
-      success: false,
-      type: 'state',
-      message: 'empty'
-    }
+    ctx.status = 401
     return
   }
 
   // Verify jwt token.
-  // The decoded user_id will be set on ctx.state.decodedUserId if verification succees.
+  // The decoded user_id will be set on ctx.state.userId if verification succees.
   try {
     ctx.state.userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
     return next()
   } catch (ex) {
-    ctx.body = {
-      success: false,
-      type: 'state',
-      message: 'invalid'
-    }
+    ctx.status = 401
   }
 }
 
@@ -76,14 +68,11 @@ async function handleSignup (ctx) {
   // Check whether the user is at unregistered state.
   let userId = ctx.state.userId
   let state = await Member.checkMemberStatus(userId)
-  if (state !== Member.STATE.Unregistered) {
-    ctx.body = {
-      success: false,
-      type: 'state',
-      message:
-        state === Member.STATE.Unauthorized ? 'unauthorized' : 'logged-in'
-    }
-    return
+  if (state === Member.STATE.Normal) {
+    ctx.status = 403
+    ctx.body = { reason: 'registered' }
+  } else if (state == Member.STATE.Unauthorized ) {
+    ctx.status = 401
   }
 
   // Validate the data.
@@ -92,10 +81,9 @@ async function handleSignup (ctx) {
 
   if (result.success) {
     ctx.status = 201
-    ctx.body = { success: true }
   } else {
+    ctx.status = 400
     ctx.body = {
-      success: false,
       type: 'body',
       error: result.error
     }
@@ -125,13 +113,11 @@ async function verifyUserState (ctx, next) {
 
   if (state === Member.STATE.Normal) {
     return next()
+  } else if (state == Member.STATE.Unauthorized ) {
+    ctx.status = 401
   } else {
-    ctx.body = {
-      success: false,
-      type: 'state',
-      message:
-        state === Member.STATE.Unauthorized ? 'unauthorized' : 'unregistered'
-    }
+    ctx.status = 403
+    ctx.body = { reason: 'unregistered' }
   }
 }
 
