@@ -41,17 +41,13 @@ export default {
     login() {
       /* global FB */
       FB.login(
-        async response => {
-          console.log(response.authResponse)
-          let { data } = await this.$axios.post('/login', {
-            authResponse: response.authResponse
-          })
-          if (data.redirect) {
-            if (data.redirect === '/signup') {
-              this.$router.replace('/signup')
-            } else {
-              this.$router.replace('')
-            }
+        async (response) => {
+          try {
+            await this.$axios.post('/login', {
+              authResponse: response.authResponse
+            })
+          } catch (e) {
+            console.log(e)
           }
         },
         { scope: 'public_profile,email' }
