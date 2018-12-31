@@ -61,5 +61,8 @@ export default {
 <style lang="scss">
 .cart-table {
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+  .el-table__row {
+    cursor: pointer;
+  }
 }
 </style>
