@@ -14,6 +14,7 @@ async function handleLogin (ctx) {
 
   // == Check fields
   if (!authResponse || !authResponse.userID) {
+    ctx.cookies.set('jwt')
     ctx.status = 401
     return
   }
@@ -54,6 +55,7 @@ async function verifyJWTToken (ctx, next) {
     ctx.state.userId = jwt.verify(jwtToken, SV_CONFIG.JWT_SECRET)
     return next()
   } catch (ex) {
+    ctx.cookies.set('jwt')
     ctx.status = 401
   }
 }
@@ -72,6 +74,7 @@ async function handleSignup (ctx) {
     ctx.status = 403
     ctx.body = { reason: 'registered' }
   } else if (state == Member.STATE.Unauthorized ) {
+    ctx.cookies.set('jwt')
     ctx.status = 401
   }
 
@@ -97,7 +100,7 @@ async function handleSignup (ctx) {
  */
 async function handleLogout (ctx) {
   ctx.cookies.set('jwt')
-  ctx.body = { success: true }
+  ctx.status = 204
 }
 
 /**
@@ -114,6 +117,7 @@ async function verifyUserState (ctx, next) {
   if (state === Member.STATE.Normal) {
     return next()
   } else if (state == Member.STATE.Unauthorized ) {
+    ctx.cookies.set('jwt')
     ctx.status = 401
   } else {
     ctx.status = 403
