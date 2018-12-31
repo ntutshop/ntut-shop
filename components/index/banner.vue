@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-carousel
-      height="455"
+      height="250"
       hide-delimiters
     >
       <v-carousel-item
@@ -15,24 +15,20 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       items: [
         {
           src:
-            'http://p0.meituan.net/codeman/a97baf515235f4c5a2b1323a741e577185048.jpg'
+            'https://media.taaze.tw/showBanaerImage.html?pk=1000500218&width=1000&height=326&fill=f'
         },
         {
           src:
-            'http://p0.meituan.net/codeman/a97baf515235f4c5a2b1323a741e577185048.jpg'
+            'https://media.taaze.tw/showBanaerImage.html?pk=1000498512&width=1000&height=326&fill=f'
         },
         {
           src:
-            'http://p0.meituan.net/codeman/a97baf515235f4c5a2b1323a741e577185048.jpg'
-        },
-        {
-          src:
-            'http://p0.meituan.net/codeman/a97baf515235f4c5a2b1323a741e577185048.jpg'
+            'https://media.taaze.tw/showBanaerImage.html?pk=1000497596&width=1000&height=326&fill=f'
         }
       ]
     }
