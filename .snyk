@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.3
+version: v1.13.1
 patch: {}
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
@@ -7,9 +7,6 @@ ignore:
     - nuxt > @nuxt/builder > chokidar > fsevents > node-pre-gyp > tar > chownr:
         reason: None given
         expires: '2019-01-05T02:41:36.871Z'
-      node-pre-gyp > tar > chownr:
-        reason: None given
-        expires: '2019-01-30T17:23:10.972Z'
     - nuxt > @nuxt/webpack > webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > chownr:
         reason: None given
         expires: '2019-01-05T02:41:36.871Z'
@@ -19,7 +16,3 @@ ignore:
     - nuxt > @nuxt/webpack > webpack > terser-webpack-plugin > cacache > chownr:
         reason: None given
         expires: '2019-01-05T02:41:36.871Z'
-  'npm:koa-body:20180127':
-    - koa-body:
-        reason: None given
-        expires: '2019-01-30T17:23:10.972Z'
