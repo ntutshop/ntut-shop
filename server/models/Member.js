@@ -1,5 +1,6 @@
 import db from '../config/db.js'
 import MemberSchema from '../schemas/Member.js'
+import { STATE_VALIDATOR } from '../models/Order.js'
 import errorGen from '../modules/errorgen.js'
 import Joi from 'joi'
 import sequelize from 'sequelize'
@@ -31,9 +32,9 @@ const STATE = Object.freeze({
 })
 
 /**
- * A JSON validator for function FillShellCustomerMember.
+ * A JSON validator for users' profile.
  */
-const PROFILE_VALIDATOR = Joi.object().keys({
+const PROFILE_VALIDATOR = Joi.object().required().keys({
   username: Joi.string()
     .required(),
   nickname: Joi.string()
@@ -123,7 +124,7 @@ async function createShellCustomer (userId) {
  */
 async function fillShellCustomer (userId, data) {
   // Validate the data.
-  let result = PROFILE_VALIDATOR.validate(data)
+  let result = PROFILE_VALIDATOR.validate(data, { abortEarly: false })
   if (result.error) {
     return {
       success: false,
@@ -137,7 +138,7 @@ async function fillShellCustomer (userId, data) {
     username: value.username,
     phone: value.phone,
     email: value.email,
-    nickname: value.nickname || '',
+    nickname: value.nickname || value.username,
     register_time: sequelize.fn('NOW')
   }, {
     where: { user_id: userId },
@@ -146,11 +147,71 @@ async function fillShellCustomer (userId, data) {
   return { success: true }
 }
 
+/**
+ * Modify user's profile.
+ * @param {string} userId The user's user_id.
+ * @param {ProfileData} data The new profile data.
+ * @async
+ */
+async function modifyUserInformationByUserId (userId, data) {
+  // Validate the data.
+  let result = PROFILE_VALIDATOR.validate(data, { abortEarly: false })
+
+  if (result.error) {
+    return {
+      success: false,
+      error: errorGen(result.error.details)
+    }
+  }
+
+  // Update the profile
+  let value = result.value
+  await Member.update({ // This statement can be replace by 'let queryResult = await ..' for checking the query result.
+    username: value.username,
+    phone: value.phone,
+    email: value.email,
+    nickname: value.nickname || value.username
+  }, {
+    where: { user_id: userId },
+    fields: [ 'username', 'phone', 'email', 'nickname' ]
+  })
+  return { success: true }
+}
+
+/**
+ * Get all the user's orders.
+ * @param {string} userId The user's user_id.
+ * @param {number} state Orders' state. It's used to find the orders with specified state.
+ * @async
+ */
+async function getAllUserOrders (userId, state) {
+  let stateCondition = state ? 'AND A.state = :state' : ''
+
+  let result = STATE_VALIDATOR.validate(state)
+
+  if (result.error) {
+    throw errorGen(result.error.details)
+  }
+
+  return db.query(`
+    SELECT A.id, total, name AS \`good.name\`, quantity AS \`good.quantity\`, A.state, transaction_time
+    FROM \`ORDER\` AS A
+    INNER JOIN GOOD ON A.good_id = GOOD.id
+    WHERE A.member_id = (
+      SELECT id
+      FROM MEMBER
+      WHERE user_id = :userId
+    ) ${stateCondition}`,
+  { replacements: { userId, state }, type: db.QueryTypes.SELECT, nest: true })
+}
+
 export default {
   getUserInformationByUserId,
   getUserInformationByUsername,
   checkMemberStatus,
   createShellCustomer,
   fillShellCustomer,
+  modifyUserInformationByUserId,
+  getAllUserOrders,
   STATE
 }
