@@ -14,7 +14,7 @@
       </el-col>
     </el-row>
     <h2>推薦商品</h2>
-    <product-list />
+    <product-list class="good-list" />
   </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
 }
 </script>
 
-<style  lang="scss">
+<style  lang="scss" scoped>
 .menu {
   position: relative;
   top: -50px;
@@ -43,5 +43,9 @@ export default {
 .banner {
   position: relative;
   top: -7px;
+}
+/deep/ .good-list {
+  margin-top: 16px;
+  margin-bottom: 40px;
 }
 </style>

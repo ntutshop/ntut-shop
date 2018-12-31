@@ -1,10 +1,7 @@
 <template>
   <div class="home-product-list">
     <v-layout justify-center>
-      <v-flex
-        xs12
-        class="pt-3 pb-5"
-      >
+      <v-flex xs12>
         <v-container
           fluid
           grid-list-md
@@ -90,9 +87,3 @@ export default {
   })
 }
 </script>
-
-<style lang="scss">
-.home-product-list {
-  width: 1190px;
-}
-</style>
