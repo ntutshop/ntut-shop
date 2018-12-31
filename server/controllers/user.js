@@ -1,21 +1,36 @@
 import Member from '../models/Member.js'
 
 /**
- * Get a user's information.
- * @param {IRouterContext} ctx Context.
+ * If query.username exists, this middleware will go find the user's information by it.
+ * Otherwise, it will go to next middleware.
+ * @param {IRouterContext} ctx Koa router's context.
+ * @param {Function} next Next function.
  * @async
  */
-async function getUserInformation(ctx) {
+async function getUserInformationByUsername (ctx, next) {
   let query = ctx.query
-  let information
-
   if (query.username) {
-    information = await Member.getUserInformationByUsername(query.username)
+    let information = await Member.getUserInformationByUsername(query.username)
+    if (information) {
+      ctx.status = 200
+      ctx.body = information
+    } else {
+      ctx.status = 404
+    }
   } else {
-    information = await Member.getUserInformationByUserId(ctx.state.userId)
+    return next()
   }
+}
 
+/**
+ * Get the user's information by MEMBER id from JWT.
+ * @param {IRouterContext} ctx Koa rounter's context.
+ * @async
+ */
+async function getUserInformationById (ctx) {
+  let information = await Member.getUserInformationByMemberId(ctx.state.memberId)
   if (information) {
+    ctx.status = 200
     ctx.body = information
   } else {
     ctx.status = 404
@@ -31,10 +46,10 @@ async function modifyUserProfile(ctx) {
   let result = await Member.modifyUserInformationByMemberId(ctx.state.memberId, ctx.request.body)
 
   if (result.success) {
-    ctx.body = { success: true }
+    ctx.status = 204
   } else {
+    ctx.status = 400
     ctx.body = {
-      success: false,
       type: 'body',
       error: result.error
     }
@@ -47,15 +62,15 @@ async function modifyUserProfile(ctx) {
  * @async
  */
 async function getOrdersInformation(ctx) {
-  try {
-    let result = await Member.getAllUserOrders(ctx.state.memberId, ctx.query.state)
+  let result = await Member.getAllUserOrders(ctx.state.memberId, ctx.query.state)
+  if (result.success) {
     ctx.status = 200
     ctx.body = { orders: result }
-  } catch (error) {
+  } else {
     ctx.status = 400
     ctx.body = {
       type: 'query',
-      error: error
+      error: result.error
     }
   }
 }
@@ -68,7 +83,8 @@ async function checkLogin(ctx) {
 }
 
 export default {
-  getUserInformation,
+  getUserInformationByUsername,
+  getUserInformationById,
   modifyUserProfile,
   getOrdersInformation,
   checkLogin

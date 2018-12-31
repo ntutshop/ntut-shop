@@ -48,14 +48,13 @@ const PROFILE_VALIDATOR = Joi.object().required().keys({
 })
 
 /**
- * Get a user's information by a user_id.
- * @param {string} userId An user_id from Facebook.
- * @async
+ * Get a user's information by a MEMBER id.
+ * @param {number} memberId MEMBER id.
  */
-async function getUserInformationByUserId (userId) {
+async function getUserInformationByMemberId (memberId) {
   return Member.findOne({
     where: {
-      user_id: userId
+      id: memberId
     }
   })
 }
@@ -78,7 +77,7 @@ async function getUserInformationByUsername (username) {
  * @async
  */
 async function checkMemberStateByMemberId (memberId) {
-  let member = await Member.findOne({ where: { id: memberId } })
+  let member = await getUserInformationByMemberId(memberId)
   if (!member) {
     return STATE.Unauthorized
   } else if (member.username === '') {
@@ -95,7 +94,7 @@ async function checkMemberStateByMemberId (memberId) {
  * @async
  */
 async function checkMemberStateAndIdByUserId (userId) {
-  let member = await getUserInformationByUserId(userId)
+  let member = await Member.findOne({ where: { user_id: userId } })
   if (!member) {
     return [STATE.Unauthorized, undefined]
   } else if (member.username === '') {
@@ -208,19 +207,27 @@ async function getAllUserOrders (memberId, state) {
   let result = STATE_VALIDATOR.validate(state)
 
   if (result.error) {
-    throw errorGen(result.error.details)
+    return {
+      success: false,
+      error: { state: "數值必須介於 0 ~ 5 之間。" } 
+    }
   }
 
-  return db.query(`
+  let orders = await db.query(`
     SELECT A.id, total, name AS \`good.name\`, quantity AS \`good.quantity\`, A.state, transaction_time
     FROM \`ORDER\` AS A
     INNER JOIN GOOD ON A.good_id = GOOD.id
     WHERE A.member_id = :memberId ${stateCondition}`,
   { replacements: { memberId, state }, type: db.QueryTypes.SELECT, nest: true })
+
+  return {
+    success: true,
+    orders
+  }
 }
 
 export default {
-  getUserInformationByUserId,
+  getUserInformationByMemberId,
   getUserInformationByUsername,
   checkMemberStateByMemberId,
   checkMemberStateAndIdByUserId,
