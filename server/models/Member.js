@@ -207,15 +207,23 @@ async function getAllUserOrders (memberId, state) {
   let result = STATE_VALIDATOR.validate(state)
 
   if (result.error) {
-    throw errorGen(result.error.details)
+    return {
+      success: false,
+      error: { state: "數值必須介於 0 ~ 5 之間。" } 
+    }
   }
 
-  return db.query(`
+  let orders = await db.query(`
     SELECT A.id, total, name AS \`good.name\`, quantity AS \`good.quantity\`, A.state, transaction_time
     FROM \`ORDER\` AS A
     INNER JOIN GOOD ON A.good_id = GOOD.id
     WHERE A.member_id = :memberId ${stateCondition}`,
   { replacements: { memberId, state }, type: db.QueryTypes.SELECT, nest: true })
+
+  return {
+    success: true,
+    orders
+  }
 }
 
 export default {

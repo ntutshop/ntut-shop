@@ -62,15 +62,15 @@ async function modifyUserProfile(ctx) {
  * @async
  */
 async function getOrdersInformation(ctx) {
-  try {
-    let result = await Member.getAllUserOrders(ctx.state.memberId, ctx.query.state)
+  let result = await Member.getAllUserOrders(ctx.state.memberId, ctx.query.state)
+  if (result.success) {
     ctx.status = 200
     ctx.body = { orders: result }
-  } catch (error) {
+  } else {
     ctx.status = 400
     ctx.body = {
       type: 'query',
-      error: error
+      error: result.error
     }
   }
 }
