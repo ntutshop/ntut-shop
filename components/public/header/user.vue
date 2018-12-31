@@ -7,7 +7,7 @@
           dark
           outline
           color="blue"
-          @click="$router.push('/user')"
+          @click="$router.push('/user/account')"
         >
           <v-avatar
           >
