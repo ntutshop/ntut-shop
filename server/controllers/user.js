@@ -51,7 +51,7 @@ async function getUserState (ctx) {
 /**
  * Passed login
  */
-async function checkLogin() {
+async function checkLogin(ctx) {
   ctx.status = 200
 }
 
