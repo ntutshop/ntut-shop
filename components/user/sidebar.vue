@@ -21,6 +21,12 @@
         <span slot="title">我的賣場</span>
       </nuxt-link>
     </el-menu-item>
+    <el-menu-item index="4">
+      <nuxt-link to="/logout">
+        <v-icon size="18">exit_to_app</v-icon>
+        <span slot="title">登出</span>
+      </nuxt-link>
+    </el-menu-item>
   </el-menu>
 </template>
 
@@ -29,7 +35,7 @@ export default {
   props: {
     index: {
       type: String,
-      default: "1"
+      default: '1'
     }
   }
 }
