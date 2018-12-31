@@ -6,10 +6,9 @@
     justify-center
     align-center
   >
-    <template>
-      <p
-        v-if="error.statusCode === 403 && error.reason === 'unregistered'"
-        class="display-1">OOPS！您尚未完成基本資料填寫</p>
+    <p>{{ error.statusCode }}; {{ error.message }}</p>
+    <template v-if="error.statusCode === 403 && error.message === 'unregistered'">
+      <p class="display-1">OOPS！您尚未完成基本資料填寫</p>
       <v-btn
         class="mt-5"
         nuxt
@@ -18,22 +17,22 @@
         large
         to="/signup">填寫資料</v-btn>
     </template>
-    <template>
+    <template v-else>
       <p
         v-if="error.statusCode === 401"
         class="display-1">OOPS！您尚未登入</p>
       <p
-        v-if="error.statusCode === 403 && error.reason === 'registered'"
+        v-if="error.statusCode === 403 && error.message === 'registered'"
         class="display-1">OOPS！您已經完成基本資料填寫</p>
       <p
-        v-if="error.statusCode === 403 && error.reason === 'permission-denied'"
+        v-if="error.statusCode === 403 && error.message === 'permission-denied'"
         class="display-1">OOPS！您沒有權限進行此操作</p>
       <p
         v-if="error.statusCode === 404"
         class="display-1">OOPS！找不到這個頁面</p>
       <p
         v-else
-        class="display-1">{{ error.message || '未知的錯誤' }}</p>
+        class="display-1">{{ '未知的錯誤' }}</p>
       <v-btn
         class="mt-5"
         nuxt
