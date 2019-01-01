@@ -1,6 +1,7 @@
 import db from '../config/db.js'
 import MemberSchema from '../schemas/Member.js'
 import { STATE_VALIDATOR as ORDER_STATE_VALIDATOR } from '../models/Order.js'
+import { STATE_VALIDATOR as GOOD_STATE_VALIDATOR } from '../models/Good.js'
 import errorGen from '../modules/errorgen.js'
 import Joi from 'joi'
 import sequelize from 'sequelize'
