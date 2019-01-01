@@ -36,7 +36,10 @@ const STATE = Object.freeze({
  */
 const PROFILE_VALIDATOR = Joi.object().required().keys({
   username: Joi.string()
-    .required(),
+    .required()
+    .regex(/^[a-zA-Z0-9]*$/)
+    .min(6)
+    .max(25),
   nickname: Joi.string()
     .empty(''),
   phone: Joi.string()
@@ -80,7 +83,7 @@ async function checkMemberStateByMemberId (memberId) {
   let member = await getUserInformationByMemberId(memberId)
   if (!member) {
     return STATE.Unauthorized
-  } else if (member.username === '') {
+  } else if (!member.username) {
     return STATE.Unregistered
   } else {
     return STATE.Normal
@@ -114,7 +117,7 @@ async function createShellCustomer (userId) {
     // id is auto-increment
     user_id: userId,
     authority: 'Facebook',
-    username: '',
+    username: null,
     nickname: '',
     phone: '',
     email: '',

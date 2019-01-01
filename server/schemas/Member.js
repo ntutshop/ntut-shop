@@ -22,7 +22,7 @@ export default function (sequelize, DataTypes) {
     },
     username: {
       type: DataTypes.STRING(25),
-      allowNull: false
+      allowNull: true
     },
     nickname: {
       type: DataTypes.STRING(25),
