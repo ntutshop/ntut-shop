@@ -172,9 +172,9 @@ async function fillShellCustomer(memberId, data) {
       nickname: value.nickname || value.username,
       register_time: sequelize.fn('NOW')
     }, {
-      where: { id: memberId },
-      fields: [ 'username', 'phone', 'email', 'nickname', 'register_time' ]
-    })
+        where: { id: memberId },
+        fields: ['username', 'phone', 'email', 'nickname', 'register_time']
+      })
   } catch (ex) {
     let fisrtError = ex.errors[0]
     // This should be processed by an error object converter.
@@ -216,9 +216,9 @@ async function modifyUserInformationByMemberId(memberId, data) {
       email: value.email,
       nickname: value.nickname || value.username
     }, {
-      where: { id: memberId },
-      fields: [ 'username', 'phone', 'email', 'nickname' ]
-    })
+        where: { id: memberId },
+        fields: ['username', 'phone', 'email', 'nickname']
+      })
   } catch (ex) {
     let fisrtError = ex.errors[0]
     // This should be processed by an error object converter.
@@ -257,7 +257,7 @@ async function getAllUserOrders(memberId, state) {
     FROM \`ORDER\` AS A
     INNER JOIN GOOD ON A.good_id = GOOD.id
     WHERE A.member_id = :memberId ${stateCondition}`,
-  { replacements: { memberId, state }, type: db.QueryTypes.SELECT, nest: true })
+    { replacements: { memberId, state }, type: db.QueryTypes.SELECT, nest: true })
 
   return {
     success: true,
