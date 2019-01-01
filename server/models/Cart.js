@@ -98,8 +98,8 @@ async function getCartGoodsByMemberId(memberId) {
   return items.map(item => ({
     id: item.id,
     quantity: item.quantity,
-    shipping_id: item.shippingId,
-    payment_id: item.paymentId
+    shipping_id: item.shipping_id,
+    payment_id: item.payment_id
   }))
 }
 
