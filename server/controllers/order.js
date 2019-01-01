@@ -47,7 +47,21 @@ async function getOrderById(ctx) {
   }
 }
 
+async function patchOrderState(ctx) {
+  let orderId = ctx.params.id
+
+  let result = await Order.getOrderInformationById(orderId)
+  if (!result) {
+    ctx.status = 404
+    return
+  }
+
+
+  ctx.body = await Order.getOrderInformationById(orderId)
+}
+
 export default {
   postNewOrder,
-  getOrderById
+  getOrderById,
+  patchOrderState
 }
