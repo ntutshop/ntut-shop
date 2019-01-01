@@ -1,5 +1,6 @@
 import consola from 'consola'
-import bodyparser from 'koa-bodyparser'
+import koaBodyparser from 'koa-bodyparser'
+import koaStatic from 'koa-static'
 import router from './routes/main.js'
 import ntutdb from './config/db.js'
 
@@ -8,7 +9,9 @@ import ntutdb from './config/db.js'
  * @param {Koa} app Koa application.
  */
 export default function (app) {
-  app.use(bodyparser())
+  app.use(koaStatic(__dirname + '/public'))
+
+  app.use(koaBodyparser())
 
   return new Promise((resolve, reject) => {
     // Check whether the connection is created or not.
