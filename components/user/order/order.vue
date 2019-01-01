@@ -2,7 +2,7 @@
   <div class="order-item">
     <el-row>
       <el-col
-        :span="14"
+        :span="20"
         class="order-info"
       >
         <dl>
@@ -16,28 +16,22 @@
             <h3>
               <nuxt-link :to="{path:'detail',query:{keyword:meta.name,type:meta.module}}">{{ meta.name }}</nuxt-link>
             </h3>
-            <p>
-              <strong class="item-price">＄{{ meta.price }}起</strong>
-            </p>
+            <div class="order-buyer">
+              <div class="buyer-name">
+                <span>賣家：</span>
+                <span>煨刃</span>
+              </div>
+              <div class="buyer-shipping">
+                <span>運輸方式：</span>
+                <span>面交</span>
+              </div>
+              <div class="buyer-payment">
+                <span>付款方式：</span>
+                <span>面交</span>
+              </div>
+            </div>
           </dd>
         </dl>
-      </el-col>
-      <el-col
-        :span="6"
-        class="order-buyer"
-      >
-        <div class="buyer-name">
-          <span>購買人：</span>
-          <span>煨刃</span>
-        </div>
-        <div class="buyer-shipping">
-          <span>運輸方式：</span>
-          <span>面交</span>
-        </div>
-        <div class="buyer-payment">
-          <span>付款方式：</span>
-          <span>面交</span>
-        </div>
       </el-col>
       <el-col :span="4">
         <div class="order-status">
