@@ -21,7 +21,7 @@ let upload = koaMulter({ storage })
  */
 async function uploadImage(ctx) {
   try {
-    await upload.single('image')(ctx)
+    await upload.single('file')(ctx)
   }
   catch (ex) {
     ctx.status = 403

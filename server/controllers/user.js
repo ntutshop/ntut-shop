@@ -13,7 +13,7 @@ async function getUserInformationByUsername (ctx, next) {
     let information = await Member.getUserInformationByUsername(query.username)
     if (information) {
       ctx.status = 200
-      ctx.body = information
+      ctx.body = information[0]
     } else {
       ctx.status = 404
     }
@@ -31,7 +31,7 @@ async function getUserInformationById (ctx) {
   let information = await Member.getUserInformationByMemberId(ctx.state.memberId)
   if (information) {
     ctx.status = 200
-    ctx.body = information
+    ctx.body = information[0]
   } else {
     ctx.status = 404
   }
