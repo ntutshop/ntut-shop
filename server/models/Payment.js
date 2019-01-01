@@ -26,6 +26,17 @@ async function createManyPayment (goodId, services) {
 }
 
 /**
+ * Get a payment by a PAYMENT id.
+ * @param {number} goodId The PAYMENT id.
+ */
+async function getPaymentById (id) {
+  return Payment.findOne({
+    where: { good_id: goodId },
+    attributes: [ 'id', 'service' ]
+  })
+}
+
+/**
  * Get payments by a GOOD id.
  * @param {number} goodId The GOOD id.
  */
@@ -38,5 +49,6 @@ async function getPaymentsByGoodId (goodId) {
 
 export default {
   createManyPayment,
+  getPaymentById,
   getPaymentsByGoodId
 }

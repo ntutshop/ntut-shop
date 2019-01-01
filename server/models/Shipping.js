@@ -38,6 +38,18 @@ async function createManyShippings (goodId, basicShippings) {
 }
 
 /**
+ * Get shipping' information by a SHIPPING id.
+ * @param {number} id The SHIPPING id.
+ * @async
+ */
+async function getShippingById (id) {
+  return Shipping.findOne({
+    where: { id: id },
+    attributes: [ 'id', 'service', 'fee' ]
+  })
+}
+
+/**
  * Get shippings' information by a GOOD id.
  * @param {number} goodId The GOOD id.
  * @async
@@ -51,5 +63,6 @@ async function getShippingsByGoodId (goodId) {
 
 export default {
   createManyShippings,
+  getShippingById,
   getShippingsByGoodId
 }

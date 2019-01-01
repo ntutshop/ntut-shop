@@ -31,6 +31,22 @@ export default function (sequelize, DataTypes) {
         model: 'GOOD',
         key: 'id'
       }
+    },
+    shipping_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'SHIPPING',
+        key: 'id'
+      }
+    },
+    payment_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'PAYMENT',
+        key: 'id'
+      }
     }
   }, {
     tableName: 'SHOPPING_CART'
