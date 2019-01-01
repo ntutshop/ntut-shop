@@ -10,6 +10,6 @@ ADD . /app
 RUN yarn
 RUN yarn build
 
-CMD [ "yarn", "start" ]
+CMD [ "yarn", "docker" ]
 
 EXPOSE 3000
