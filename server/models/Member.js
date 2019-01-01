@@ -54,7 +54,7 @@ const PROFILE_VALIDATOR = Joi.object().required().keys({
  * Get a user's information by a MEMBER id.
  * @param {number} memberId MEMBER id.
  */
-async function getUserInformationByMemberId (memberId) {
+async function getUserInformationByMemberId(memberId) {
   return db.query(`
     SELECT id, user_id, authority, username, nickname, phone, email, certificated, permission, register_time, rate_count, rate_average
     FROM MEMBER AS M, (
@@ -71,7 +71,7 @@ async function getUserInformationByMemberId (memberId) {
  * @param {string} username Username.
  * @async
  */
-async function getUserInformationByUsername (username) {
+async function getUserInformationByUsername(username) {
   return db.query(`
   SELECT id, user_id, authority, username, nickname, phone, email, certificated, permission, register_time, rate_count, rate_average
   FROM MEMBER AS M, (
@@ -89,7 +89,7 @@ async function getUserInformationByUsername (username) {
  * @return {Promise<STATE>} Symbol. The user's state.
  * @async
  */
-async function checkMemberStateByMemberId (memberId) {
+async function checkMemberStateByMemberId(memberId) {
   let member = await getUserInformationByMemberId(memberId)
   if (!member) {
     return STATE.Unauthorized
@@ -106,7 +106,7 @@ async function checkMemberStateByMemberId (memberId) {
  * @return {Promise<STATE, number?>} The user state and member id from MEMBER table.
  * @async
  */
-async function checkMemberStateAndIdByUserId (userId) {
+async function checkMemberStateAndIdByUserId(userId) {
   let member = await Member.findOne({ where: { user_id: userId } })
   if (!member) {
     return [STATE.Unauthorized, undefined]
@@ -122,7 +122,7 @@ async function checkMemberStateAndIdByUserId (userId) {
  * @param {string} userId A user_id from Facebook.
  * @async
  */
-async function createShellCustomer (userId) {
+async function createShellCustomer(userId) {
   return Member.create({
     // id is auto-increment
     user_id: userId,
@@ -152,7 +152,7 @@ async function createShellCustomer (userId) {
  * @param {ProfileData} data ProfileData.
  * @async
  */
-async function fillShellCustomer (memberId, data) {
+async function fillShellCustomer(memberId, data) {
   // Validate the data.
   let result = PROFILE_VALIDATOR.validate(data, { abortEarly: false })
   if (result.error) {
@@ -196,7 +196,7 @@ async function fillShellCustomer (memberId, data) {
  * @param {ProfileData} data The new profile data.
  * @async
  */
-async function modifyUserInformationByMemberId (memberId, data) {
+async function modifyUserInformationByMemberId(memberId, data) {
   // Validate the data.
   let result = PROFILE_VALIDATOR.validate(data, { abortEarly: false })
 
@@ -240,7 +240,7 @@ async function modifyUserInformationByMemberId (memberId, data) {
  * @param {number} state Orders' state. It's used to find the orders with specified state.
  * @async
  */
-async function getAllUserOrders (memberId, state) {
+async function getAllUserOrders(memberId, state) {
   let stateCondition = state ? 'AND A.state = :state' : ''
 
   let result = ORDER_STATE_VALIDATOR.validate(state)
@@ -248,7 +248,7 @@ async function getAllUserOrders (memberId, state) {
   if (result.error) {
     return {
       success: false,
-      error: { state: "數值必須介於 0 ~ 5 之間。" } 
+      error: { state: "數值必須介於 0 ~ 5 之間。" }
     }
   }
 
