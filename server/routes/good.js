@@ -10,6 +10,8 @@ router.get('/:id', controller.getGoodById)
 
 router.get('/:id/images', controller.getAllImagesUrlByGoodId)
 
+router.get('/:id/shippings', controller.getAllShippingsByGoodId)
+
 router.get('/:id/tags', controller.getAllTagsByGoodId)
 
 // Add JWT token and user state verifications as authorization filter.
