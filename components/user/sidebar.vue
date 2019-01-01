@@ -22,6 +22,12 @@
       </nuxt-link>
     </el-menu-item>
     <el-menu-item index="4">
+      <nuxt-link to="/good/publish">
+        <v-icon size="18">add_circle_outline</v-icon>
+        <span slot="title">上架商品</span>
+      </nuxt-link>
+    </el-menu-item>
+    <el-menu-item index="5">
       <nuxt-link to="/logout">
         <v-icon size="18">exit_to_app</v-icon>
         <span slot="title">登出</span>
