@@ -1,8 +1,55 @@
+import Joi from 'joi'
+import errorGen from '../modules/errorgen.js'
 import Good from '../models/Good.js'
 import Shipping from '../models/Shipping.js'
 import Payment from '../models/Payment.js'
 import Image from '../models/Image.js'
 import Tag from '../models/Tag.js'
+
+const GOOD_QUERY_VALIDATOR = Joi.object().keys({
+  sort: Joi.string()
+    .only([ 'price', 'publishTime', 'rate', 'durability' ]),
+  sort_type: Joi.string()
+    .only([ 'desc', 'asc' ]),
+  price_start: Joi.number()
+    .integer()
+    .min(0),
+  price_end: Joi.number()
+    .integer()
+    .min(0)
+    .when('price_start', { 
+      is: Joi.exist(),
+      then: Joi.number()
+        .greater( Joi.ref('price_start') )
+    }),
+  time_start: Joi.date(),
+  time_end: Joi.date()
+    .when('time_start', {
+      is: Joi.exist(),
+      then: Joi.date()
+        .greater( Joi.ref('time_start') )
+    }),
+  keyword: Joi.string()
+    .empty('')
+    .regex(/^[^%]+$/)
+})
+
+/**
+ * Get goods.
+ * @param {IRouterContext} ctx Koa router's context.
+ */
+async function getGoods(ctx) {
+  let result = GOOD_QUERY_VALIDATOR.validate(ctx.query)
+  if (result.error) {
+    ctx.status = 400
+    ctx.body = {
+      type: 'query',
+      error: errorGen(result.error.details)
+    }
+  } else {
+    ctx.body = await Good.getGoodsByConditions(ctx.query)
+  }
+}
 
 /**
  * Publish a new good with basic information.
@@ -106,6 +153,7 @@ async function getGoodById(ctx) {
 }
 
 export default {
+  getGoods,
   postNewGood,
   getGoodById
 }

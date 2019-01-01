@@ -83,37 +83,6 @@ async function publishNewGood (memberId, data) {
 }
 
 /**
-{
-    "id": number,
-    "name": string,
-    "description": string,
-    "price": number,
-    "stock": number,
-    "durability": number,
-    "sellerId": number,
-    "state": number,
-    "publishTime": date,
-    "images": [ string ],
-    "tags": [ string ],
-    "shippings":
-    [
-        {
-            "id": number,
-            "service": string,
-            "fee": number
-        }
-    ],
-    "payments":
-    [
-        {
-            "id": number,
-            "service": string
-        }
-    ]
-}
-**/
-
-/**
  * Get a good's information.
  * @param {number} goodId The good's id.
  */
@@ -121,8 +90,60 @@ async function getGoodInformationById (goodId) {
   return await Good.findOne({ where: { id: goodId } })
 }
 
+/**
+ * Get goods with condtions.
+ * @param {QueryObject} query A query object.
+ */
+async function getGoodsByConditions (query) {
+  const OP = db.Op
+  let queryObject = {
+    attributes: [ 'id', 'name', 'price', 'stock', 'durability', 'member_id', 'state', 'publish_time' ],
+    where: {}
+  }
+
+  if (query.sort)
+    queryObject.order = [[ query.sort, query.sort_type || 'DESC' ]]
+
+  if (query.price_start && query.price_end) {
+    queryObject.where['price'] = {
+      [OP.between]: [query.price_start, query.price_end]
+    }
+  } else if (query.price_start) {
+    queryObject.where['price'] = {
+      [OP.gte]: query.price_start
+    }
+  } else if (query.price_end) {
+    queryObject.where['price'] = {
+      [OP.lte]: query.price_end
+    }
+  }
+
+  if (query.time_start && query.time_end) {
+    queryObject.where['publish_time'] = {
+      [OP.between]: [query.time_start, query.time_end]
+    }
+  } else if (query.time_start) {
+    queryObject.where['publish_time'] = {
+      [OP.gte]: query.time_start
+    }
+  } else if (query.time_end) {
+    queryObject.where['publish_time'] = {
+      [OP.lte]: query.time_end
+    }
+  }
+
+  if (query.keyword) {
+    queryObject.where['name'] = {
+      [OP.like]: '%' + query.keyword + '%'
+    }
+  }
+
+  return Good.findAll(queryObject)
+}
+
 export default {
   publishNewGood,
   getGoodInformationById,
+  getGoodsByConditions,
   STATE_VALIDATOR
 }
