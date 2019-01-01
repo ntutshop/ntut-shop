@@ -36,7 +36,8 @@
           align-center
           class="user-rate"
         >
-          <span class="rate-value">{{ `${userInfo.rate_average} ${rateComment}` }}</span>
+          <p class="rate-value mb-1">{{ `${userInfo.rate_count} 次評分` }}</p>
+          <p class="rate-value mb-1">{{ `${userInfo.rate_average} 分` }}</p>
           <el-rate
             v-model="userInfo.rate_average"
             :colors="['#ff9900', '#ff9900', '#FF9900']"
@@ -106,16 +107,6 @@ export default {
         }
       }
       return undefined
-    },
-    rateComment() {
-      let rate = this.userInfo.rate_average
-      if(rate > 4) {
-        return '令人滿意'
-      } else if(rate >= 3) {
-        return '普通'
-      } else {
-        return '令人不滿'
-      }
     }
   },
   methods: {
