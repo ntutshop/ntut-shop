@@ -176,5 +176,6 @@ export default {
   getGoods,
   postNewGood,
   getGoodById,
-  getAllImagesUrlByGoodId
+  getAllImagesUrlByGoodId,
+  getAllTagsByGoodId
 }
