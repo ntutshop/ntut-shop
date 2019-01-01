@@ -3,6 +3,15 @@ import db from '../config/db.js'
 import GoodSchema from '../schemas/Good.js'
 import errorGen from '../modules/errorgen.js'
 
+/**
+* A validator for GOOD.state.
+* There are 3 possible values:
+* 0. In stock
+* 1. Out of stock
+* 2. Removed
+*/
+export const STATE_VALIDATOR = Joi.number().min(0).max(2)
+
 const Good = db.import('GOOD', GoodSchema)
 
 /**
@@ -74,5 +83,6 @@ async function publishNewGood (memberId, data) {
 }
 
 export default {
-  publishNewGood
+  publishNewGood,
+  STATE_VALIDATOR
 }

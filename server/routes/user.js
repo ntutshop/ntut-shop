@@ -22,4 +22,7 @@ router.put('/information', controller.modifyUserProfile)
 // Get user's orders
 router.get('/orders', controller.getOrdersInformation)
 
+// Get user's goods
+router.get('/goods', controller.getGoodsInformation)
+
 export default router
