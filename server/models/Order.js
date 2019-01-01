@@ -51,6 +51,10 @@ const ORDERDATA_VALIDATOR = Joi.object().required().keys({
  * @async
  */
 async function publishNewOrder(memberId, data) {
+  data.goodId = data.good.id
+  data.quantity = data.good.quantity
+  delete data.good
+
   let result = ORDERDATA_VALIDATOR.validate(data, { abortEarly: false })
 
   if (result.error) {
