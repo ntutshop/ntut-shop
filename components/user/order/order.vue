@@ -8,26 +8,26 @@
         <dl>
           <dt>
             <img
-              :src="meta.imgUrl"
+              :src="good.images[0]"
               alt="商品"
             >
           </dt>
           <dd>
             <h3>
-              <nuxt-link :to="{path:'detail',query:{keyword:meta.name,type:meta.module}}">{{ meta.name }}</nuxt-link>
+              <nuxt-link :to="{path:'detail'}">{{ good.name }}</nuxt-link>
             </h3>
             <div class="order-buyer">
               <div class="buyer-name">
                 <span>賣家：</span>
-                <span>煨刃</span>
+                <span>{{ good.member_id }}</span>
               </div>
               <div class="buyer-shipping">
                 <span>運輸方式：</span>
-                <span>面交</span>
+                <span>{{ good.shippings[0].service }}</span>
               </div>
               <div class="buyer-payment">
                 <span>付款方式：</span>
-                <span>面交</span>
+                <span>{{ good.payments[0].service }}</span>
               </div>
             </div>
           </dd>
@@ -36,15 +36,15 @@
       <el-col :span="4">
         <div class="order-status">
           <div
-            v-if="meta.state==='waiting'"
+            v-if="order.state===0"
             class="blue--text"
           >等待賣家確認中</div>
           <div
-            v-else-if="meta.state==='reject'"
+            v-else-if="order.state===5"
             class="red--text"
           >賣家拒絕交易</div>
           <div
-            v-else-if="meta.state==='cancel'"
+            v-else-if="order.state===4"
             class="red--text"
           >買家取消交易</div>
         </div>
@@ -57,24 +57,48 @@
 <script>
 export default {
   props: {
-    meta: {
+    order: {
       type: Object,
       default() {
         return {}
       }
-    },
-    confirm: {
-      type: Boolean,
-      default: true
-    },
-    pending: {
-      type: Boolean,
-      default: false
-    },
-    state: {
-      type: String,
-      default: ''
     }
+  },
+  data() {
+    return {
+      good: {
+        id: 0,
+        name: '',
+        description: '',
+        price: 0,
+        stock: 0,
+        durability: 0,
+        member_id: 0,
+        state: 0,
+        publish_time: '',
+        images: [''],
+        tags: [''],
+        shippings: [
+          {
+            id: 0,
+            service: '',
+            fee: 0
+          }
+        ],
+        payments: [
+          {
+            id: 0,
+            service: ''
+          }
+        ]
+      }
+    }
+  },
+  mounted() {
+    let vm = this
+    vm.$axios.get(`/goods/${vm.order.good.id}`).then(response => {
+      vm.good = response.data
+    })
   }
 }
 </script>

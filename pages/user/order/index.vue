@@ -1,5 +1,6 @@
 <template>
   <v-container
+    v-loading.fullscreen.lock="fullscreenLoading"
     fluid
     fill-height
     class="order-container"
@@ -16,32 +17,30 @@
         <el-tabs type="border-card">
           <el-tab-pane label="待處理">
             <order
-              v-for="(item, index) in penddingOrderList"
+              v-for="(order, index) in penddingOrderList"
               :key="index"
-              :meta="item"
-              :confirm="false"
+              :order="order"
             />
           </el-tab-pane>
           <el-tab-pane label="處理中">
             <order
-              v-for="(item, index) in handlingOrderList"
+              v-for="(order, index) in handlingOrderList"
               :key="index"
-              :meta="item"
-              :pending="true"
+              :order="order"
             />
           </el-tab-pane>
           <el-tab-pane label="完成">
             <order
-              v-for="(item, index) in finishOrderList"
+              v-for="(order, index) in finishOrderList"
               :key="index"
-              :meta="item"
+              :order="order"
             />
           </el-tab-pane>
           <el-tab-pane label="取消">
             <order
-              v-for="(item, index) in cancelOrderList"
+              v-for="(order, index) in cancelOrderList"
               :key="index"
-              :meta="item"
+              :order="order"
             />
           </el-tab-pane>
         </el-tabs>
@@ -61,94 +60,42 @@ export default {
   },
   data() {
     return {
-      items: [
-        { title: 'Home', icon: 'dashboard' },
-        { title: 'About', icon: 'question_answer' }
-      ],
-      penddingOrderList: [
-        {
-          name: '雲南菜',
-          imgUrl:
-            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-          rate: 5,
-          owner: 'Andy Meow',
-          price: 238,
-          type: '食物',
-          state: 'waiting'
-        },
-        {
-          name: '雲南菜',
-          imgUrl:
-            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-          rate: 5,
-          owner: 'Andy Meow',
-          price: 238,
-          type: '食物',
-          state: 'waiting'
-        }
-      ],
-      handlingOrderList: [
-        {
-          name: '雲南菜',
-          imgUrl:
-            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-          rate: 5,
-          owner: 'Andy Meow',
-          price: 238,
-          type: '食物'
-        },
-        {
-          name: '雲南菜',
-          imgUrl:
-            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-          rate: 5,
-          owner: 'Andy Meow',
-          price: 238,
-          type: '食物'
-        }
-      ],
-      finishOrderList: [
-        {
-          name: '雲南菜',
-          imgUrl:
-            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-          rate: 5,
-          owner: 'Andy Meow',
-          price: 238,
-          type: '食物'
-        },
-        {
-          name: '雲南菜',
-          imgUrl:
-            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-          rate: 5,
-          owner: 'Andy Meow',
-          price: 238,
-          type: '食物'
-        }
-      ],
-      cancelOrderList: [
-        {
-          name: '雲南菜',
-          imgUrl:
-            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-          rate: 5,
-          owner: 'Andy Meow',
-          price: 238,
-          type: '食物',
-          state: 'cancel'
-        },
-        {
-          name: '雲南菜',
-          imgUrl:
-            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-          rate: 5,
-          owner: 'Andy Meow',
-          price: 238,
-          type: '食物',
-          state: 'reject'
-        }
-      ]
+      orderList: [],
+      fullscreenLoading: false
+    }
+  },
+  computed: {
+    penddingOrderList() {
+      return this.orderList.filter(order => order.state === 0)
+    },
+    handlingOrderList() {
+      return this.orderList.filter(order => order.state === 1)
+    },
+    finishOrderList() {
+      return this.orderList.filter(order => order.state === 2)
+    },
+    cancelOrderList() {
+      return this.orderList.filter(
+        order => order.state === 3 || order.state === 4 || order.state === 5
+      )
+    }
+  },
+  async asyncData({ $axios, error, query }) {
+    try {
+      let { data } = await $axios.get('/user/orders')
+      let orderList = []
+      for (let order of data.orders) {
+        let orderTemp = await $axios.get(`/orders/${order.id}`)
+        orderList.push(orderTemp.data)
+      }
+      return { orderList }
+    } catch (e) {
+      const code = parseInt(e.response && e.response.status)
+      if (code === 400) {
+        error({ statusCode: 400, message: ErrorObject })
+      } else {
+        throw e
+      }
     }
   }
 }
