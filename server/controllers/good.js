@@ -75,6 +75,37 @@ async function postNewGood(ctx) {
   ctx.body = { goodId }
 }
 
+/**
+ * Get a good by GOOD id.
+ * @param {IRouterContext} ctx Koa router's context.
+ * @async
+ */
+async function getGoodById(ctx) {
+  let goodId = ctx.params.id
+
+  let result = await Good.getGoodInformationById(goodId)
+  if (!result) {
+    ctx.status = 404
+    return
+  }
+  let responseBody = result.toJSON()
+
+  result = await Shipping.getShippingsByGoodId(goodId)
+  responseBody.shippings = result
+
+  result = await Payment.getPaymentsByGoodId(goodId)
+  responseBody.payments = result
+
+  result = await Tag.getTagsByGoodId(goodId)
+  responseBody.tags = result
+
+  result = await Image.getImagesByGoodId(goodId)
+  responseBody.images = result
+
+  ctx.body = responseBody
+}
+
 export default {
-  postNewGood
+  postNewGood,
+  getGoodById
 }

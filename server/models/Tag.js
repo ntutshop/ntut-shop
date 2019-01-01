@@ -23,6 +23,19 @@ async function createManyTags (goodId, names) {
   }
 }
 
+/**
+ * Get tags by a GOOD id.
+ * @param {number} goodId The GOOD id.
+ * @async
+ */
+async function getTagsByGoodId (goodId) {
+  return Tag.findAll({
+    where: { good_id: goodId },
+    attributes: [ 'name' ]
+  })
+}
+
 export default {
-  createManyTags
+  createManyTags,
+  getTagsByGoodId
 }

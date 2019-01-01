@@ -25,6 +25,18 @@ async function createManyPayment (goodId, services) {
   }
 }
 
+/**
+ * Get payments by a GOOD id.
+ * @param {number} goodId The GOOD id.
+ */
+async function getPaymentsByGoodId (goodId) {
+  return Payment.findAll({
+    where: { good_id: goodId },
+    attributes: [ 'id', 'service' ]
+  })
+}
+
 export default {
-  createManyPayment
+  createManyPayment,
+  getPaymentsByGoodId
 }

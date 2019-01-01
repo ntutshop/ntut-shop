@@ -24,6 +24,18 @@ async function createManyImages(goodId, imageUrls) {
   }
 }
 
+/**
+ * Get images' url by a GOOD id.
+ * @param {number} goodId The GOOD id.
+ */
+async function getImagesByGoodId (goodId) {
+  return Image.findAll({
+    where: { good_id: goodId },
+    attributes: [ 'path' ]
+  })
+}
+
 export default {
-  createManyImages
+  createManyImages,
+  getImagesByGoodId
 }
