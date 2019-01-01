@@ -110,7 +110,7 @@ async function checkMemberStateAndIdByUserId (userId) {
   let member = await Member.findOne({ where: { user_id: userId } })
   if (!member) {
     return [STATE.Unauthorized, undefined]
-  } else if (member.username === '') {
+  } else if (!member.username) {
     return [STATE.Unregistered, member.id]
   } else {
     return [STATE.Normal, member.id]
