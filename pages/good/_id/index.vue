@@ -1,13 +1,13 @@
 <template>
   <el-row class="m-good-detail">
     <el-col :span="24">
-      <crumbs
+      <!-- <crumbs
         :category="category"
         :keyword="keyword"
         class="breadcrumbs"
-      />
+      /> -->
       <detail
-        :meta="meta"
+        :detail="detail"
         class="detail-card"
       />
     </el-col>
@@ -18,25 +18,49 @@
 import Crumbs from '@/components/good/crumbs.vue'
 import Detail from '@/components/good-detail/detail.vue'
 export default {
+  async asyncData({ params, error, $axios }) {
+    let loadedData = {}
+    try {
+      let { data } = await $axios.get(`/goods/${params.id}`)
+      loadedData.goodInfo = data
+    } catch (e) {
+      const code = parseInt(e.response && e.response.status)
+      if (code === 404) {
+        error({ statusCode: 404, message: '找不到此商品' })
+        return
+      } else {
+        throw e
+      }
+    }
+    try {
+      let { data } = await $axios.get(`/user/information?id=${loadedData.goodInfo.member_id}`)
+      loadedData.sellerInfo = data
+    } catch (e) {
+      const code = parseInt(e.response && e.response.status)
+      if (code === 404) {
+        error({ statusCode: 404, message: '找不到此賣家' })
+      } else {
+        throw e
+      }
+    }
+    return loadedData
+  },
   components: {
     Crumbs,
     Detail
   },
-  data () {
+  data() {
     return {
-      keyword: '',
-      category: '分類',
-      meta: {
-        name: '雲南菜',
-        imgUrl:
-          'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-        rate: 5,
-        owner: 'Andy Meow',
-        price: 238,
-        type: '食物'
+    }
+  },
+  computed: {
+    detail() {
+      return {
+        sellerInfo: this.sellerInfo,
+        goodInfo: this.goodInfo
       }
     }
-  }
+  },
 }
 </script>
 

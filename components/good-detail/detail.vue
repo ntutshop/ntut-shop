@@ -2,12 +2,14 @@
   <div>
     <el-card class="good-header-card">
       <v-btn
+        v-if="userInfo.username === detail.sellerInfo.username"
         icon
         fab
         small
         dark
         color="blue"
         style="position: absolute;right: 24px;z-index: 20;"
+        @click="$router.push(`/good/${detail.goodInfo.id}/edit`)"
       >
         <v-icon>edit</v-icon>
       </v-btn>
@@ -15,24 +17,28 @@
         <el-col :span="13">
           <v-carousel height="350">
             <v-carousel-item
-              v-for="(item,index) in goodImage"
+              v-for="(item,index) in detail.goodInfo.images"
               :key="index"
-              :src="item.src"
+              :src="item"
             />
           </v-carousel>
         </el-col>
         <el-col :span="11">
-          <h1 class="good-title">雲南菜</h1>
-          <div class="seller-info">
-            <span class="seller-name">DevilTea</span>
+          <h1 class="good-title">{{ detail.goodInfo.name }}</h1>
+          <div 
+            class="seller-info" 
+            style="height: 24px;padding-top: 8px;">
+            <span class="seller-name">{{ detail.sellerInfo.nickname }}</span>
             <el-rate
-              v-model="rate"
+              v-model="detail.sellerInfo.rate"
               :colors="['#ff9900', '#ff9900', '#FF9900']"
               class="seller-rate"
               disabled
             />
-            <span class="item-value">{{ rate }}分</span>
+            <span class="item-value">{{ detail.sellerInfo.rate }}分</span>
+            <span class="price">＄{{ detail.goodInfo.price }}</span>
           </div>
+
           <v-divider />
           <div class="good-payment">
             <span>付款方式：</span>
@@ -41,9 +47,9 @@
               placeholder="請選擇"
             >
               <el-option
-                v-for="(item, index) in paymentList"
+                v-for="(item, index) in detail.goodInfo.payments"
                 :key="index"
-                :label="item"
+                :label="`${item.service}`"
                 :value="item"
               />
             </el-select>
@@ -55,9 +61,9 @@
               placeholder="請選擇"
             >
               <el-option
-                v-for="(item, index) in shippingList"
+                v-for="(item, index) in detail.goodInfo.shippings"
                 :key="index"
-                :label="item"
+                :label="`${item.service}: $${item.fee}`"
                 :value="item"
               />
             </el-select>
@@ -73,13 +79,16 @@
               <v-icon>fab fa-facebook-f</v-icon>
             </v-btn>
           </div>
-          <el-button
-            type="primary"
-            class="cart-button"
-          >
-            <v-icon dark>shopping_cart</v-icon>
-            加入購物車
-          </el-button>
+          <div>
+            
+            <el-button
+              type="primary"
+              class="cart-button"
+            >
+              <v-icon dark>shopping_cart</v-icon>
+              加入購物車
+            </el-button>
+          </div>
         </el-col>
       </el-row>
     </el-card>
@@ -87,8 +96,18 @@
       <div slot="header">
         <span>商品詳情</span>
       </div>
+      <div>
+        <span>標籤: </span>
+        <el-tag
+          v-for="(tag, index) in detail.goodInfo.tags"
+          :key="index"
+          class="ma-1"
+        >
+          {{ tag.name }}
+        </el-tag>
+      </div>
       <p class="good-detail-content">
-        威任哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉哈囉
+        {{ detail.goodInfo.description }}
       </p>
     </el-card>
     <el-card class="good-messaage-board-card">
@@ -124,28 +143,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
+  props: {
+    detail: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
-      rate: 4,
-      currentPayment: '',
-      currentShipping: '',
-      paymentList: ['面交', '口交'],
-      shippingList: ['海運', '航運'],
-      goodImage: [
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
-        }
-      ],
+      currentShipping: undefined,
+      currentPayment: undefined,
       messaageList: [
         {
           userName: 'DevilTea',
@@ -165,7 +174,10 @@ export default {
         }
       ]
     }
-  }
+  },
+  computed: {
+    ...mapState(['userInfo'])
+  },
 }
 </script>
 
@@ -263,5 +275,10 @@ export default {
       }
     }
   }
+}
+.price {
+  font-size: 24px;
+  transform: translateY(-9px);
+  color: #f60;
 }
 </style>
