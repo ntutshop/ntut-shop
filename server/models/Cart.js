@@ -61,7 +61,9 @@ async function patchCartGoods(memberId, data) {
     let cartGood = await Cart.findOne({ where: { member_id: memberId, good_id: item.id } })
     if (cartGood) {
       if (item.quantity) {
-        console.log(1)
+        await cartGood.update({
+          quantity: item.quantity
+        })
       }
       else {
         console.log(2)
