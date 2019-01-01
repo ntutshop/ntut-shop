@@ -7,11 +7,20 @@ import Member from '../models/Member.js'
  * @param {Function} next Next function.
  * @async
  */
-async function getUserInformationByUsername (ctx, next) {
+async function getUserInformationByQuery(ctx, next) {
   let query = ctx.query
-  if (query.username) {
+  if (query.id) {
+    let information = await Member.getUserInformationByMemberId(query.id)
+    console.log(information)
+    if (information.length) {
+      ctx.status = 200
+      ctx.body = information[0]
+    } else {
+      ctx.status = 404
+    }
+  } else if (query.username) {
     let information = await Member.getUserInformationByUsername(query.username)
-    if (information) {
+    if (information.length) {
       ctx.status = 200
       ctx.body = information[0]
     } else {
@@ -27,9 +36,9 @@ async function getUserInformationByUsername (ctx, next) {
  * @param {IRouterContext} ctx Koa rounter's context.
  * @async
  */
-async function getUserInformationById (ctx) {
+async function getUserInformationByToken(ctx) {
   let information = await Member.getUserInformationByMemberId(ctx.state.memberId)
-  if (information) {
+  if (information.length) {
     ctx.status = 200
     ctx.body = information[0]
   } else {
@@ -98,12 +107,12 @@ async function getGoodsInformation(ctx) {
 * Passed login
 */
 async function checkLogin(ctx) {
- ctx.status = 200
+  ctx.status = 200
 }
 
 export default {
-  getUserInformationByUsername,
-  getUserInformationById,
+  getUserInformationByQuery,
+  getUserInformationByToken,
   modifyUserProfile,
   getOrdersInformation,
   getGoodsInformation,
