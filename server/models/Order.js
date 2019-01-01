@@ -94,7 +94,7 @@ async function publishNewOrder(memberId, data) {
 
 /**
  * Get a order's information.
- * @param {number} orderId The good's id.
+ * @param {number} orderId The order's id.
  */
 async function getOrderInformationById(orderId) {
   return await Order.findOne({ where: { id: orderId } })
