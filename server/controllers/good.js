@@ -173,6 +173,16 @@ async function getAllShippingsByGoodId(ctx) {
 }
 
 /**
+ * Get all payments by a GOOD id.
+ * @param {IRouterContext} ctx Koa router's context.
+ * @async
+ */
+async function getAllPaymentsByGoodId(ctx) {
+  let goodId = ctx.params.id
+  ctx.body = (await Payment.getPaymentsByGoodId(goodId))
+}
+
+/**
  * Get all tags' name by a GOOD id.
  * @param {IRouterContext} ctx Koa router's context.
  * @async
@@ -188,5 +198,6 @@ export default {
   getGoodById,
   getAllImagesUrlByGoodId,
   getAllShippingsByGoodId,
+  getAllPaymentsByGoodId,
   getAllTagsByGoodId
 }
