@@ -58,13 +58,23 @@ async function patchCartGoods(memberId, data) {
 
   for (let i in items) {
     let item = items[i]
-    if (item.quantity) {
-      let cartGood = await Cart.findOne({ where: { member_id: memberId, id: item.goodId } })
-      if (cartGood) {
+    let cartGood = await Cart.findOne({ where: { member_id: memberId, good_id: item.id } })
+    if (cartGood) {
+      if (item.quantity) {
         console.log(1)
       }
       else {
         console.log(2)
+      }
+    }
+    else {
+      if (item.quantity) {
+        await Cart.create({
+          // id is auto-increment
+          member_id: memberId,
+          good_id: item.id,
+          quantity: item.quantity,
+        })
       }
     }
   }
