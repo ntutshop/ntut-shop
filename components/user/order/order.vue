@@ -16,25 +16,6 @@
             <h3>
               <nuxt-link :to="{path:'detail',query:{keyword:meta.name,type:meta.module}}">{{ meta.name }}</nuxt-link>
             </h3>
-            <el-rate
-              v-model="meta.rate"
-              :colors="['#ff9900', '#ff9900', '#FF9900']"
-              disabled
-            />
-            <span
-              v-if="meta.rate>4"
-              class="item-comment"
-            >很好</span><span
-              v-else-if="meta.rate>3"
-              class="item-comment"
-            >一般</span><span
-              v-else
-              class="item-comment"
-            >很差</span>
-            <span class="item-value">{{ meta.rate }}分</span>
-            <p>
-              <span class="item-type">{{ meta.type }}</span>
-            </p>
             <p>
               <strong class="item-price">＄{{ meta.price }}起</strong>
             </p>
