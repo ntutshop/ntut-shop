@@ -18,7 +18,7 @@
     <el-menu-item index="3">
       <nuxt-link to="/user/good">
         <v-icon size="18">store</v-icon>
-        <span slot="title">我的賣場</span>
+        <span slot="title">賣家訂單</span>
       </nuxt-link>
     </el-menu-item>
     <el-menu-item index="4">

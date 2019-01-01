@@ -2,7 +2,7 @@
   <div class="good-item">
     <el-row>
       <el-col
-        :span="14"
+        :span="21"
         class="good-info"
       >
         <dl>
@@ -16,47 +16,22 @@
             <h3>
               <nuxt-link :to="{path:'detail',query:{keyword:meta.name,type:meta.module}}">{{ meta.name }}</nuxt-link>
             </h3>
-            <el-rate
-              v-model="meta.rate"
-              :colors="['#ff9900', '#ff9900', '#FF9900']"
-              disabled
-            />
-            <span
-              v-if="meta.rate>4"
-              class="item-comment"
-            >很好</span><span
-              v-else-if="meta.rate>3"
-              class="item-comment"
-            >一般</span><span
-              v-else
-              class="item-comment"
-            >很差</span>
-            <span class="item-value">{{ meta.rate }}分</span>
-            <p>
-              <span class="item-type">{{ meta.type }}</span>
-            </p>
-            <p>
-              <strong class="item-price">＄{{ meta.price }}起</strong>
-            </p>
+            <div class="good-buyer">
+              <div class="buyer-name">
+                <span>購買人：</span>
+                <span>煨刃</span>
+              </div>
+              <div class="buyer-shipping">
+                <span>運輸方式：</span>
+                <span>面交</span>
+              </div>
+              <div class="buyer-payment">
+                <span>付款方式：</span>
+                <span>面交</span>
+              </div>
+            </div>
           </dd>
         </dl>
-      </el-col>
-      <el-col
-        :span="7"
-        class="good-buyer"
-      >
-        <div class="buyer-name">
-          <span>購買人：</span>
-          <span>煨刃</span>
-        </div>
-        <div class="buyer-shipping">
-          <span>運輸方式：</span>
-          <span>面交</span>
-        </div>
-        <div class="buyer-payment">
-          <span>付款方式：</span>
-          <span>面交</span>
-        </div>
       </el-col>
       <el-col
         v-if="!confirm"
@@ -90,6 +65,16 @@
         :span="3"
       >
         <div class="check-button">
+          <div>
+            <v-btn
+              outline
+              small
+              fab
+              color="green"
+            >
+              <v-icon>check</v-icon>
+            </v-btn>
+          </div>
           <div>
             <v-btn
               outline
@@ -205,7 +190,6 @@ export default {
           font-size: 12px;
           padding-top: 11px;
           margin-top: 5px;
-          bgood-top: 1px dashed #ddd;
 
           li {
             width: 668px;
@@ -256,7 +240,7 @@ export default {
     }
   }
   .check-button {
-    min-height: 125px;
+    min-height: 132px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
