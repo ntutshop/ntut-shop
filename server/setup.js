@@ -1,5 +1,5 @@
 import consola from 'consola'
-import koaBody from 'koa-body'
+import koaBodyparser from 'koa-bodyparser'
 import koaStatic from 'koa-static'
 import router from './routes/main.js'
 import ntutdb from './config/db.js'
@@ -11,13 +11,7 @@ import ntutdb from './config/db.js'
 export default function (app) {
   app.use(koaStatic(__dirname + '/public'))
 
-  app.use(koaBody({
-    multipart: true,
-    encoding: 'gzip',
-    formidable: {
-      maxFieldsSize: 5 * 1024 * 1024,
-    }
-  }))
+  app.use(koaBodyparser())
 
   return new Promise((resolve, reject) => {
     // Check whether the connection is created or not.

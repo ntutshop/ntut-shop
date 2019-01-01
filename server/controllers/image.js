@@ -1,6 +1,18 @@
+import os from 'os'
 import fs from 'fs'
 import crypto from 'crypto'
+import koaMulter from 'koa-multer'
 import { SERVER_CONFIG as SV_CONFIG } from '../config/config.js'
+
+let storage = koaMulter.diskStorage({
+  destination: os.tmpdir(),
+  filename(ctx, file, cb) {
+    const filetype = file.originalname.split('.')[file.originalname.split('.').length - 1]
+    cb(null, crypto.randomBytes(8).toString('hex') + '.' + filetype)
+  }
+})
+
+let upload = koaMulter({ storage })
 
 /**
  * Upload image.
@@ -8,7 +20,16 @@ import { SERVER_CONFIG as SV_CONFIG } from '../config/config.js'
  * @async
  */
 async function uploadImage(ctx) {
-  let file = Object.values(ctx.request.files)[0]
+  try {
+    await upload.single('image')(ctx)
+  }
+  catch (ex) {
+    ctx.status = 403
+    ctx.body = { reason: 'wrong field.' }
+    return
+  }
+
+  const file = ctx.req.file
 
   if (file.size > 500 * 1024) {
     ctx.status = 403
@@ -16,16 +37,14 @@ async function uploadImage(ctx) {
     return
   }
 
-  if (file.type.split('/')[0] !== 'image') {
+  if (file.mimetype.split('/')[0] !== 'image') {
     ctx.status = 403
     ctx.body = { reason: 'invalid type' }
     return
   }
 
-  let filetype = file.name.split('.')[1] || file.type.split('/')[1]
-  let filename = crypto.randomBytes(8).toString('hex') + '.' + filetype
-  let srcPath = file.path
-  let distPath = __dirname + '/../public/images/' + filename
+  const srcPath = file.path
+  const distPath = __dirname + '/../public/images/' + file.filename
 
   const copy = async (srcPath, distPath) => {
     return new Promise((resolve, reject) => {
@@ -42,7 +61,7 @@ async function uploadImage(ctx) {
 
   ctx.status = 201
   ctx.body = {
-    url: SV_CONFIG.BASE_URL + '/images/' + filename
+    url: SV_CONFIG.BASE_URL + '/images/' + file.filename
   }
 }
 
