@@ -170,10 +170,10 @@ source RATE.sql;
 
 source MESSAGE_BOARD.sql;
 
-source SHOPPING_CART.sql;
-
 source SHIPPING.sql;
 
 source PAYMENT.sql;
+
+source SHOPPING_CART.sql;
 
 source ORDER.sql;
