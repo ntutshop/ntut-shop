@@ -22,12 +22,12 @@
             label-width="80px"
           >
             <el-form-item
+              :inline-message="true"
+              :error="error.name"
               label="商品名稱"
               style="width: 500px;"
             >
               <el-input
-                :inline-message="true"
-                :error="error.name"
                 v-model="form.name"
                 placeholder="請輸入商品名稱"
               />
@@ -57,23 +57,23 @@
               </el-upload>
             </el-form-item>
             <el-form-item
+              :inline-message="true"
+              :error="error.stock"
               label="數量"
               style="width: 500px;"
             >
               <el-input
-                :inline-message="true"
-                :error="error.stock"
                 v-model="form.stock"
                 placeholder="請輸入商品數量"
               />
             </el-form-item>
             <el-form-item
+              :inline-message="true"
+              :error="error.price"
               label="價錢"
               style="width: 500px;"
             >
               <el-input
-                :inline-message="true"
-                :error="error.price"
                 v-model="form.price"
                 placeholder="請輸入商品價錢"
               />
@@ -245,16 +245,19 @@ export default {
   methods: {
     async submit() {
       try {
+        Object.keys(this.error).forEach(key => {
+          this.error[key] = ''
+        })
         let { data } = await this.$axios.post('/goods', this.form)
         console.log('OK', data)
         this.$router.replace(`/good/${data.goodId}`)
       } catch (e) {
         const code = parseInt(e.response && e.response.status)
         if (code === 400) {
-          console.log(Object.keys(this.error))
           Object.keys(this.error).forEach(key => {
             this.error[key] = e.response.data.error[key]
           })
+          console.log(this.error)
         } else {
           throw e
         }
