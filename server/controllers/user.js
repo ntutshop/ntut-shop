@@ -81,7 +81,17 @@ async function getOrdersInformation(ctx) {
  * @async
  */
 async function getGoodsInformation(ctx) {
-  ctx.status = 204
+  let result = await Member.getAllUserGoods(ctx.state.memberId, ctx.query.state)
+  if (result.success) {
+    ctx.status = 200
+    ctx.body = { goods: result }
+  } else {
+    ctx.status = 400
+    ctx.body = {
+      type: 'query',
+      error: result.error
+    }
+  }
 }
 
 /**

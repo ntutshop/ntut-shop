@@ -266,6 +266,36 @@ async function getAllUserOrders(memberId, state) {
   }
 }
 
+/**
+ * Get all the user's goods.
+ * @param {number} memberId The user's memberId.
+ * @param {number} state Goods' state. It's used to find the goods with specified state.
+ * @async
+ */
+async function getAllUserGoods(memberId, state) {
+  let stateCondition = state ? 'AND A.state = :state' : ''
+
+  let result = GOOD_STATE_VALIDATOR.validate(state)
+
+  if (result.error) {
+    return {
+      success: false,
+      error: { state: "數值必須介於 0 ~ 2 之間。" }
+    }
+  }
+
+  let goods = await db.query(`
+    SELECT id, name, stock, price, durability, state, publish_time
+    FROM GOOD
+    WHERE member_id = :memberId ${stateCondition}`,
+    { replacements: { memberId, state }, type: db.QueryTypes.SELECT, nest: true })
+
+  return {
+    success: true,
+    goods
+  }
+}
+
 export default {
   getUserInformationByMemberId,
   getUserInformationByUsername,
@@ -275,5 +305,6 @@ export default {
   fillShellCustomer,
   modifyUserInformationByMemberId,
   getAllUserOrders,
+  getAllUserGoods,
   STATE
 }
