@@ -11,7 +11,7 @@ router.get('/state/login', authController.verifyJWTToken, controller.checkLogin)
 router.get('/state/register', authController.verifyJWTToken, authController.verifyUserState, controller.checkLogin)
 
 // Get user's information
-router.get('/information', controller.getUserInformationByUsername, authController.verifyJWTToken, authController.verifyUserState,  controller.getUserInformationById)
+router.get('/information', controller.getUserInformationByQuery, authController.verifyJWTToken, authController.verifyUserState,  controller.getUserInformationByToken)
 
 // Add JWT token and user state verifications as authorization filter.
 router.use(authController.verifyJWTToken, authController.verifyUserState)
