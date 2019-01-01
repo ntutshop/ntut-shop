@@ -11,7 +11,6 @@ async function getUserInformationByQuery(ctx, next) {
   let query = ctx.query
   if (query.id) {
     let information = await Member.getUserInformationByMemberId(query.id)
-    console.log(information)
     if (information.length) {
       ctx.status = 200
       ctx.body = information[0]
