@@ -88,7 +88,16 @@ async function publishNewOrder(memberId, data) {
   }
 }
 
+/**
+ * Get a order's information.
+ * @param {number} orderId The good's id.
+ */
+async function getOrderInformationById(orderId) {
+  return await Order.findOne({ where: { id: orderId } })
+}
+
 export default {
   publishNewOrder,
+  getOrderInformationById,
   STATE_VALIDATOR
 }
