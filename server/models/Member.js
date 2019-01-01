@@ -254,10 +254,9 @@ async function getAllUserOrders(memberId, state) {
   }
 
   let orders = await db.query(`
-    SELECT A.id, total, name AS \`good.name\`, quantity AS \`good.quantity\`, A.state, transaction_time
-    FROM \`ORDER\` AS A
-    INNER JOIN GOOD ON A.good_id = GOOD.id
-    WHERE A.member_id = :memberId ${stateCondition}`,
+    SELECT id, state, transaction_time
+    FROM \`ORDER\`
+    WHERE member_id = :memberId ${stateCondition}`,
     { replacements: { memberId, state }, type: db.QueryTypes.SELECT, nest: true })
 
   return {
