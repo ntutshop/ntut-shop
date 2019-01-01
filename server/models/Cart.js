@@ -66,7 +66,7 @@ async function patchCartGoods(memberId, data) {
         })
       }
       else {
-        console.log(2)
+        await cartGood.destroy()
       }
     }
     else {
