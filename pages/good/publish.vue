@@ -26,6 +26,8 @@
               style="width: 500px;"
             >
               <el-input
+                :inline-message="true"
+                :error="error.name"
                 v-model="form.name"
                 placeholder="請輸入商品名稱"
               />
@@ -35,10 +37,13 @@
               style="width: 500px;"
             >
               <el-upload
-                :file-list="form.images"
+                :file-list="fileList"
+                :on-success="handleUploadSuccess"
+                :on-error="handleUploadError"
+                :on-remove="handleUploadRemove"
                 class="upload-demo"
                 multiple
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="/api/image"
                 list-type="picture"
               >
                 <el-button
@@ -56,7 +61,9 @@
               style="width: 500px;"
             >
               <el-input
-                v-model="form.name"
+                :inline-message="true"
+                :error="error.stock"
+                v-model="form.stock"
                 placeholder="請輸入商品數量"
               />
             </el-form-item>
@@ -65,7 +72,9 @@
               style="width: 500px;"
             >
               <el-input
-                v-model="form.name"
+                :inline-message="true"
+                :error="error.price"
+                v-model="form.price"
                 placeholder="請輸入商品價錢"
               />
             </el-form-item>
@@ -80,15 +89,15 @@
                 closable
                 @close="handleShippingClose(shipping)"
               >
-                {{ shipping }}
+                {{ `${shipping.service}: $${shipping.fee}` }}
               </el-tag>
               <el-input
                 v-if="shippingInputVisible"
                 ref="saveTagInput"
                 v-model="shippingInput"
+                placeholder="方式 運費"
                 class="input-new-tag"
                 size="small"
-                @keyup.enter.native="handleShippingInputConfirm"
                 @blur="handleShippingInputConfirm"
               />
               <el-button
@@ -96,7 +105,7 @@
                 class="button-new-tag"
                 size="small"
                 @click="showShippingInput"
-              >+ New Tag</el-button>
+              >+ 運輸方式</el-button>
             </el-form-item>
             <el-form-item
               label="付款方式"
@@ -117,7 +126,6 @@
                 v-model="paymentInput"
                 class="input-new-tag"
                 size="small"
-                @keyup.enter.native="handlePaymentInputConfirm"
                 @blur="handlePaymentInputConfirm"
               />
               <el-button
@@ -125,7 +133,7 @@
                 class="button-new-tag"
                 size="small"
                 @click="showPaymentInput"
-              >+ New Tag</el-button>
+              >+ 付款方式</el-button>
             </el-form-item>
             <el-form-item
               label="標籤"
@@ -146,7 +154,6 @@
                 v-model="tagInput"
                 class="input-new-tag"
                 size="small"
-                @keyup.enter.native="handleTagInputConfirm"
                 @blur="handleTagInputConfirm"
               />
               <el-button
@@ -154,14 +161,16 @@
                 class="button-new-tag"
                 size="small"
                 @click="showTagInput"
-              >+ New Tag</el-button>
+              >+ 標籤</el-button>
             </el-form-item>
             <el-form-item
               label="商品詳情"
               style="width: 500px;"
             >
               <el-input
-                v-model="form.name"
+                :inline-message="true"
+                :error="error.description"
+                v-model="form.description"
                 :rows="6"
                 type="textarea"
                 placeholder="請輸入商品詳情"
@@ -180,8 +189,10 @@
               />
             </el-form-item>
             <el-form-item>
-              <el-button type="primary">建立商品</el-button>
-              <el-button>取消</el-button>
+              <el-button 
+                type="primary" 
+                @click="submit">建立商品</el-button>
+              <el-button @click="cancel">取消</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -197,31 +208,31 @@ export default {
   components: {
     SideBar
   },
-  middleware: ['checkUserLogin', 'checkUserRegister'],
   data() {
     return {
       form: {
-        username: 'deviltea',
-        nickname: '威任',
-        phone: '0970517333',
-        email: 'deviltea@gmail.com',
-        durability: 9,
-        images: [
-          {
-            name: 'food.jpeg',
-            url:
-              'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-          },
-          {
-            name: 'food2.jpeg',
-            url:
-              'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-          }
-        ],
-        shippings: ['海運', '空運'],
-        payments: ['現金'],
-        tags: ['全新', '女神用過']
+        name: '',
+        description: '',
+        price: '',
+        stock: '',
+        durability: 5,
+        images: [],
+        shippings: [],
+        payments: [],
+        tags: []
       },
+      error: {
+        name: '',
+        description: '',
+        price: '',
+        stock: '',
+        durability: '',
+        images: '',
+        shippings: '',
+        payments: '',
+        tags: ''
+      },
+      fileList: [],
       shippingInputVisible: false,
       shippingInput: '',
       paymentInputVisible: false,
@@ -230,7 +241,45 @@ export default {
       tagInput: ''
     }
   },
+  middleware: ['checkUserLogin', 'checkUserRegister'],
   methods: {
+    async submit() {
+      try {
+        let { data } = await this.$axios.post('/goods', this.form)
+        console.log('OK', data)
+        this.$router.replace(`/good/${data.goodId}`)
+      } catch (e) {
+        const code = parseInt(e.response && e.response.status)
+        if (code === 400) {
+          console.log(Object.keys(this.error))
+          Object.keys(this.error).forEach(key => {
+            this.error[key] = e.response.data.error[key]
+          })
+        } else {
+          throw e
+        }
+      }
+    },
+    cancel() {
+      this.$router.push('/')
+    },
+    handleUploadChange(file, fileList) {
+      let images = []
+      fileList.forEach(f => {
+        images.push(f.remoteUrl)
+      })
+      this.form.images = images
+    },
+    handleUploadRemove(file, fileList) {
+      this.handleUploadChange(file, fileList)
+    },
+    handleUploadSuccess(response, file, fileList) {
+      fileList[fileList.indexOf(file)].remoteUrl = response.url
+      this.handleUploadChange(file, fileList)
+    },
+    handleUploadError(error, file, fileList) {
+      console.log(error)
+    },
     formatDurability(value) {
       return value + '成新'
     },
@@ -245,8 +294,13 @@ export default {
     },
     handleShippingInputConfirm() {
       let shippingInput = this.shippingInput
-      if (shippingInput) {
-        this.form.shippings.push(shippingInput)
+      let temp = shippingInput.trim().split(' ')
+      if (temp.length === 2 && typeof temp[0] === 'string' && !isNaN(+temp[1])) {
+        let shipping = { 
+          service: temp[0],
+          fee: +temp[1]
+        }
+        this.form.shippings.push(shipping)
       }
       this.shippingInputVisible = false
       this.shippingInput = ''
