@@ -1,5 +1,7 @@
 FROM node
 
+ENV HOST 0.0.0.0
+
 # 設定工作目錄為 /app
 WORKDIR /app
 
