@@ -147,7 +147,7 @@ async function getGoodById(ctx) {
   responseBody.tags = result
 
   result = await Image.getImagesByGoodId(goodId)
-  responseBody.images = result
+  responseBody.images = result.map(image => image.path)
 
   ctx.body = responseBody
 }
