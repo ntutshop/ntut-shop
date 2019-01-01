@@ -31,7 +31,7 @@ async function uploadImage(ctx) {
 
   const file = ctx.req.file
 
-  if (file.size > 500 * 1024) {
+  if (file.size > 5 * 1024 * 1024) {
     ctx.status = 403
     ctx.body = { reason: 'oversize' }
     return
