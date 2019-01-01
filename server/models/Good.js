@@ -53,7 +53,7 @@ const GOODDATA_VALIDATOR = Joi.object().required().keys({
  * @param {GoodData} data A data which records new product
  * @async
  */
-async function publishNewGood (memberId, data) {
+async function publishNewGood(memberId, data) {
   let result = GOODDATA_VALIDATOR.validate(data, { abortEarly: false })
 
   if (result.error) {
@@ -117,7 +117,7 @@ async function publishNewGood (memberId, data) {
  * Get a good's information.
  * @param {number} goodId The good's id.
  */
-async function getGoodInformationById (goodId) {
+async function getGoodInformationById(goodId) {
   return await Good.findOne({ where: { id: goodId } })
 }
 
