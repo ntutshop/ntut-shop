@@ -31,7 +31,7 @@ async function getCartByToken(ctx) {
     return
   }
 
-  ctx.body = result
+  ctx.body = { goods: result }
 }
 
 export default {
