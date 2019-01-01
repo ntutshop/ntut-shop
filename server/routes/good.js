@@ -8,6 +8,8 @@ router.get('/', controller.getGoods)
 
 router.get('/:id', controller.getGoodById)
 
+router.get('/:id/images', controller.getAllImagesUrlByGoodId)
+
 // Add JWT token and user state verifications as authorization filter.
 router.use(authController.verifyJWTToken, authController.verifyUserState)
 
