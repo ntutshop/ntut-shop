@@ -93,7 +93,7 @@ async function checkMemberStateByMemberId (memberId) {
   let member = await getUserInformationByMemberId(memberId)
   if (!member) {
     return STATE.Unauthorized
-  } else if (!member.username) {
+  } else if (!member[0].username) {
     return STATE.Unregistered
   } else {
     return STATE.Normal
