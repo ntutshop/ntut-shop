@@ -9,7 +9,7 @@ export let SERVER_CONFIG = {
 }
 
 export let DB_CONFIG = {
-  HOST: 'mariadb',
+  HOST: DOMAIN,
   USER: 'shopkeeper',
   PASSWORD: 'ycjls5dm',
   DATABASE: 'ntutdb',
