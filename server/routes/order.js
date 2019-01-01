@@ -10,4 +10,6 @@ router.use(authController.verifyJWTToken, authController.verifyUserState)
 // A route for users to publish their new orders.
 router.post('/', controller.postNewOrder)
 
+router.get('/:id', controller.getOrderById)
+
 export default router

@@ -19,6 +19,35 @@ async function postNewOrder(ctx) {
   }
 }
 
+/**
+ * Get a order by ORDER id.
+ * @param {IRouterContext} ctx Koa router's context.
+ * @async
+ */
+async function getOrderById(ctx) {
+  let orderId = ctx.params.id
+
+  let result = await Order.getOrderInformationById(orderId)
+  if (!result) {
+    ctx.status = 404
+    return
+  }
+
+  let data = result.toJSON()
+
+  ctx.body = {
+    id: data.id,
+    buyerId: data.member_id,
+    good: {
+      id: data.good_id,
+      quantity: data.quantity
+    },
+    state: data.state,
+    transactionTime: data.transaction_time
+  }
+}
+
 export default {
-  postNewOrder
+  postNewOrder,
+  getOrderById
 }
