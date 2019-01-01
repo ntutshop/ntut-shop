@@ -1,6 +1,6 @@
 import db from '../config/db.js'
 import MemberSchema from '../schemas/Member.js'
-import { STATE_VALIDATOR } from '../models/Order.js'
+import { STATE_VALIDATOR as ORDER_STATE_VALIDATOR } from '../models/Order.js'
 import errorGen from '../modules/errorgen.js'
 import Joi from 'joi'
 import sequelize from 'sequelize'
@@ -243,7 +243,7 @@ async function modifyUserInformationByMemberId (memberId, data) {
 async function getAllUserOrders (memberId, state) {
   let stateCondition = state ? 'AND A.state = :state' : ''
 
-  let result = STATE_VALIDATOR.validate(state)
+  let result = ORDER_STATE_VALIDATOR.validate(state)
 
   if (result.error) {
     return {
