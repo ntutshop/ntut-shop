@@ -62,7 +62,9 @@ async function patchCartGoods(memberId, data) {
     if (cartGood) {
       if (item.quantity) {
         await cartGood.update({
-          quantity: item.quantity
+          quantity: item.quantity,
+          shipping_id: item.shippingId,
+          payment_id: item.paymentId
         })
       }
       else {
