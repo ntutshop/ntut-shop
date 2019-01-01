@@ -82,7 +82,47 @@ async function publishNewGood (memberId, data) {
   }
 }
 
+/**
+{
+    "id": number,
+    "name": string,
+    "description": string,
+    "price": number,
+    "stock": number,
+    "durability": number,
+    "sellerId": number,
+    "state": number,
+    "publishTime": date,
+    "images": [ string ],
+    "tags": [ string ],
+    "shippings":
+    [
+        {
+            "id": number,
+            "service": string,
+            "fee": number
+        }
+    ],
+    "payments":
+    [
+        {
+            "id": number,
+            "service": string
+        }
+    ]
+}
+**/
+
+/**
+ * Get a good's information.
+ * @param {number} goodId The good's id.
+ */
+async function getGoodInformationById (goodId) {
+  return await Good.findOne({ where: { id: goodId } })
+}
+
 export default {
   publishNewGood,
+  getGoodInformationById,
   STATE_VALIDATOR
 }

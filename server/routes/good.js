@@ -4,6 +4,8 @@ import controller from '../controllers/good.js'
 
 const router = new KoaRouter({ prefix: '/goods' })
 
+router.get('/:id', controller.getGoodById)
+
 // Add JWT token and user state verifications as authorization filter.
 router.use(authController.verifyJWTToken, authController.verifyUserState)
 

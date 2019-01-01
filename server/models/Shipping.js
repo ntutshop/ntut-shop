@@ -18,6 +18,7 @@ const Shipping = db.import('SHIPPING', ShippingSchema)
  * Create many shipping instances.
  * @param {number} goodId Which good has these shipping types.
  * @param {BasicShippingData[]} basicShippings Basic shipping data.
+ * @async
  */
 async function createManyShippings (goodId, basicShippings) {
   let shippingsData = basicShippings.map(data => ({
@@ -36,6 +37,19 @@ async function createManyShippings (goodId, basicShippings) {
   }
 }
 
+/**
+ * Get shippings' information by a GOOD id.
+ * @param {number} goodId The GOOD id.
+ * @async
+ */
+async function getShippingsByGoodId (goodId) {
+  return Shipping.findAll({
+    where: { good_id: goodId },
+    attributes: [ 'id', 'service', 'fee' ]
+  })
+}
+
 export default {
-  createManyShippings
+  createManyShippings,
+  getShippingsByGoodId
 }
