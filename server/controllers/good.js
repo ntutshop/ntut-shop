@@ -162,6 +162,16 @@ async function getAllImagesUrlByGoodId(ctx) {
   ctx.body = (await Image.getImagesByGoodId(goodId)).map(image => image.path)
 }
 
+/**
+ * Get all tags' name by a GOOD id.
+ * @param {IRouterContext} ctx Koa router's context.
+ * @async
+ */
+async function getAllTagsByGoodId(ctx) {
+  let goodId = ctx.params.id
+  ctx.body = (await Tag.getTagsByGoodId(goodId)).map(tag => tag.name)
+}
+
 export default {
   getGoods,
   postNewGood,
