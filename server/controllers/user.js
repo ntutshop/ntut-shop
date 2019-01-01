@@ -76,10 +76,29 @@ async function getOrdersInformation(ctx) {
 }
 
 /**
- * Passed login
+ * Get the information of user's goods.
+ * @param {IRouterContext} ctx Koa's router. context.
+ * @async
  */
+async function getGoodsInformation(ctx) {
+  let result = await Member.getAllUserGoods(ctx.state.memberId, ctx.query.state)
+  if (result.success) {
+    ctx.status = 200
+    ctx.body = { goods: result }
+  } else {
+    ctx.status = 400
+    ctx.body = {
+      type: 'query',
+      error: result.error
+    }
+  }
+}
+
+/**
+* Passed login
+*/
 async function checkLogin(ctx) {
-  ctx.status = 200
+ ctx.status = 200
 }
 
 export default {
@@ -87,5 +106,6 @@ export default {
   getUserInformationById,
   modifyUserProfile,
   getOrdersInformation,
+  getGoodsInformation,
   checkLogin
 }

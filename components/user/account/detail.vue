@@ -120,6 +120,11 @@ export default {
         await this.$axios.put('/user/information', this.form)
         await this.$store.dispatch('updateUserState')
         this.reset()
+        this.$notify({
+          title: '成功',
+          message: '用戶資料更改成功',
+          type: 'success'
+        })
       } catch (e) {
         const code = parseInt(e.response && e.response.status)
         if (code === 400) {
