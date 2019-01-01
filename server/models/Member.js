@@ -55,11 +55,15 @@ const PROFILE_VALIDATOR = Joi.object().required().keys({
  * @param {number} memberId MEMBER id.
  */
 async function getUserInformationByMemberId (memberId) {
-  return Member.findOne({
-    where: {
-      id: memberId
-    }
-  })
+  return db.query(`
+    SELECT id, user_id, authority, username, nickname, phone, email, certificated, permission, register_time, rate_count, rate_average
+    FROM MEMBER AS M, (
+      SELECT COUNT(*) AS rate_count, FLOOR(AVG(stars)) AS rate_average
+      FROM RATE
+      WHERE RATE.target_id = :memberId
+    ) AS R
+    WHERE M.id = :memberId;
+  `, { replacements: { memberId }, type: db.QueryTypes.SELECT })
 }
 
 /**
@@ -68,9 +72,15 @@ async function getUserInformationByMemberId (memberId) {
  * @async
  */
 async function getUserInformationByUsername (username) {
-  return Member.findOne({
-    where: { username }
-  })
+  return db.query(`
+  SELECT id, user_id, authority, username, nickname, phone, email, certificated, permission, register_time, rate_count, rate_average
+  FROM MEMBER AS M, (
+    SELECT COUNT(*) AS rate_count, FLOOR(AVG(stars)) AS rate_average
+    FROM RATE
+    WHERE RATE.target_id = ( SELECT id FROM MEMBER WHERE username = :username )
+  ) AS R
+  WHERE M.username = :username;
+`, { replacements: { username }, type: db.QueryTypes.SELECT })
 }
 
 /**
