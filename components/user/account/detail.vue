@@ -101,7 +101,7 @@ export default {
     registerDate() {
       if (this.userInfo.register_time) {
         return new Date(
-          Date.parse('2018-12-31T09:59:43.000Z')
+          Date.parse(this.userInfo.register_time)
         ).toLocaleDateString()
       }
       return '錯誤'
