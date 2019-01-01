@@ -53,7 +53,7 @@
                 <div
                   slot="tip"
                   class="el-upload__tip"
-                >只能上傳jpg/png文件，且不超過500kb</div>
+                >只能上傳jpg/png文件，且不超過5MB</div>
               </el-upload>
             </el-form-item>
             <el-form-item
@@ -249,7 +249,6 @@ export default {
           this.error[key] = ''
         })
         let { data } = await this.$axios.post('/goods', this.form)
-        console.log('OK', data)
         this.$router.replace(`/good/${data.goodId}`)
       } catch (e) {
         const code = parseInt(e.response && e.response.status)
