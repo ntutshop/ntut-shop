@@ -25,9 +25,10 @@
         </el-col>
         <el-col :span="11">
           <h1 class="good-title">{{ detail.goodInfo.name }}</h1>
-          <div 
-            class="seller-info" 
-            style="height: 24px;padding-top: 8px;">
+          <div
+            class="seller-info"
+            style="height: 24px;padding-top: 8px;"
+          >
             <span class="seller-name">{{ detail.sellerInfo.nickname }}</span>
             <el-rate
               v-model="detail.sellerInfo.rate"
@@ -38,7 +39,6 @@
             <span class="item-value">{{ detail.sellerInfo.rate }}分</span>
             <span class="price">＄{{ detail.goodInfo.price }}</span>
           </div>
-
           <v-divider />
           <div class="good-payment">
             <span>付款方式：</span>
@@ -50,7 +50,7 @@
                 v-for="(item, index) in detail.goodInfo.payments"
                 :key="index"
                 :label="`${item.service}`"
-                :value="item"
+                :value="item.id"
               />
             </el-select>
           </div>
@@ -64,11 +64,29 @@
                 v-for="(item, index) in detail.goodInfo.shippings"
                 :key="index"
                 :label="`${item.service}: $${item.fee}`"
-                :value="item"
+                :value="item.id"
               />
             </el-select>
           </div>
-          <div class="social-share">
+          <div class="good-shipping">
+            <span>購買數量：</span>
+            <el-select
+              v-model="currentQuantity"
+              placeholder="請選擇"
+            >
+              <el-option
+                v-for="i in detail.goodInfo.stock"
+                :key="i"
+                :label="i"
+                :value="i"
+              />
+            </el-select>
+          </div>
+          <v-layout
+            row
+            wrap
+            align-center
+          >
             <span>分享：</span>
             <v-btn
               icon
@@ -78,17 +96,16 @@
             >
               <v-icon>fab fa-facebook-f</v-icon>
             </v-btn>
-          </div>
-          <div>
-            
             <el-button
+              :disabled="!addToCartEnabled"
               type="primary"
               class="cart-button"
+              @click="addToCart"
             >
               <v-icon dark>shopping_cart</v-icon>
               加入購物車
             </el-button>
-          </div>
+          </v-layout>
         </el-col>
       </el-row>
     </el-card>
@@ -155,6 +172,7 @@ export default {
     return {
       currentShipping: undefined,
       currentPayment: undefined,
+      currentQuantity: undefined,
       messaageList: [
         {
           userName: 'DevilTea',
@@ -176,8 +194,40 @@ export default {
     }
   },
   computed: {
+    addToCartEnabled() {
+      return (
+        this.detail.goodInfo.state === 0 &&
+        this.currentQuantity &&
+        this.currentShipping &&
+        this.currentPayment &&
+        this.userInfo.username !== this.detail.sellerInfo.username
+      )
+    },
     ...mapState(['userInfo'])
   },
+  methods: {
+    async addToCart() {
+      let cartGoods = undefined
+      try {
+        let { data } = await this.$axios.get('/cart')
+        cartGoods = data.goods
+        cartGoods.push({
+          id: this.detail.goodInfo.id,
+          quantity: this.currentQuantity,
+          shippingId: this.currentShipping,
+          paymentId: this.currentPayment
+        })
+      } catch (e) {
+        console.log(e)
+      }
+      try {
+        let { data } = await this.$axios.patch('/cart', { goods: cartGoods })
+        console.log('add to cart', data)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }
 }
 </script>
 
@@ -214,6 +264,7 @@ export default {
     }
   }
   .good-shipping {
+    margin-bottom: 16px;
     > span {
       color: #757575;
     }
@@ -226,7 +277,7 @@ export default {
   }
 
   .cart-button {
-    margin-top: 24px;
+    margin-left: 48px;
     /deep/ span {
       display: flex;
       align-items: center;

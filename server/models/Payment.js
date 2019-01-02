@@ -31,7 +31,7 @@ async function createManyPayment (goodId, services) {
  */
 async function getPaymentById (id) {
   return Payment.findOne({
-    where: { good_id: goodId },
+    where: { good_id: id },
     attributes: [ 'id', 'service' ]
   })
 }
