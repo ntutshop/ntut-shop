@@ -98,7 +98,7 @@ async function patchCartGoods(memberId, data) {
 async function getCartGoodsByMemberId(memberId) {
   let items = await Cart.findAll({ where: { member_id: memberId } })
   return items.map(item => ({
-    id: item.id,
+    id: item.good_id,
     quantity: item.quantity,
     shipping_id: item.shipping_id,
     payment_id: item.payment_id
