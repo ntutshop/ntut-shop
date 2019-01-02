@@ -12,11 +12,11 @@
             wrap
           >
             <v-flex
-              v-for="(card, index) in cards"
+              v-for="(good, index) in goodList.slice(80,200)"
               :key="index"
-              v-bind="{ [`xs${card.flex}`]: true }"
+              xs2
             >
-              <good />
+              <good :good="good" />
             </v-flex>
           </v-layout>
         </v-container>
@@ -31,59 +31,27 @@ export default {
   components: {
     Good
   },
-  data: () => ({
-    cards: [
-      {
-        title: 'Pre-fab homes',
-        src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-        flex: 2
-      },
-      {
-        title: 'Favorite road trips',
-        src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
-        flex: 2
-      },
-      {
-        title: 'Best airlines',
-        src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        flex: 2
-      },
-      {
-        title: 'Best airlines',
-        src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        flex: 2
-      },
-      {
-        title: 'Best airlines',
-        src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        flex: 2
-      },
-      {
-        title: 'Best airlines',
-        src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        flex: 2
-      },
-      {
-        title: 'Best airlines',
-        src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        flex: 2
-      },
-      {
-        title: 'Best airlines',
-        src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        flex: 2
-      },
-      {
-        title: 'Best airlines',
-        src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        flex: 2
-      },
-      {
-        title: 'Best airlines',
-        src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        flex: 2
-      }
-    ]
-  })
+  data() {
+    return {
+      goodList: [
+        {
+          id: 0,
+          name: '',
+          price: 0,
+          stock: 0,
+          durability: 0,
+          member_id: '',
+          state: 0,
+          publish_time: ''
+        }
+      ]
+    }
+  },
+  async mounted() {
+    let vm = this
+    let { data } = await vm.$axios.get('/goods')
+    // console.log(data)
+    vm.goodList = data
+  }
 }
 </script>
