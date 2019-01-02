@@ -5,10 +5,10 @@
       class="mx-auto"
       max-width="600"
     >
-      <nuxt-link to="/good/1">
+      <nuxt-link :to="`/good/${good.id}`">
         <v-img
-          height="180"
           src="https://cdn.vuetifyjs.com/images/cards/kitchen.png"
+          height="180"
         />
         <v-card-text
           class="pt-3"
@@ -25,14 +25,35 @@
           >
             <v-icon>fas fa-shopping-cart</v-icon>
           </v-btn>
-          <span class="caption font-weight-light grey--text mb-2">3C</span>
-          <h3 class="text-truncate">QW cooking utensildddddd</h3>
-          <p class="orange--text">$120 - $300</p>
+          <h3 class="text-truncate">{{ good.name }}</h3>
+          <p class="orange--text">${{ good.price }}</p>
         </v-card-text>
       </nuxt-link>
     </v-card>
   </v-hover>
 </template>
+
+<script>
+export default {
+  props: {
+    good: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  data() {
+    return {
+      image: ''
+    }
+  },
+  async mounted() {
+    let vm = this
+    let { data } = await vm.$axios.get(`/goods/${good.id}`)
+    vm.image = data.images[0]
+  }
+}
+</script>
+
 
 <style lang="scss">
 .v-card--reveal {
