@@ -9,7 +9,7 @@
       justify-center
     >
       <v-flex xs2>
-        <side-bar index="3" />
+        <side-bar index="4" />
       </v-flex>
       <v-flex xs10>
         <el-card>

@@ -8,11 +8,15 @@
     <el-table-column
       prop="name"
       label="商品"
-      width="450"
+      width="400"
     />
     <el-table-column
-      prop="mode"
-      label="交易方式"
+      prop="paymentService"
+      label="付款方式"
+    />
+    <el-table-column
+      prop="shippingService"
+      label="運輸方式"
     />
     <el-table-column
       prop="price"
@@ -58,11 +62,17 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .cart-table {
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
-  .el-table__row {
+  /deep/ .el-table__row {
     cursor: pointer;
+  }
+  /deep/ th {
+    text-align: center;
+  }
+  /deep/ td {
+    text-align: center;
   }
 }
 </style>

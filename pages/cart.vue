@@ -26,42 +26,56 @@
 <script>
 import List from '../components/cart/cart-list.vue'
 export default {
+  async asyncData({ $axios, error }) {
+    let rawCart = undefined
+    let cart = []
+    try {
+      let { data } = await $axios.get('/cart')
+      rawCart = data.goods
+      console.log(rawCart)
+    } catch (e) {
+      console.log(e)
+    }
+
+    for (let i in rawCart) {
+      try {
+        let response = undefined
+        response = await $axios.get(`/goods/${rawCart[i].id}`)
+        let good = response.data
+        response = await $axios.get(`/shippings/${rawCart[i].shipping_id}`)
+        let shipping = response.data
+        response = await $axios.get(`/payments/${rawCart[i].payment_id}`)
+        let payment = response.data
+        cart.push({
+          id: rawCart[i].id,
+          name: good.name,
+          price: good.price,
+          quantity: rawCart[i].quantity,
+          shippingId: shipping.id,
+          shippingService: shipping.service,
+          shippingFee: shipping.fee,
+          paymentId: payment.id,
+          paymentService: payment.service
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    return { cart, rawCart }
+  },
   middleware: ['checkUserLogin', 'checkUserRegister'],
   components: {
     List
   },
   data() {
     return {
-      cart: [
-        {
-          name: '蝦子卷',
-          mode: '面交',
-          price: 120,
-          quantity: 4,
-          action: ''
-        },
-        {
-          name: '蝦子卷',
-          mode: '面交',
-          price: 120,
-          quantity: 4,
-          action: ''
-        },
-        {
-          name: '蝦子卷',
-          mode: '面交',
-          price: 120,
-          quantity: 4,
-          action: ''
-        }
-      ]
     }
   },
   computed: {
     total() {
       let total = 0
       this.cart.forEach(item => {
-        total += item.price * item.quantity
+        total += item.price * item.quantity + item.shippingFee
       })
       return total
     }
