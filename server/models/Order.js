@@ -94,14 +94,25 @@ async function publishNewOrder(memberId, data) {
 
 /**
  * Get a order's information.
- * @param {number} orderId The good's id.
+ * @param {number} orderId The order's id.
  */
 async function getOrderInformationById(orderId) {
   return await Order.findOne({ where: { id: orderId } })
 }
 
+/**
+ * Change a order's state.
+ * @param {number} orderId The order's id.
+ * @param {number} state The order's state.
+ */
+async function changeOrderState(orderId, state) {
+  let order = await Order.findOne({ where: { id: orderId } })
+  await order.update({ state })
+}
+
 export default {
   publishNewOrder,
   getOrderInformationById,
+  changeOrderState,
   STATE_VALIDATOR
 }

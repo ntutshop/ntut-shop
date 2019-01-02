@@ -1,3 +1,4 @@
+import Good from '../models/Good.js'
 import Order from '../models/Order.js'
 
 /**
@@ -47,7 +48,80 @@ async function getOrderById(ctx) {
   }
 }
 
+async function patchOrderState(ctx) {
+  let orderId = ctx.params.id
+  let state = ctx.request.body.state
+
+  let result = await Order.getOrderInformationById(orderId)
+  if (!result) {
+    ctx.status = 404
+    return
+  }
+
+  const sellerId = (await Good.getGoodInformationById(result.good_id)).member_id
+  const buyerId = result.member_id
+
+  switch (result.state) {
+    case 0:
+      if (ctx.state.memberId == sellerId) {
+        if (state == 1 || state == 3) {
+          await Order.changeOrderState(orderId, state)
+        }
+        else {
+          ctx.status = 403
+          return
+        }
+      }
+      else if (ctx.state.memberId == buyerId) {
+        if (state == 4) {
+          await Order.changeOrderState(orderId, state)
+        }
+        else {
+          ctx.status = 403
+          return
+        }
+      }
+      else {
+        ctx.status = 403
+        return
+      }
+      break
+
+    case 1:
+      if (ctx.state.memberId == sellerId) {
+        if (state == 5) {
+          await Order.changeOrderState(orderId, state)
+        }
+        else {
+          ctx.status = 403
+          return
+        }
+      }
+      else if (ctx.state.memberId == buyerId) {
+        if (state == 2 || state == 4) {
+          await Order.changeOrderState(orderId, state)
+        }
+        else {
+          ctx.status = 403
+          return
+        }
+      }
+      else {
+        ctx.status = 403
+        return
+      }
+      break
+
+    default:
+      ctx.status = 403
+      return
+  }
+
+  ctx.body = await Order.getOrderInformationById(orderId)
+}
+
 export default {
   postNewOrder,
-  getOrderById
+  getOrderById,
+  patchOrderState
 }

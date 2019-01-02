@@ -12,4 +12,6 @@ router.post('/', controller.postNewOrder)
 
 router.get('/:id', controller.getOrderById)
 
+router.patch('/:id', controller.patchOrderState)
+
 export default router
