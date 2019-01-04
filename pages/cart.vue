@@ -2,7 +2,9 @@
   <v-container class="m-cart">
     <h2 class="title">請選一項訂單提交</h2>
     <v-layout v-if="1||cart.length">
-      <list :cart-data="cart" />
+      <char-list 
+        :cart-data="cart" 
+        @delete="deleteCartItem($event)" />
     </v-layout>
     <v-layout
       justify-end
@@ -24,15 +26,14 @@
 </template>
 
 <script>
-import List from '../components/cart/cart-list.vue'
+import CharList from '../components/cart/cart-list.vue'
 export default {
   async asyncData({ $axios, error }) {
-    let rawCart = undefined
+    let rawCart = []
     let cart = []
     try {
       let { data } = await $axios.get('/cart')
       rawCart = data.goods
-      console.log(rawCart)
     } catch (e) {
       console.log(e)
     }
@@ -54,6 +55,7 @@ export default {
           shippingId: shipping.id,
           shippingService: shipping.service,
           shippingFee: shipping.fee,
+          shippingInfo: `${shipping.service}: $${shipping.fee}`,
           paymentId: payment.id,
           paymentService: payment.service
         })
@@ -65,7 +67,7 @@ export default {
   },
   middleware: ['checkUserLogin', 'checkUserRegister'],
   components: {
-    List
+    CharList
   },
   data() {
     return {
@@ -78,6 +80,54 @@ export default {
         total += item.price * item.quantity + item.shippingFee
       })
       return total
+    }
+  },
+  methods: {
+    async deleteCartItem(index) {
+      this.rawCart.splice(index, 1)
+      this.cart.splice(index, 1)
+      let { data } = await this.$axios.patch('/cart', { goods: this.rawCart })
+      this.$notify({
+        title: '成功',
+        message: '成功從購物車移除',
+        type: 'success'
+      })
+    },
+    async updateCartItem() {
+      this.rawCart = []
+      this.cart = []
+      try {
+        let { data } = await this.$axios.get('/cart')
+        this.rawCart = data.goods
+      } catch (e) {
+        console.log(e)
+      }
+
+      for (let i in this.rawCart) {
+        try {
+          let response = undefined
+          response = await this.$axios.get(`/goods/${this.rawCart[i].id}`)
+          let good = response.data
+          response = await this.$axios.get(`/shippings/${this.rawCart[i].shipping_id}`)
+          let shipping = response.data
+          response = await this.$axios.get(`/payments/${this.rawCart[i].payment_id}`)
+          let payment = response.data
+          this.cart.push({
+            id: this.rawCart[i].id,
+            name: good.name,
+            price: good.price,
+            quantity: this.rawCart[i].quantity,
+            shippingId: shipping.id,
+            shippingService: shipping.service,
+            shippingFee: shipping.fee,
+            shippingInfo: `${shipping.service}: $${shipping.fee}`,
+            paymentId: payment.id,
+            paymentService: payment.service
+          })
+        } catch (e) {
+          console.log(e)
+        }
+      }
     }
   }
 }

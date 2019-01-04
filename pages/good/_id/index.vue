@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import Crumbs from '@/components/good/crumbs.vue'
 import Detail from '@/components/good-detail/detail.vue'
 export default {
   async asyncData({ params, error, $axios }) {
@@ -46,7 +45,6 @@ export default {
     return loadedData
   },
   components: {
-    Crumbs,
     Detail
   },
   data() {
