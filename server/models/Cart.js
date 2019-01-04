@@ -45,6 +45,19 @@ async function patchCartGoods(memberId, data) {
   // }
 
   let items = data.goods
+
+  let itemsId = data.goods.map(good => good.id)
+  let existedItemsId =  await Cart.findAll({ where: { member_id: memberId } })
+  existedItemsId = existedItemsId.map(item => item.good_id)
+  console.log('abc', itemsId)
+  console.log('def', existedItemsId)
+  for (let existedItemId of existedItemsId) {
+    if (itemsId.indexOf(existedItemId) === -1) {
+      let cartItem = await Cart.findOne({ where: { good_id: existedItemId } })
+      await cartItem.destroy()
+    }
+  }
+
   for (let i in items) {
     let item = items[i]
     let good = await Good.findOne({ where: { id: item.id } })
@@ -63,8 +76,8 @@ async function patchCartGoods(memberId, data) {
       if (item.quantity) {
         await cartGood.update({
           quantity: item.quantity,
-          shipping_id: item.shippingId,
-          payment_id: item.paymentId
+          shipping_id: item.shipping_id,
+          payment_id: item.payment_id
         })
       }
       else {
@@ -78,8 +91,8 @@ async function patchCartGoods(memberId, data) {
           member_id: memberId,
           good_id: item.id,
           quantity: item.quantity,
-          shipping_id: item.shippingId,
-          payment_id: item.paymentId
+          shipping_id: item.shipping_id,
+          payment_id: item.payment_id
         })
       }
     }

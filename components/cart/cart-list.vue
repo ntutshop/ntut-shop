@@ -15,7 +15,7 @@
       label="付款方式"
     />
     <el-table-column
-      prop="shippingService"
+      prop="shippingInfo"
       label="運輸方式"
     />
     <el-table-column
@@ -28,7 +28,7 @@
     />
     <el-table-column label="總計">
       <template slot-scope="scope">
-        {{ scope.row.price * scope.row.quantity }}
+        {{ scope.row.price * scope.row.quantity + scope.row.shippingFee }}
       </template>
     </el-table-column>
     <el-table-column
@@ -39,7 +39,7 @@
         <el-button
           size="mini"
           type="danger"
-          @click="handleDelete(scope.$index, scope.row)"
+          @click.stop="$emit('delete', scope.$index)"
         >刪除</el-button>
       </template>
     </el-table-column>
@@ -54,11 +54,7 @@ export default {
       default: () => []
     }
   },
-  methods: {
-    handleDelete(index, row) {
-      console.log(index, row)
-    }
-  }
+  methods: {}
 }
 </script>
 

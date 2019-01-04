@@ -33,18 +33,7 @@ export default {
   },
   data() {
     return {
-      goodList: [
-        {
-          id: 0,
-          name: '',
-          price: 0,
-          stock: 0,
-          durability: 0,
-          member_id: '',
-          state: 0,
-          publish_time: ''
-        }
-      ]
+      goodList: []
     }
   },
   async mounted() {

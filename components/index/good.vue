@@ -48,7 +48,7 @@ export default {
   },
   async mounted() {
     let vm = this
-    let { data } = await vm.$axios.get(`/goods/${good.id}`)
+    let { data } = await vm.$axios.get(`/goods/${vm.good.id}`)
     vm.image = data.images[0]
   }
 }

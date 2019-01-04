@@ -17,9 +17,9 @@
         <el-col :span="13">
           <v-carousel height="350">
             <v-carousel-item
-              v-for="(item,index) in detail.goodInfo.images"
+              v-for="(image,index) in detail.goodInfo.images"
               :key="index"
-              :src="item"
+              :src="image"
             />
           </v-carousel>
         </el-col>
@@ -47,10 +47,10 @@
               placeholder="請選擇"
             >
               <el-option
-                v-for="(item, index) in detail.goodInfo.payments"
+                v-for="(payment, index) in detail.goodInfo.payments"
                 :key="index"
-                :label="`${item.service}`"
-                :value="item.id"
+                :label="`${payment.service}`"
+                :value="payment.id"
               />
             </el-select>
           </div>
@@ -61,10 +61,10 @@
               placeholder="請選擇"
             >
               <el-option
-                v-for="(item, index) in detail.goodInfo.shippings"
+                v-for="(shipping, index) in detail.goodInfo.shippings"
                 :key="index"
-                :label="`${item.service}: $${item.fee}`"
-                :value="item.id"
+                :label="`${shipping.service}: $${shipping.fee}`"
+                :value="shipping.id"
               />
             </el-select>
           </div>
@@ -214,15 +214,19 @@ export default {
         cartGoods.push({
           id: this.detail.goodInfo.id,
           quantity: this.currentQuantity,
-          shippingId: this.currentShipping,
-          paymentId: this.currentPayment
+          shipping_id: this.currentShipping,
+          payment_id: this.currentPayment
         })
       } catch (e) {
         console.log(e)
       }
       try {
         let { data } = await this.$axios.patch('/cart', { goods: cartGoods })
-        console.log('add to cart', data)
+        this.$notify({
+          title: '成功',
+          message: '成功添加到購物車',
+          type: 'success'
+        })
       } catch (e) {
         console.log(e)
       }
