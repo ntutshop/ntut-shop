@@ -6,7 +6,7 @@ WORKDIR /app
 
 ADD . /app
 
-RUN yarn
+RUN yarn install
 RUN yarn build
 
 CMD [ "yarn", "docker" ]
