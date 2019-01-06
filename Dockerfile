@@ -1,7 +1,5 @@
 FROM node
 
-ENV HOST 0.0.0.0
-
 WORKDIR /app
 
 ADD . /app
