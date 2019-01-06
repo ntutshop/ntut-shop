@@ -1,15 +1,15 @@
 version: '3'
 services:
   web:
-      build: .
-      ports:
-          - "3000:3000"
-      expose:
-          - "3000"
-      volumes:
-          - .:/app
-      depends_on:
-          - mariadb
+    build: .
+    ports:
+        - "3000:3000"
+    expose:
+        - "3000"
+    volumes:
+        - .:/app
+    depends_on:
+        - mariadb
   mariadb:
     container_name: mariadb
     image: mariadb
