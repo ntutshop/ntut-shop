@@ -10,6 +10,7 @@ services:
       - mariadb
     environment:
       DOCKER_ENV: "1"
+    restart: always
   mariadb:
     container_name: mariadb
     image: mariadb
