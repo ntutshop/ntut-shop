@@ -8,6 +8,8 @@ services:
       - "3000"
     depends_on:
       - mariadb
+    environment:
+      DOCKER_ENV: "1"
   mariadb:
     container_name: mariadb
     image: mariadb
