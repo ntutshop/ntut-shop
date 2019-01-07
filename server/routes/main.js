@@ -1,6 +1,7 @@
 import KoaRouter from 'koa-router'
 
 import oauthRouter from './authorization.js'
+import devRouter from './dev.js'
 import userRouter from './user.js'
 import goodRouter from './good.js'
 import orderRouter from './order.js'
@@ -10,6 +11,9 @@ import paymentRouter from './payment.js'
 import imageRouter from './image.js'
 
 const router = new KoaRouter({ prefix: '/api' })
+
+// Routes for development needs.
+router.use(devRouter.routes()).use(devRouter.allowedMethods());
 
 // Routes for authorization.
 router.use(oauthRouter.routes()).use(oauthRouter.allowedMethods())

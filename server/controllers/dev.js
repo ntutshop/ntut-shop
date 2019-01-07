@@ -21,29 +21,23 @@ async function fakeFacebookLogin (ctx) {
     return ctx.redirect('/') // *It should change to an error page.
   }
 
-  // == Sign user_id with key
-  const JWT_TOKEN = jwt.sign(uid, SV_CONFIG.JWT_SECRET)
-  ctx.cookies.set('jwt', JWT_TOKEN)
-
   // == Check the member
-  let state = await Member.checkMemberStatus(uid)
+  let [state, memberId] = await Member.checkMemberStateAndIdByUserId(uid)
   if (state === Member.STATE.Normal) {
-    ctx.body = {
-      success: true,
-      redirect: '/'
-    }
+    ctx.status = 201
   } else if (state === Member.STATE.Unregistered) {
-    ctx.body = {
-      success: true,
-      redirect: '/signup'
-    }
+    ctx.status = 403
+    ctx.body = { reason: 'unregistered' }
   } else {
-    await Member.createShellCustomer(uid)
-    ctx.body = {
-      success: true,
-      redirect: '/signup'
-    }
+    let member = await Member.createShellCustomer(uid)
+    memberId = member.id
+    ctx.status = 403
+    ctx.body = { reason: 'unregistered' }
   }
+
+  // == Sign MEMBER id with key
+  const JWT_TOKEN = jwt.sign(memberId, SV_CONFIG.JWT_SECRET)
+  ctx.cookies.set('jwt', JWT_TOKEN)
 }
 
 export default {

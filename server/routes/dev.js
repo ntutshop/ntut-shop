@@ -5,7 +5,7 @@ import { SERVER_CONFIG } from '../config/config.js'
 const router = new KoaRouter({ prefix: '/dev' })
 
 if (SERVER_CONFIG.MODE !== 'production') {
-  router.get('/facebook_login', controller.FakeFacebookLogin)
+  router.get('/login', controller.fakeFacebookLogin)
 }
 
 export default router
