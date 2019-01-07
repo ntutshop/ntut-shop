@@ -10,13 +10,13 @@
       </nuxt-link>
     </el-menu-item>
     <el-menu-item index="2">
-      <nuxt-link to="/user/order">
+      <nuxt-link to="/user/order/buyer">
         <v-icon size="18">shopping_basket</v-icon>
         <span slot="title">購買清單</span>
       </nuxt-link>
     </el-menu-item>
     <el-menu-item index="3">
-      <nuxt-link to="/user/good">
+      <nuxt-link to="/user/order/seller">
         <v-icon size="18">store</v-icon>
         <span slot="title">賣家訂單</span>
       </nuxt-link>

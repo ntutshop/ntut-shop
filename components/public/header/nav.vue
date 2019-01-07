@@ -6,7 +6,7 @@
     >
       <el-menu-item index="1">
         <nuxt-link
-          to="/user/order"
+          to="/user/order/buyer"
           style="display: block;"
         >我的訂單</nuxt-link>
       </el-menu-item>

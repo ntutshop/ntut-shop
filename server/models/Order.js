@@ -2,6 +2,7 @@ import Joi from 'joi'
 import db from '../config/db.js'
 import GoodSchema from '../schemas/Good.js'
 import OrderSchema from '../schemas/Order.js'
+import ShippingSchema from '../schemas/Shipping.js'
 import errorGen from '../modules/errorgen.js'
 
 /**
@@ -18,6 +19,7 @@ export const STATE_VALIDATOR = Joi.number().min(0).max(5)
 
 const Good = db.import('GOOD', GoodSchema)
 const Order = db.import('ORDER', OrderSchema)
+const Shipping = db.import('SHIPPING', ShippingSchema)
 
 /**
  * A json validator for OrderData.
@@ -73,7 +75,10 @@ async function publishNewOrder(memberId, data) {
     }
   }
 
-  let total = good.toJSON().price * value.quantity
+  let shipping = await Shipping.findOne({ where: {id: value.shippingId} })
+
+  let goodData = good.toJSON()
+  let total = goodData.price * value.quantity + shipping.fee
   let newOrder = await Order.create({
     // id is auto-increment
     member_id: memberId,
@@ -107,6 +112,14 @@ async function getOrderInformationById(orderId) {
  */
 async function changeOrderState(orderId, state) {
   let order = await Order.findOne({ where: { id: orderId } })
+  let orderData = order.toJSON()
+  let good = await Good.findOne({ where: { id: orderData.good_id } })
+  let goodData = good.toJSON()
+  if (state === 1) {
+    await good.update({ stock: goodData.stock - orderData.quantity })
+  } else if (state === 4 || state === 5) {
+    await good.update({ stock: goodData.stock + orderData.quantity })
+  }
   await order.update({ state })
 }
 

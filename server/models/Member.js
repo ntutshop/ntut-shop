@@ -242,7 +242,7 @@ async function modifyUserInformationByMemberId(memberId, data) {
  * @async
  */
 async function getAllUserOrders(memberId, state) {
-  let stateCondition = state ? 'AND A.state = :state' : ''
+  let stateCondition = state ? ' AND A.state = :state' : ''
 
   let result = ORDER_STATE_VALIDATOR.validate(state)
 
@@ -253,10 +253,18 @@ async function getAllUserOrders(memberId, state) {
     }
   }
 
+  let { goods } = await getAllUserGoods(memberId, undefined)
+  let sellerCondition = ''
+  if (goods.length) {
+    for (let good of goods) {
+      sellerCondition += ` OR good_id = ${good.id}`
+    }
+  }
+
   let orders = await db.query(`
-    SELECT id, state, transaction_time
+    SELECT id, state, transaction_time, shipping_id, payment_id
     FROM \`ORDER\`
-    WHERE member_id = :memberId ${stateCondition}`,
+    WHERE (member_id = :memberId${stateCondition})${sellerCondition}`,
     { replacements: { memberId, state }, type: db.QueryTypes.SELECT, nest: true })
 
   return {

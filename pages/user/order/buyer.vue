@@ -27,16 +27,19 @@
               v-for="(order, index) in handlingOrderList"
               :key="index"
               :order="order"
+              :pending="true"
+              @cancel="cancel(order)"
+              @finish="finish(order)"
             />
           </el-tab-pane>
-          <el-tab-pane label="完成">
+          <el-tab-pane label="已完成">
             <order
               v-for="(order, index) in finishOrderList"
               :key="index"
               :order="order"
             />
           </el-tab-pane>
-          <el-tab-pane label="取消">
+          <el-tab-pane label="已取消">
             <order
               v-for="(order, index) in cancelOrderList"
               :key="index"
@@ -51,7 +54,7 @@
 
 <script>
 import SideBar from '@/components/user/sidebar'
-import Order from '@/components/user/order/order'
+import Order from '@/components/user/order/buyer'
 export default {
   middleware: ['checkUserLogin', 'checkUserRegister'],
   components: {
@@ -80,13 +83,20 @@ export default {
       )
     }
   },
-  async asyncData({ $axios, error, query }) {
+  async asyncData({ $axios, store, error, query }) {
     try {
       let { data } = await $axios.get('/user/orders')
       let orderList = []
       for (let order of data.orders) {
         let orderTemp = await $axios.get(`/orders/${order.id}`)
-        orderList.push(orderTemp.data)
+        orderTemp = orderTemp.data
+        if (orderTemp.buyerId === store.state.userInfo.id) {
+          orderTemp.good.shipping = await $axios.get(`/shippings/${orderTemp.good.shipping}`)
+          orderTemp.good.shipping = orderTemp.good.shipping.data
+          orderTemp.good.payment = await $axios.get(`/payments/${orderTemp.good.payment}`)
+          orderTemp.good.payment = orderTemp.good.payment.data
+          orderList.push(orderTemp)
+        }
       }
       return { orderList }
     } catch (e) {
@@ -96,6 +106,28 @@ export default {
       } else {
         throw e
       }
+    }
+  },
+  methods: {
+    async cancel(order) {
+      let { data } = await this.$axios.patch(`/orders/${order.id}`, {
+        state: 4
+      })
+      data.good.shipping = await this.$axios.get(`/shippings/${data.good.shipping}`)
+      data.good.shipping = data.good.shipping.data
+      data.good.payment = await this.$axios.get(`/payments/${data.good.payment}`)
+      data.good.payment = data.good.payment.data
+      this.orderList.splice(this.orderList.indexOf(order), 1, data)
+    },
+    async finish(order) {
+      let { data } = await this.$axios.patch(`/orders/${order.id}`, {
+        state: 2
+      })
+      data.good.shipping = await this.$axios.get(`/shippings/${data.good.shipping}`)
+      data.good.shipping = data.good.shipping.data
+      data.good.payment = await this.$axios.get(`/payments/${data.good.payment}`)
+      data.good.payment = data.good.payment.data
+      this.orderList.splice(this.orderList.indexOf(order), 1, data)
     }
   }
 }

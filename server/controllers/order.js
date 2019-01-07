@@ -41,7 +41,10 @@ async function getOrderById(ctx) {
     buyerId: data.member_id,
     good: {
       id: data.good_id,
-      quantity: data.quantity
+      quantity: data.quantity,
+      shipping: data.shipping_id,
+      payment: data.payment_id,
+      total: data.total
     },
     state: data.state,
     transactionTime: data.transaction_time
@@ -117,7 +120,21 @@ async function patchOrderState(ctx) {
       return
   }
 
-  ctx.body = await Order.getOrderInformationById(orderId)
+  result = await Order.getOrderInformationById(orderId)
+  let data = result.toJSON()
+  ctx.body = {
+    id: data.id,
+    buyerId: data.member_id,
+    good: {
+      id: data.good_id,
+      quantity: data.quantity,
+      shipping: data.shipping_id,
+      payment: data.payment_id,
+      total: data.total
+    },
+    state: data.state,
+    transactionTime: data.transaction_time
+  }
 }
 
 export default {
