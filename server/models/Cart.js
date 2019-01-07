@@ -49,8 +49,6 @@ async function patchCartGoods(memberId, data) {
   let itemsId = data.goods.map(good => good.id)
   let existedItemsId =  await Cart.findAll({ where: { member_id: memberId } })
   existedItemsId = existedItemsId.map(item => item.good_id)
-  console.log('abc', itemsId)
-  console.log('def', existedItemsId)
   for (let existedItemId of existedItemsId) {
     if (itemsId.indexOf(existedItemId) === -1) {
       let cartItem = await Cart.findOne({ where: { good_id: existedItemId } })
