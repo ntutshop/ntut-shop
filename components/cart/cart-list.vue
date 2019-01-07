@@ -4,6 +4,7 @@
     :data="cartData"
     highlight-current-row
     class="cart-table"
+    @current-change="currentChange"
   >
     <el-table-column
       prop="name"
@@ -26,11 +27,11 @@
       prop="quantity"
       label="數量"
     />
-    <el-table-column label="總計">
+    <!-- <el-table-column label="總計">
       <template slot-scope="scope">
         {{ scope.row.price * scope.row.quantity + scope.row.shippingFee }}
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column
       prop="action"
       label="操作"
@@ -39,7 +40,7 @@
         <el-button
           size="mini"
           type="danger"
-          @click.stop="$emit('delete', scope.$index)"
+          @click.stop="del(scope.$index)"
         >刪除</el-button>
       </template>
     </el-table-column>
@@ -54,7 +55,15 @@ export default {
       default: () => []
     }
   },
-  methods: {}
+  methods: {
+    del(index) {
+      this.$refs.singleTable.setCurrentRow()
+      this.$emit('delete', index)
+    },
+    currentChange(currentRow) {
+      this.$emit('choose', currentRow ? currentRow.index : -1)
+    }
+  }
 }
 </script>
 

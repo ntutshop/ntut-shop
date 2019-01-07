@@ -103,7 +103,7 @@
               @click="addToCart"
             >
               <v-icon dark>shopping_cart</v-icon>
-              加入購物車
+              {{ detail.goodInfo.state === 0 ? '加入購物車' : detail.goodInfo.state === 1 ? '已遭下架' : detail.goodInfo.state === 2 ? '已遭移除' : '???' }}
             </el-button>
           </v-layout>
         </el-col>
@@ -221,11 +221,16 @@ export default {
         console.log(e)
       }
       try {
+        let vm = this
         let { data } = await this.$axios.patch('/cart', { goods: cartGoods })
         this.$notify({
           title: '成功',
           message: '成功添加到購物車',
-          type: 'success'
+          type: 'success',
+          onClick: function() {
+            vm.$router.push('/cart')
+            this.close()
+          }
         })
       } catch (e) {
         console.log(e)
