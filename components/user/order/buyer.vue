@@ -1,33 +1,52 @@
 <template>
-  <div class="good-item">
-    <el-row>
+  <div
+    v-if="!isLoading"
+    class="order-item"
+  >
+    <el-row 
+      type="flex" 
+      align="middle">
       <el-col
-        :span="21"
-        class="good-info"
+        :span="20"
+        class="order-info"
       >
         <dl>
           <dt>
             <img
-              :src="meta.imgUrl"
+              :src="good.images[0]"
               alt="商品"
             >
           </dt>
           <dd>
             <h3>
-              <nuxt-link :to="{path:'detail',query:{keyword:meta.name,type:meta.module}}">{{ meta.name }}</nuxt-link>
+              <nuxt-link :to="{path:`/good/${good.id}`}">{{ good.name }}</nuxt-link>
             </h3>
-            <div class="good-buyer">
-              <div class="buyer-name">
-                <span>購買人：</span>
-                <span>煨刃</span>
+            <div class="order-buyer">
+              <div>
+                <span>賣家：</span>
+                <span>
+                  <nuxt-link :to="`/user/info?username=${sellerInfo.username}`">{{ sellerInfo.nickname }}</nuxt-link>
+                </span>
               </div>
-              <div class="buyer-shipping">
+              <div>
+                <span>數量：</span>
+                <span>{{ order.good.quantity }}</span>
+              </div>
+              <div>
                 <span>運輸方式：</span>
-                <span>面交</span>
+                <span>{{ order.good.shipping.service }}</span>
               </div>
-              <div class="buyer-payment">
+              <div>
+                <span>運輸費用：</span>
+                <span>{{ `$${order.good.shipping.fee}` }}</span>
+              </div>
+              <div>
                 <span>付款方式：</span>
-                <span>面交</span>
+                <span>{{ order.good.payment.service }}</span>
+              </div>
+              <div>
+                <span>總計：</span>
+                <span>{{ `$${order.good.total}` }}</span>
               </div>
             </div>
           </dd>
@@ -44,6 +63,7 @@
               small
               fab
               color="green"
+              @click="$emit('accept')"
             >
               <v-icon>check</v-icon>
             </v-btn>
@@ -54,6 +74,7 @@
               small
               fab
               color="red"
+              @click="$emit('deny')"
             >
               <v-icon>clear</v-icon>
             </v-btn>
@@ -62,7 +83,7 @@
       </el-col>
       <el-col
         v-else-if="pending"
-        :span="3"
+        :span="4"
       >
         <div class="check-button">
           <div>
@@ -71,6 +92,7 @@
               small
               fab
               color="green"
+              @click="$emit('finish')"
             >
               <v-icon>check</v-icon>
             </v-btn>
@@ -81,10 +103,41 @@
               small
               fab
               color="red"
+              @click="$emit('cancel')"
             >
               <v-icon>delete_forever</v-icon>
             </v-btn>
           </div>
+        </div>
+      </el-col>
+      <el-col 
+        v-else 
+        :span="4">
+        <div class="order-status">
+          <div
+            v-if="order.state===0"
+            class="blue--text"
+          >等待賣家確認中</div>
+          <div
+            v-if="order.state===1"
+            class="blue--text"
+          >訂單交易中</div>
+          <div
+            v-if="order.state===2"
+            class="green--text"
+          >交易完成</div>
+          <div
+            v-else-if="order.state===3"
+            class="red--text"
+          >賣家拒絕交易</div>
+          <div
+            v-else-if="order.state===4"
+            class="red--text"
+          >買家取消交易</div>
+          <div
+            v-else-if="order.state===5"
+            class="red--text"
+          >賣家取消交易</div>
         </div>
       </el-col>
     </el-row>
@@ -95,7 +148,7 @@
 <script>
 export default {
   props: {
-    meta: {
+    order: {
       type: Object,
       default() {
         return {}
@@ -109,18 +162,35 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  data() {
+    return {
+      isLoading: true,
+      good: {},
+      sellerInfo: {}
+    }
+  },
+  async mounted() {
+    this.isLoading = true
+    let response = await this.$axios.get(`/goods/${this.order.good.id}`)
+    this.good = response.data
+    response = await this.$axios.get(
+      `/user/information?id=${this.good.member_id}`
+    )
+    this.sellerInfo = response.data
+    this.isLoading = false
   }
 }
 </script>
 
 <style lang="scss">
-.good-item {
-  .good-info {
+.order-item {
+  .order-info {
     dl {
       display: flex;
       min-height: 125px;
       // // padding: 20px 0;
-      // bgood-bottom: 1px solid #e5e5e5;
+      // border-bottom: 1px solid #e5e5e5;
       dt {
         width: 220px;
         height: 125px;
@@ -172,12 +242,12 @@ export default {
 
           > b {
             float: right;
-            bgood: 1px solid #31bbac;
+            border: 1px solid #31bbac;
             background-color: rgb(255, 153, 0);
-            bgood-color: rgb(255, 153, 0);
+            border-color: rgb(255, 153, 0);
             color: rgb(255, 255, 255);
             padding: 0 6px;
-            bgood-radius: 2px;
+            border-radius: 2px;
             height: 18px;
             line-height: 18px;
             font-size: 12px;
@@ -190,6 +260,7 @@ export default {
           font-size: 12px;
           padding-top: 11px;
           margin-top: 5px;
+          border-top: 1px dashed #ddd;
 
           li {
             width: 668px;
@@ -205,7 +276,7 @@ export default {
               background: rgb(35, 147, 238);
               color: #fff;
               text-align: center;
-              bgood-radius: 1px;
+              border-radius: 1px;
               padding: 1px 2px;
               margin-right: 10px;
             }
@@ -226,7 +297,7 @@ export default {
       }
     }
   }
-  .good-buyer {
+  .order-buyer {
     margin-top: 8px;
     div {
       margin-bottom: 8px;
@@ -240,10 +311,15 @@ export default {
     }
   }
   .check-button {
-    min-height: 132px;
+    min-height: 125px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+  }
+  .order-status {
+    min-height: 125px;
+    align-items: center;
+    display: flex;
   }
 }
 </style>
