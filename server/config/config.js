@@ -1,5 +1,5 @@
-const DOMAIN = process.env.DOMAIN || 'virtualprism.io'
-const DB_DOMAIN = (process.env.NODE_ENV === 'production') ? DOMAIN : 'virtualprism.io'
+const DOMAIN = process.env.DOMAIN || 'ntut.shop'
+const DB_DOMAIN = process.env.DB_DOMAIN || ((process.env.DOCKER_ENV) ? 'mariadb' : DOMAIN)
 
 export let SERVER_CONFIG = {
   HOST: (process.env.NODE_ENV === 'production') ? '0.0.0.0' : 'localhost',
@@ -10,7 +10,7 @@ export let SERVER_CONFIG = {
 }
 
 export let DB_CONFIG = {
-  HOST: (process.env.DOCKER_ENV) ? 'mariadb' : DB_DOMAIN,
+  HOST: DB_DOMAIN,
   USER: 'shopkeeper',
   PASSWORD: 'ycjls5dm',
   DATABASE: 'ntutdb',

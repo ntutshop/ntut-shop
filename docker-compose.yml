@@ -1,15 +1,16 @@
 version: '3'
 services:
-  nuxt:
-      build: .
-      ports:
-          - "3000:3000"
-      expose:
-          - "3000"
-      volumes:
-          - .:/app
-      depends_on:
-          - mariadb
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    depends_on:
+      - mariadb
+    environment:
+      DOCKER_ENV: "1"
+    restart: always
   mariadb:
     container_name: mariadb
     image: mariadb
@@ -18,12 +19,13 @@ services:
     expose:
       - "3306"
     volumes:
-      - ./mysql:/var/lib/mysql
       - ./server/sql/action.sql:/docker-entrypoint-initdb.d/action.sql
-    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
       MYSQL_USER: shopkeeper
       MYSQL_PASSWORD: ycjls5dm
       MYSQL_DATABASE: ntutdb
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
     restart: always
