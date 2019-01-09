@@ -1,4 +1,4 @@
-const DOMAIN = process.env.DOMAIN || 'ntut.shop'
+const DOMAIN = process.env.DOMAIN || ((process.env.NODE_ENV === 'production') ? 'ntut.shop' : 'localhost')
 const DB_DOMAIN = process.env.DB_DOMAIN || ((process.env.DOCKER_ENV) ? 'mariadb' : DOMAIN)
 
 export let SERVER_CONFIG = {
