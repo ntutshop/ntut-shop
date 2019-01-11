@@ -12,7 +12,7 @@
       </el-menu-item>
       <el-menu-item index="2">
         <nuxt-link
-          to="/user/good"
+          to="/user/order/seller"
           style="display: block;"
         >我的賣場</nuxt-link>
       </el-menu-item>
