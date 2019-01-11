@@ -1,3 +1,5 @@
+import { SERVER_CONFIG } from './server/config/config'
+
 const pkg = require('./package')
 
 module.exports = {
@@ -58,7 +60,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    prefix: '/api',
+    baseURL: `${SERVER_CONFIG.BASE_URL}/api`,
     credentials: true
   },
 
