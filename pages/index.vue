@@ -79,7 +79,6 @@
       <h2 class="blue--text font-weight-bold">推薦商品</h2>
       <good-list class="good-list" />
     </el-card>
-
   </div>
 </template>
 
@@ -88,7 +87,7 @@ import Emenu from '@/components/index/menu.vue'
 import Banner from '@/components/index/banner.vue'
 import GoodList from '@/components/index/good-list.vue'
 import HomeHeader from '@/components/index/home-header.vue'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
     Emenu,
@@ -111,34 +110,41 @@ export default {
   },
   methods: {
     login() {
-      /* global FB */
-      FB.login(
-        async response => {
-          try {
-            await this.$axios.post('/login', {
-              authResponse: response.authResponse
-            })
-            this.$store.dispatch('updateUserState')
-            this.$router.replace('/')
-          } catch (e) {
-            const code = parseInt(e.response && e.response.status)
-            if (code === 401) {
+      if (process.env.NODE_ENV === 'production') {
+        /* global FB */
+        FB.login(
+          async response => {
+            try {
+              await this.$axios.post('/login', {
+                authResponse: response.authResponse
+              })
               this.$store.dispatch('updateUserState')
-              this.$nuxt.error({ statusCode: 401 })
-            } else if (
-              code === 403 &&
-              e.response.data.reason === 'unregistered'
-            ) {
-              this.$store.dispatch('updateUserState')
-              this.$router.push('/signup')
-            } else {
-              throw e
+              this.$router.replace('/')
+            } catch (e) {
+              const code = parseInt(e.response && e.response.status)
+              if (code === 401) {
+                this.$store.dispatch('updateUserState')
+                this.$nuxt.error({ statusCode: 401 })
+              } else if (
+                code === 403 &&
+                e.response.data.reason === 'unregistered'
+              ) {
+                this.$store.dispatch('updateUserState')
+                this.$router.push('/signup')
+              } else {
+                throw e
+              }
             }
-          }
-        },
-        { scope: 'public_profile,email' }
-      )
-    }
+          },
+          { scope: 'public_profile,email' }
+        )
+      } else {
+        this.showLoginDialog()
+      }
+    },
+    ...mapMutations({
+      showLoginDialog: 'showLoginDialog'
+    })
   }
 }
 </script>

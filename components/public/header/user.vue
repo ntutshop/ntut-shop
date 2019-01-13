@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import LoginDialog from '@/components/public/login-dialog.vue'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -58,34 +59,41 @@ export default {
   },
   methods: {
     login() {
-      /* global FB */
-      FB.login(
-        async response => {
-          try {
-            await this.$axios.post('/login', {
-              authResponse: response.authResponse
-            })
-            this.$store.dispatch('updateUserState')
-            this.$router.replace('/')
-          } catch (e) {
-            const code = parseInt(e.response && e.response.status)
-            if (code === 401) {
+      if (this.envMode === 'production') {
+        /* global FB */
+        FB.login(
+          async response => {
+            try {
+              await this.$axios.post('/login', {
+                authResponse: response.authResponse
+              })
               this.$store.dispatch('updateUserState')
-              this.$nuxt.error({ statusCode: 401 })
-            } else if (
-              code === 403 &&
-              e.response.data.reason === 'unregistered'
-            ) {
-              this.$store.dispatch('updateUserState')
-              this.$router.push('/signup')
-            } else {
-              throw e
+              this.$router.replace('/')
+            } catch (e) {
+              const code = parseInt(e.response && e.response.status)
+              if (code === 401) {
+                this.$store.dispatch('updateUserState')
+                this.$nuxt.error({ statusCode: 401 })
+              } else if (
+                code === 403 &&
+                e.response.data.reason === 'unregistered'
+              ) {
+                this.$store.dispatch('updateUserState')
+                this.$router.push('/signup')
+              } else {
+                throw e
+              }
             }
-          }
-        },
-        { scope: 'public_profile,email' }
-      )
-    }
+          },
+          { scope: 'public_profile,email' }
+        )
+      } else {
+        this.showLoginDialog()
+      }
+    },
+    ...mapMutations({
+      showLoginDialog: 'showLoginDialog'
+    })
   }
 }
 </script>

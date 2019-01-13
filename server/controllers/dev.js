@@ -14,7 +14,7 @@ import { SERVER_CONFIG as SV_CONFIG } from '../config/config.js'
  * @async
  */
 async function fakeFacebookLogin (ctx) {
-  let uid = ctx.query.user_id
+  let uid = ctx.request.body.user_id
 
   if (!uid) {
     consola.error('Got no user_id in query.')
