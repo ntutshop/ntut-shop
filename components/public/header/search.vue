@@ -28,22 +28,21 @@ export default {
   methods: {
     async querySearchAsync(queryString, callback) {
       let { data } = await this.$axios.get(`/goods?keyword=${queryString}`)
-      console.log(data)
       let searchResult = []
       data.forEach(element => {
         searchResult.push({
-          value: element.name
+          value: element.name,
+          id: element.id
         })
       })
-      console.log(searchResult)
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         callback(searchResult)
       }, 1000 * Math.random())
     },
-    searchCommit() {
+    searchCommit(item) {
       this.$router.push({
-        path: `/good?keyword=${this.value}`
+        path: `/good/${item.id}`
       })
     }
   }
