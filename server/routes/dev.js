@@ -1,13 +1,11 @@
 import KoaRouter from 'koa-router'
 import controller from '../controllers/dev.js'
-// import { SERVER_CONFIG } from '../config/config.js'
+import { SERVER_CONFIG } from '../config/config.js'
 
 const router = new KoaRouter({ prefix: '/dev' })
 
-// if (SERVER_CONFIG.MODE !== 'production') {
-//   router.post('/login', controller.fakeFacebookLogin)
-// }
-// It's temporary. Because of TAs' need.
-router.post('/login', controller.fakeFacebookLogin)
+if (SERVER_CONFIG.MODE !== 'production') {
+  router.post('/login', controller.fakeFacebookLogin)
+}
 
 export default router
