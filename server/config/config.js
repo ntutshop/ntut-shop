@@ -2,7 +2,7 @@ const DOMAIN = process.env.DOMAIN || ((process.env.NODE_ENV === 'production') ? 
 const DB_DOMAIN = process.env.DB_DOMAIN || ((process.env.DOCKER_ENV) ? 'mariadb' : DOMAIN)
 
 export let SERVER_CONFIG = {
-  HOST: (process.env.NODE_ENV === 'production') ? '0.0.0.0' : 'localhost',
+  HOST: '0.0.0.0',
   PORT: 3000,
   JWT_SECRET: 'mysecret',
   MODE: process.env.NODE_ENV,
