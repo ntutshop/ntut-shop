@@ -7,7 +7,7 @@
         :label="item.title"
       >
         <good
-          v-for="(item, index) in goodList"
+          v-for="(item, index) in list"
           :key="index"
           :meta="item"
         />
@@ -25,12 +25,12 @@ export default {
   props: {
     list: {
       type: Array,
-      default () {
+      default() {
         return []
       }
     }
   },
-  data () {
+  data() {
     return {
       orderLabel: [
         {
@@ -45,36 +45,7 @@ export default {
         {
           title: '評價最高'
         }
-      ],
-      goodList: [
-        {
-          name: '雲南菜',
-          imgUrl:
-            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-          rate: 5,
-          owner: 'Andy Meow',
-          price: 238,
-          type: '食物'
-        },
-        {
-          name: '雲南菜',
-          imgUrl:
-            'http://p1.meituan.net/600.600/deal/dd5fb74439b6601228cf0cb4d9275889323455.jpg@220w_125h_1e_1c',
-          rate: 5,
-          owner: 'Andy Meow',
-          price: 238,
-          type: '食物'
-        }
       ]
-    }
-  },
-  async asyncData ({ app }) {
-    let { data } = await app.$axios.get('searchList')
-    return { items: data.list }
-  },
-  methods: {
-    navSelect: function () {
-      console.log('select')
     }
   }
 }

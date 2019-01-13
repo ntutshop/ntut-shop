@@ -23,17 +23,7 @@
         :span="8"
         class="search"
       >
-        <el-autocomplete
-          v-model="value"
-          :fetch-suggestions="querySearchAsync"
-          placeholder="請輸入內容"
-          @select="handleSelect"
-        >
-          <el-button
-            slot="append"
-            icon="el-icon-search"
-          />
-        </el-autocomplete>
+        <search-bar/>
       </el-col>
       <el-col :span="8">
         <v-layout>
@@ -54,11 +44,13 @@
 import Navbar from './nav.vue'
 import User from './user.vue'
 import Cart from './cart.vue'
+import SearchBar from './search.vue'
 export default {
   components: {
     Navbar,
     User,
-    Cart
+    Cart,
+    SearchBar
   },
   props: {
     prominent: {

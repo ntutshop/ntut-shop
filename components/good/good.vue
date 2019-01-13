@@ -41,10 +41,13 @@ export default {
   props: {
     meta: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     }
+  },
+  created() {
+    console.log(this.meta)
   }
 }
 </script>
