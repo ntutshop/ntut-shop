@@ -5,10 +5,12 @@
         v-model="value"
         :fetch-suggestions="querySearchAsync"
         placeholder="請輸入內容"
+        @select="searchCommit"
       >
         <el-button
           slot="append"
           icon="el-icon-search"
+          @click="searchCommit"
         />
       </el-autocomplete>
     </el-col>
@@ -37,7 +39,12 @@ export default {
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         callback(searchResult)
-      }, 2000 * Math.random())
+      }, 1000 * Math.random())
+    },
+    searchCommit() {
+      this.$router.push({
+        path: `/good?keyword=${this.value}`
+      })
     }
   }
 }
