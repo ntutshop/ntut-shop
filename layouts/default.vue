@@ -3,6 +3,7 @@
     <my-header />
     <v-content>
       <nuxt />
+      <login-dialog/>
     </v-content>
     <my-footer />
   </v-app>
@@ -11,10 +12,12 @@
 <script>
 import MyHeader from '../components/public/header/index.vue'
 import MyFooter from '../components/public/footer/index.vue'
+import LoginDialog from '@/components/public/login-dialog.vue'
 export default {
   components: {
     MyHeader,
-    MyFooter
+    MyFooter,
+    LoginDialog
   }
 }
 </script>
